@@ -22,8 +22,9 @@ export default {};
   width: 100%;
   background-color: rgb(235, 174, 163);
   font-size: 22px;
-  padding: 50px;
+  padding: 30px;
   overflow: hidden;
+  position: fixed;
 }
 li{
   display: inline;
