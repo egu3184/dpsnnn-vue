@@ -1,14 +1,21 @@
 <template>
   <div class="content">
-   
-    
-
+    <Card1/>
+    <Card2/>
+    <Card3/>
   </div>
 </template>
 <script>
+
+import Card1 from "@/components/card/Card1"
+import Card2 from "@/components/card/Card2"
+import Card3 from "@/components/card/Card3"
+
 export default {
   name: '',
-  components: {},
+  components: {
+    Card1, Card2, Card3
+  },
   data() {
     return {
        sampleData: ''
