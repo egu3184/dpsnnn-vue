@@ -24,7 +24,7 @@ export default {
 <style>
   .card1{
     width: 100%;
-    height: 100px;
+    height: 700px;
     background-color: rgba(39, 216, 54, 0.747);
 
   }

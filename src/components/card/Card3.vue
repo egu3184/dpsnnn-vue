@@ -1,7 +1,12 @@
 <template>
   <div class="card3">
    
-    <p1>카드 3이에용</p1>
+    <div class="box">
+      <video muted autoplay loop>
+        <source src="@/assets/file.mp4" type="video/mp4">
+      <h1> style="font-size:50px; color:white;">첫번째 이야기</h1>
+      </video>
+    </div>  
 
   </div>
 </template>
