@@ -20,7 +20,7 @@ export default {};
 <style>
 .header{
   width: 100%;
-  background-color: rgb(235, 174, 163);
+  background-color: transparent;
   font-size: 22px;
   padding: 30px;
   overflow: hidden;
