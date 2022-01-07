@@ -40,7 +40,7 @@ export default {
 <style>
   .card4{
     width: 100%;
-    height: 1000px;
+    height: 1100px;
     background-color: rgb(51, 27, 63);
     padding: 180px;
 

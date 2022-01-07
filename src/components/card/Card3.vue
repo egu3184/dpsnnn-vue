@@ -32,7 +32,7 @@ export default {
   .card3{
    width: 100%;
     position: relative;
-    height: 730px;
+    height: 950px;
   }
   video{
     width: 100%;

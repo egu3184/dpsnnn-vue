@@ -42,7 +42,7 @@ export default {
 <style>
   .card6{
     width: 100%;
-    height: 1000px;
+    height: 1100px;
     background-color: rgb(106, 123, 162);
     padding: 180px;
 

@@ -37,7 +37,7 @@ export default {
 <style>
   .content{
     width: 100%;
-    background-color: rgba(156, 199, 224, 0.747);
+    
     min-height: 1000px;
   }
 </style>
