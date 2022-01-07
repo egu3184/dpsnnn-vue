@@ -51,6 +51,7 @@ export default {
     text-align: center;
     font-size: 48px;
     color: whitesmoke;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
    
   }
 

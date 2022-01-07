@@ -44,7 +44,7 @@ export default {
   }
   .comment{
     position: absolute;
-    left: 30%;
+    left: 15%;
     
     margin: auto;
   }
