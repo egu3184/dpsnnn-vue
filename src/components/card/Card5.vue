@@ -1,7 +1,14 @@
 <template>
-  <div class="card1">
-   
-    <p1>카드 5이에용</p1>
+  <div class="card5">
+    <div class="box">
+      <video muted autoplay loop>
+        <source src="@/assets/flower.mp4" type="video/mp4">
+      </video>
+      <div class="card5-text">
+        <p>두번째 이야기</p><br/>
+        <p>사람들은 그것을 행복이라 부르기로 했다.</p>
+      </div>
+    </div>  
 
   </div>
 </template>
@@ -22,10 +29,30 @@ export default {
 }
 </script>
 <style>
-  .card1{
+  .card5{
     width: 100%;
-    height: 700px;
-    background-color: rgba(39, 216, 54, 0.747);
-
+    position: relative;
+    height: 730px;
   }
+  video{
+    width: 100%;
+  }
+    
+  .card5-text{
+    position: absolute;
+    top: 25%;
+    
+    width: 100%;
+    
+  }
+  .card5-text p {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 48px;
+    color: whitesmoke;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+   
+  }
+
+  
 </style>

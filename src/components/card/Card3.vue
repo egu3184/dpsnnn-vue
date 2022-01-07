@@ -30,10 +30,9 @@ export default {
 </script>
 <style>
   .card3{
-    width: 100%;
+   width: 100%;
     position: relative;
-    background-color: rgba(207, 241, 210, 0.747);
-
+    height: 730px;
   }
   video{
     width: 100%;
