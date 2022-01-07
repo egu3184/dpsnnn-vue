@@ -42,6 +42,12 @@ export default {
     padding: 180px;
 
   }
+  .comment{
+    position: absolute;
+    left: 30%;
+    
+    margin: auto;
+  }
   .comment span{
     font-weight: bold;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;

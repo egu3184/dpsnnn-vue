@@ -1,11 +1,13 @@
 <template>
   <div class="card3">
-   
     <div class="box">
       <video muted autoplay loop>
         <source src="@/assets/file.mp4" type="video/mp4">
-      <h1> style="font-size:50px; color:white;">첫번째 이야기</h1>
       </video>
+      <div class="card3-text">
+        <p>첫번째 이야기</p><br/>
+        <p>그림자 없는 상자</p>
+      </div>
     </div>  
 
   </div>
@@ -29,8 +31,28 @@ export default {
 <style>
   .card3{
     width: 100%;
-    height: 100px;
+    position: relative;
     background-color: rgba(207, 241, 210, 0.747);
 
   }
+  video{
+    width: 100%;
+  }
+    
+  .card3-text{
+    position: absolute;
+    top: 25%;
+    
+    width: 100%;
+    
+  }
+  .card3-text p {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 48px;
+    color: whitesmoke;
+   
+  }
+
+  
 </style>
