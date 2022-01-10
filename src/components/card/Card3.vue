@@ -32,15 +32,21 @@ export default {
   .card3{
    width: 100%;
     position: relative;
-    height: 950px;
+    height: 80vh;
+    
   }
   video{
     width: 100%;
+    height: 80vh;
+    overflow: hidden;
+    object-fit: cover;
+  
   }
     
   .card3-text{
     position: absolute;
     top: 25%;
+    background-attachment: fixed;
     
     width: 100%;
     

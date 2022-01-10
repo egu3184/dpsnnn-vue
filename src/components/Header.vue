@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <header>
     <ul>
       <li class="main"><a href="#">dpsnnn</a></li>
       <ul class="menu">
@@ -10,7 +10,7 @@
         <li><a href="#">Plans & Pricing</a></li>
        </ul> 
     </ul> 
-  </div>  
+  </header>  
 </template>
 
 <script>
@@ -18,24 +18,26 @@ export default {};
 </script>
 
 <style>
-.header{
+header{
   width: 100%;
   background-color: transparent;
-  font-size: 22px;
-  padding: 30px;
+  display: flex;
+  flex-direction: row;
+  padding: 70px;
   overflow: hidden;
   position: fixed;
+  z-index: 1000;
 }
-li{
-  display: inline;
-  float: left;
+ul{
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
 }
+
 li a{
-  display: block;
   text-align: center;
-  font-weight: bold;
   padding: 18px;
-  color: rgb(240, 216, 187); /* 링크의 색상 제거 */
+  color: white;
   text-decoration: none;
 }
 li a:hover{

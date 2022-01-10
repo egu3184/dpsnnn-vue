@@ -1,11 +1,11 @@
 <template>
   <div class="card2">
    <div class="comment"> 
-    <div style="font-size:40px; line-height:50px">
+    <div style="font-size:45px; line-height:1.2em;">
      <span>Short stories to</span><br/>
      <span>feel, live, do.</span><br/>
     </div><br/><br><br/>
-     <div style="font-size:20px; line-height:1.3em">
+     <div style="font-size:23px; line-height:1.2em">
       <span>우리에게 가장 소중한 경험들이 언제나 그렇듯이,</span><br/>
       <span>단편선에서의 여정은 한 줄의 이야기로부터 시작됩니다.</span><br/><br/>
       <span>여러분과 저희가 공유하는 이 공간에서, 우리는 함께</span><br/>
@@ -36,17 +36,16 @@ export default {
 </script>
 <style>
   .card2{
+    display: flex;
     width: 100%;
     height: 800px;
     background-color: rgb(2, 52, 63);
-    padding: 180px;
+    
 
   }
   .comment{
-    position: absolute;
-    left: 15%;
-    
     margin: auto;
+    margin-left: 22%;
   }
   .comment span{
     font-weight: bold;

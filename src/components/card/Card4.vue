@@ -42,17 +42,21 @@ export default {
     width: 100%;
     height: 1100px;
     background-color: rgb(51, 27, 63);
-    padding: 180px;
+    display: flex;
 
   }
   .card4-comment{
-    position: absolute;
-    left: 15%;
-    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     color:rgb(240, 237, 204);
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     text-align: left;
     color: #ACC7B4;
+    margin-left: 22%;
+   
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .card4-comment-title span{
@@ -68,7 +72,6 @@ export default {
 
   .reservationButton{
     margin-top: 80px;
-    
   }
   .reservationButton button{
     padding: 30px 100px;

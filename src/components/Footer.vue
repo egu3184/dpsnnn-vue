@@ -1,7 +1,7 @@
 <template>
-  <div class="footer">
-  <h3>저는 Footer에용</h3>
-  </div>
+  <footer>
+    <span>We are, as a species, addicted to stories.</span>
+  </footer>
 </template>
 
 <script>
@@ -12,9 +12,12 @@ export default {};
 
 </style>
 <style scoped>
-  .footer{
+  footer{
     width: 100%;
-    background-color: yellowgreen;
-    height: 200px;
+    text-align: center;
+    height: auto;
+    color: rgba(126, 122, 122, 0.959);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    
   }
 </style>
