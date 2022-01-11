@@ -1,17 +1,17 @@
 <template>
-  <div class="card8">
-    <div class="picture8"> 
+  <div class="card9">
+    <div class="picture9"> 
     </div>   
-    <div class="title8">
-      <span>그림자 없는 상자</span>
+    <div class="title9">
+      <span>사람들은 그것을 행복이라 부르기로 했다.</span>
     </div>
-    <div class="content8">
-      <span>“결국 끝도, 시작도, 누나한테 달렸어.”</span>
+    <div class="content9">
+      <span>석우는 루드베키아의 문을 열었다.</span>
     </div>  
     <div class="more"><a href="#">더보기</a></div>
-    <div class="line8"><span></span></div>
-    <div class="playtime8"><span>1 hr 10 min</span></div>
-    <div class="button8"><button>예약하기</button></div>
+    <div class="line9"><span></span></div>
+    <div class="playtime9"><span>1 hr 10 min</span></div>
+    <div class="button9"><button>예약하기</button></div>
   </div>
 </template>
 <script>
@@ -31,7 +31,7 @@ export default {
 }
 </script>
 <style>
-  .card8{
+  .card9{
     border:rgb(177, 166, 166) 1px solid;
     width: 20vw;
     height: 75vh;
@@ -50,7 +50,7 @@ export default {
   }
   */
 
-  .line8{
+  .line9{
     width: 23rem;
     border: 1px solid rgb(228, 221, 221);
     
@@ -58,7 +58,7 @@ export default {
     display: flex;
     align-items: center;
   }
-  .title8{
+  .title9{
     height: 3rem;
 
     padding: 1.5rem 1.75rem;
@@ -77,26 +77,26 @@ export default {
     text-underline-position:under;
   }
 
-  .content8{
+  .content9{
    
     height: 2rem;
     text-align: left;
     padding: 1.5rem 1.75rem;
   }
 
-  .playtime8{
+  .playtime9{
     height: 2rem;
     text-align: left;
     padding: 1.5rem 1.75rem;
   }
 
-  .picture8{
+  .picture9{
     height: 26rem;
    
-    background-image: url("https://static.wixstatic.com/media/7d3d32_fb2337143586484b8ba78480ab1e76eb~mv2.jpg/v1/fill/w_413,h_413,fp_0.50_0.50,q_80,usm_0.66_1.00_0.01/7d3d32_fb2337143586484b8ba78480ab1e76eb~mv2.webp");
+    background-image: url("https://static.wixstatic.com/media/7d3d32_b23f50c86c5a482f84707a3db1aaea4c~mv2.jpg/v1/fill/w_413,h_413,fp_0.50_0.50,q_80,usm_0.66_1.00_0.01/7d3d32_b23f50c86c5a482f84707a3db1aaea4c~mv2.webp.wixstatic.com/media/7d3d32_fb2337143586484b8ba78480ab1e76eb~mv2.jpg/v1/fill/w_413,h_413,fp_0.50_0.50,q_80,usm_0.66_1.00_0.01/7d3d32_fb2337143586484b8ba78480ab1e76eb~mv2.webp");
   }
 
-  .button8 button{
+  .button9 button{
     padding: 0.8rem 2rem;
     background-color: transparent;
     color: gray;

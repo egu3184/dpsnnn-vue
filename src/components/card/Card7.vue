@@ -1,15 +1,21 @@
 <template>
   <div class="card7">
-    <Card8/>
+    <div class="card7-theme1"> 
+      <Card8/>
+    </div>
+    <div class="card7-theme2">
+      <Card9/>
+    </div>  
   </div>
 </template>
 <script>
 
 import Card8 from "@/components/card/Card8";
+import Card9 from "@/components/card/Card9";
 
 export default {
   name: '',
-  components: { Card8 },
+  components: { Card8, Card9 },
   data() {
     return {
        sampleData: ''
@@ -26,6 +32,12 @@ export default {
   .card7{
     width: 100%;
     height: 1100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
   }
   
+
+
 </style>
