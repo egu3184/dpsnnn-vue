@@ -32,6 +32,7 @@ export default {
   .card7{
     width: 100%;
     height: 1100px;
+    padding: 0rem 25rem;
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
