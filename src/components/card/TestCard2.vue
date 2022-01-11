@@ -1,16 +1,18 @@
 <template>
   <div class="card8">
-    <div class="picture8" style="background-image: url('https://static.wixstatic.com/media/7d3d32_fb2337143586484b8ba78480ab1e76eb~mv2.jpg/v1/fill/w_413,h_413,fp_0.50_0.50,q_80,usm_0.66_1.00_0.01/7d3d32_fb2337143586484b8ba78480ab1e76eb~mv2.webp')"> 
+    <div class="picture8" v-bind:style="{backgroundImage:'url('+this.background+')'}"> 
     </div>   
     <div class="title8">
-      <span>그림자 없는 상자</span>
+      <slot name="title"></slot>
     </div>
     <div class="content8">
-      <span>“결국 끝도, 시작도, 누나한테 달렸어.”</span>
+      <slot name="content"></slot>
     </div>  
     <div class="more"><a href="#">더보기</a></div>
     <div class="line8"><span></span></div>
-    <div class="playtime8"><span>1 hr 10 min</span></div>
+    <div class="playtime8">
+      <slot name="playtime"></slot>
+    </div>
     <div class="button8"><button>예약하기</button></div>
   </div>
 </template>
@@ -18,9 +20,15 @@
 export default {
   name: '',
   components: {},
+  props:{
+    background: {
+      type:String,
+    }
+  },
   data() {
     return {
-       sampleData: ''
+     
+       
     };
   },
   setup() {},
@@ -93,7 +101,7 @@ export default {
   .picture8{
     height: 26rem;
    
-    background-image: url();
+    background-image: url("");
   }
 
   .button8 button{
