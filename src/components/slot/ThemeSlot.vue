@@ -1,6 +1,6 @@
 <template>
   <div class="card8">
-    <div class="picture8" v-bind:style="{backgroundImage:'url('+this.background+')'}"> 
+    <div class="picture8" v-bind:style="{'background-image':'url('+this.background+')'}"> 
     </div>   
     <div class="title8">
       <slot name="title"></slot>
@@ -41,7 +41,7 @@ export default {
 <style>
   .card8{
     border:rgb(177, 166, 166) 1px solid;
-    width: 20vw;
+    width: 500px;
     height: 75vh;
     display: flex;
     flex-direction: column;
@@ -59,11 +59,11 @@ export default {
   */
 
   .line8{
-    width: 23rem;
+   
     border: 1px solid rgb(228, 221, 221);
+   
+    margin: 0rem 1.8rem;
     
-    margin-left: 1.8rem;
-    display: flex;
     align-items: center;
   }
   .title8{
