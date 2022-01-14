@@ -47,18 +47,31 @@ export default {
     position: absolute;
     top: 25%;
     background-attachment: fixed;
-    
     width: 100%;
     
   }
-  .card3-text p {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 48px;
-    color: whitesmoke;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-   
+
+  @media (max-width:768px) {
+    .card3-text p {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 24px;
+      color: whitesmoke;
+      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    }
   }
+
+  @media (min-width: 767px) {
+    .card3-text p {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 48px;
+      color: whitesmoke;
+      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    }
+  }
+
+
 
   
 </style>

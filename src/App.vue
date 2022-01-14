@@ -30,13 +30,10 @@ import Content from './components/Content.vue'
   
 }
 
-.wrap{
-  display:flex;
-}
 
+html, body{
+  margin: 0;
+  padding: 0;
+}  
 
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

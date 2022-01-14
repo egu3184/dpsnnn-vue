@@ -5,9 +5,7 @@
        <span>공간으로의 이야기,</span><br/>
        <span>단편선</span>
       </div>
-      <div class="card1-reservationButton">
-        <button>예약하기</button>
-      </div>
+     
     </div>  
   </div>
 </template>

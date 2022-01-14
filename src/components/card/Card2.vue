@@ -40,8 +40,6 @@ export default {
     width: 100%;
     height: 800px;
     background-color: rgb(2, 52, 63);
-    
-
   }
   .comment{
     margin: auto;

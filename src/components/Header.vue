@@ -54,7 +54,11 @@ li a:hover{
 }
 .menu{
   float: right;
-  
+}
+@media (max-width: 768px) {
+  .menu{
+    display: none;
+  }
 }
 
 </style>
