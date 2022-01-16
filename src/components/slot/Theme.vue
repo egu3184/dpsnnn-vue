@@ -11,7 +11,8 @@
        <slot name="content"></slot>
      </div>
     <div class="reservationButton">
-      <button v-bind:style=styleObject>예약하기</button>
+      <!-- <button v-bind:style=styleObject>예약하기</button> -->
+      <slot name="button"></slot>
     </div>
    </div>
   </div>
@@ -113,7 +114,7 @@ export default {
       display: flex;
       justify-content: center;
       margin-top: 4rem;
-   }   
+  }   
   }
 
   

@@ -17,17 +17,21 @@
         <span>공식 발표 이틀 전 사라져버린 연구소장.</span><br/>
         <span>그 사건에 배정된 형사, 김석우.</span><br/><br/>
         <span>석우는 루드베키아의 문을 열었다.</span>
-      </template>       
+      </template>
+      <template v-slot:button>
+        <ReservationButton :theme=theme></ReservationButton>
+      </template>        
     </Theme>  
   </div>
 </template>
 <script>
 
 import Theme from "@/components/slot/Theme"
+import ReservationButton from "@/components/slot/ReservationButton"
 
 export default {
   name: '',
-  components: { Theme },
+  components: { Theme,ReservationButton },
   data() {
     return {
         theme:{

@@ -15,17 +15,21 @@
         <span>하지만 시현아. 누나도 사람이고, 힘들고, 아파.</span><br/><br/>
         <span>초자연적인 물체니 뭐니... 동생의 망상을 견뎌주는 것도 이제 한계다.</span><br/>
         <span>지쳐버린 나는 이 허무맹랑한 문자를 받고, 마지막으로 쓴소리를 해주러 시현이의 집으로 향했다.</span><br/>
-      </template>     
+      </template>
+      <template v-slot:button>
+        <ReservationButton :theme=theme></ReservationButton>
+      </template>       
     </Theme> 
   </div>
 </template>
 <script>
 
 import Theme from "@/components/slot/Theme"
+import ReservationButton from "@/components/slot/ReservationButton"
 
 export default {
   name: '',
-  components: { Theme },
+  components: { Theme, ReservationButton },
   data() {
     return {
       theme:{
