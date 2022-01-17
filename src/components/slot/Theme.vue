@@ -13,8 +13,9 @@
         <template v-slot:content></template>
       </Theme-card-content> 
    </div>
-    <div class="reservationButton" v-if="Theme.isRequiredReservationButtion==true">
-      <ReservationButton />
+    <!-- Button -->
+    <div class="reservationButton" v-if="Theme.button.isRequiredReservationButtion==true">
+      <ReservationButton :button=Theme.button />
     </div>
   </div>
   </div> 
@@ -39,8 +40,10 @@ export default {
        Theme: this.theme, 
        styleObject: {
          'background-color':this.theme.backgroundColor,
-         'color':this.theme.fontColor,
-         'border-color':this.theme.fontColor 
+        //  'color': this.theme.defaultColor,
+         'color': 'red',
+        //  'border-color': this.theme.defaultColor,
+         'border-color': 'red', //여기가 안 됨.
        },
        
     };
@@ -56,6 +59,7 @@ export default {
   .theme-card-slot{
     width: 100%;
     display: flex; 
+    
   }
   .theme-description{
     display: flex;
@@ -73,6 +77,7 @@ export default {
       padding: 30px 100px;
       font-size: 25px;
       border: 3px solid ;
+      
    }
     .theme-description-head{
       font-weight:bold; 
@@ -120,8 +125,6 @@ export default {
     }   
   }
 
-
-
   .theme-description-content span{   
    
     line-height:1.3em;
@@ -129,13 +132,5 @@ export default {
     margin: 0;
   }
 
-  .reservationButton button{
-    background-color: transparent;
-    border: 3px solid;
-  }
-  .reservationButton button:hover{
-    background-color: black;
-    color: white;
-  }
 
 </style>

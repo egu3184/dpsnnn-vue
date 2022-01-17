@@ -29,11 +29,14 @@ export default {
               contentFontColor : '',
               contentFontSize : '',
           },
-          // Default 
+          button: {
+             isRequiredReservationButtion: true,
+             buttonFontColor: '',
+             buttonFborderColor: '',
+          },
+           // Default 
           backgroundColor: 'rgb(2, 52, 63)',
-          fontColor : 'rgb(240, 237, 204)',
-          isRequiredReservationButtion: false,
-             
+          defaultColor: 'rgb(240, 237, 204)',   
       }
     };
   },

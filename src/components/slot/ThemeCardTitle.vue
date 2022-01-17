@@ -20,7 +20,6 @@ export default {
                  'font-size':this.head.titleFontSize,
                  'color':this.head.titleFontColor
              }
-
         };
     },
     setup() {},
