@@ -1,33 +1,26 @@
 <template>
-  <div class="theme-card-slot" v-bind:style=styleObject>
-   <div class="theme-description"> 
-     <!-- Title -->
-    <div class="theme-description-head">
-      <ThemeCardTitle :head=Theme.head>
-        <template v-slot:title></template>
-      </ThemeCardTitle> 
+  <div class="content-theme-card" v-bind:style=styleObject>
+   <div class="card-comment"> 
+    <div class="card-comment-enTitle">
+      <slot name="egTitle"></slot>
     </div>
-    <!-- Content -->
-    <div class="theme-description-content">
-      <Theme-card-content :content=Theme.content>
-        <template v-slot:content></template>
-      </Theme-card-content> 
+    <div class="card-comment-krTitle">
+      <slot name="krTitle"></slot>
+    </div><br/><br><br/>
+     <div class="card-comment-content">
+       <slot name="content"></slot>
+     </div>
+    <div class="reservationButton">
+      <!-- <button v-bind:style=styleObject>예약하기</button> -->
+      <slot name="button"></slot>
+    </div>
    </div>
-    <div class="reservationButton" v-if="Theme.isRequiredReservationButtion==true">
-      <ReservationButton />
-    </div>
   </div>
-  </div> 
 </template>
 <script>
-
-import ThemeCardTitle from "@/components/slot/ThemeCardTitle"
-import ThemeCardContent from "@/components/slot/ThemeCardContent"
-import ReservationButton from "@/components/slot/ReservationButton"
-
 export default {
   name: '',
-  components: { ThemeCardTitle, ThemeCardContent, ReservationButton},
+  components: {},
   props:{
     theme: Object,
   },
@@ -36,7 +29,6 @@ export default {
   },
   data() {
     return {
-       Theme: this.theme, 
        styleObject: {
          'background-color':this.theme.backgroundColor,
          'color':this.theme.fontColor,
@@ -53,59 +45,60 @@ export default {
 }
 </script>
 <style>
-  .theme-card-slot{
+  .content-theme-card{
     width: 100%;
-    display: flex; 
+    display: flex;
+    
   }
-  .theme-description{
+
+  .card-comment{
     display: flex;
     flex-direction: column;
     justify-content: center;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     text-align: left;
-    margin: 10% 30% 6% 25%;
+    margin: 10% 20%;
   }
 
-
-  /* 데스크톱 */
   @media (min-width: 769px){
+   
+   .card-comment-content{
+     font-size:23px; 
+   }
+   
    .reservationButton button{
       padding: 30px 100px;
       font-size: 25px;
       border: 3px solid ;
    }
-    .theme-description-head{
+   .card-comment-enTitle span{
+      line-height: 60px;
+      font-size: 40px;
+    }  
+    .card-comment-krTitle{
       font-weight:bold; 
-      /* 폰트 사이즈 기본값 */
-      font-size:45px;
-      line-height: 3rem;
-      margin-bottom: 5.5rem;
-    }
-    .theme-description-content{
-      /* 폰트 사이즈 기본값 */
-      font-size:23px; 
+      font-size:50px;
     }
     .reservationButton{
     display: flex;
     justify-content: left;
     margin-top: 4rem;
-   } 
+  } 
   }
 
-
-
-  /* 모바일 */
   @media (max-width:768px){
-    .theme-description{
+    .card-comment{
       margin-left:  11%;
       margin-right: 11%;
     }
-    .theme-description-head{
-      font-weight:bold; 
-      /* 폰트 사이즈 기본값 */
-      font-size:28px;
-      line-height: 3rem;
-      margin-bottom: 2.5rem;
+
+    .card-comment-enTitle span{
+        line-height: 30px;
+        font-size: 22px;
+    }
+
+    .card-comment-content span{
+      font-size: 17px;
     }  
     .reservationButton button{
       padding: 15px 50px;
@@ -113,16 +106,21 @@ export default {
       border: 3px solid;
       justify-content: center;
    }
+    .card-comment-krTitle{
+      font-weight:bold; 
+      font-size:30px;
+    }
     .reservationButton{
       display: flex;
       justify-content: center;
       margin-top: 4rem;
-    }   
+  }   
   }
 
+  
 
 
-  .theme-description-content span{   
+  .card-comment-content span{   
    
     line-height:1.3em;
     padding: 0;
