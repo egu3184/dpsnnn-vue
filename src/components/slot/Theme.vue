@@ -87,7 +87,7 @@ export default {
       font-weight:bold; 
       /* 폰트 사이즈 기본값 */
       font-size:45px;
-      line-height: 3rem;
+      line-height: 4.7rem;
       margin-bottom: 5.5rem;
     }
     .theme-description-content{
@@ -125,7 +125,8 @@ export default {
     .reservationButton{
       display: flex;
       justify-content: center;
-      margin-top: 4rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1.5rem;
     }   
   }
 
