@@ -3,19 +3,21 @@
    <div class="theme-description"> 
      <!-- Title -->
     <div class="theme-description-head">
-      <ThemeCardTitle :head=Theme.head>
+      <ThemeCardTitle :head=theme.head>
         <template v-slot:title></template>
       </ThemeCardTitle> 
     </div>
     <!-- Content -->
     <div class="theme-description-content">
-      <Theme-card-content :content=Theme.content>
+      <Theme-card-content :content=theme.content>
         <template v-slot:content></template>
       </Theme-card-content> 
    </div>
     <!-- Button -->
-    <div class="reservationButton" v-if="Theme.button.isRequiredReservationButtion==true">
-      <ReservationButton :button=Theme.button />
+    <div class="reservationButton" v-if="theme.button.isRequiredReservationButtion==true">
+      <ReservationButton :defaultColor=theme.defaultColor :button=theme.button>
+          <template v-slot:button></template>
+      </ReservationButton>
     </div>
   </div>
   </div> 
@@ -37,15 +39,12 @@ export default {
   },
   data() {
     return {
-       Theme: this.theme, 
        styleObject: {
          'background-color':this.theme.backgroundColor,
-        //  'color': this.theme.defaultColor,
-         'color': 'red',
-        //  'border-color': this.theme.defaultColor,
-         'border-color': 'red', //여기가 안 됨.
+         'color': this.theme.defaultColor,
        },
-       
+      
+
     };
   },
   setup() {},
@@ -70,6 +69,11 @@ export default {
     margin: 10% 30% 6% 25%;
   }
 
+   .reservationButton button{
+      
+      border: 3px solid ;
+      
+   }
 
   /* 데스크톱 */
   @media (min-width: 769px){

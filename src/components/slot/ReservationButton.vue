@@ -1,6 +1,9 @@
 <template>
   <div class="reservationButton"> 
-    <button v-bind:style=buttonStyle>예약하기</button>
+    <slot name="button">
+      <button v-if="button.buttonFontColor == ''" :style=defaultStyle>예약하기</button>
+      <button v-else :style=buttonStyle>예약하기</button>
+    </slot>
   </div>
 </template>
 <script>
@@ -8,18 +11,19 @@ export default {
   name: '',
   components: {},
   props:{
+    defaultColor:String,
     button: Object,
-  },
-  computed:{
-
   },
   data() {
     return {
-       buttonStyle: {
-         'color': this.button.buttonFontColor,
-         'border-color':this.button.buttonBorderColor 
-       },
-       
+      defaultStyle:{
+        'border-color': this.defaultColor,
+        'color': this.defaultColor,
+      },
+      buttonStyle:{
+        'border-color': this.button.buttonBorderColor,
+        'color': this.button.buttonFontColor,
+      }
     };
   },
   setup() {},
