@@ -30,7 +30,6 @@ export default {
               contentFontSize : '',
           },
           button: {
-             color: 'red',
              isRequiredReservationButtion: true,
              buttonFontColor: '',
              buttonBorderColor: '',
