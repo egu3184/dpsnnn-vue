@@ -1,7 +1,7 @@
 <template>
   <div class="card7">
-    <div class="card7-theme1"> 
-      <ThemeCardSlot :background="Theme1.background">
+    
+      <SimpleThemeCardSlot :background="Theme1.background">
         <template v-slot:title>
          <span> {{Theme1.title}} </span>
         </template>
@@ -11,10 +11,8 @@
         <template v-slot:playtime>
           <span>{{Theme1.playtime}}</span>
         </template> 
-      </ThemeCardSlot>
-    </div>
-    <div class="card7-theme2">
-       <ThemeCardSlot :background="Theme2.background">
+      </SimpleThemeCardSlot>
+       <SimpleThemeCardSlot :background="Theme2.background">
         <template v-slot:title>
          <span> {{Theme2.title}} </span>
         </template>
@@ -24,17 +22,16 @@
         <template v-slot:playtime>
           <span>{{Theme2.playtime}}</span>
         </template> 
-      </ThemeCardSlot>  
+      </SimpleThemeCardSlot>
     </div>
-  </div>
 </template>
 <script>
 
-import ThemeCardSlot from "@/components/slot/ThemeCardSlot";
+import SimpleThemeCardSlot from "@/components/slot/SimpleThemeCardSlot";
 
 export default {
   name: '',
-  components: { ThemeCardSlot },
+  components: { SimpleThemeCardSlot },
   
   data() {
     return {
@@ -63,15 +60,13 @@ export default {
 </script>
 <style>
   .card7{
-    width: 100%;
-    height: 1100px;
-    padding: 0rem 25rem;
+    width: 100%;    
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
+    flex-wrap: wrap;
   }
-  
 
 
 </style>

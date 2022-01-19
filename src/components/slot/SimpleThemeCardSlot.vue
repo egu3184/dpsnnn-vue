@@ -1,19 +1,19 @@
 <template>
-  <div class="card8">
-    <div class="picture8" v-bind:style="{'background-image':'url('+this.background+')'}"> 
+  <div class="SimpleThemeCardSlot">
+    <div class="simple-theme-picture" v-bind:style="{'background-image':'url('+this.background+')'}"> 
     </div>   
-    <div class="title8">
+    <div class="simple-theme-title">
       <slot name="title"></slot>
     </div>
-    <div class="content8">
+    <div class="simple-theme-content">
       <slot name="content"></slot>
     </div>  
     <div class="more"><a href="#">더보기</a></div>
-    <div class="line8"><span></span></div>
-    <div class="playtime8">
+    <div class="simple-theme-line"><span></span></div>
+    <div class="simple-theme-playtime">
       <slot name="playtime"></slot>
     </div>
-    <div class="button8"><button>예약하기</button></div>
+    <div class="simple-theme-button"><button>예약하기</button></div>
   </div>
 </template>
 <script>
@@ -38,81 +38,133 @@ export default {
   methods: {}
 }
 </script>
-<style>
-  .card8{
-    border:rgb(177, 166, 166) 1px solid;
-    width: 500px;
-    height: 75vh;
+<style > 
+.SimpleThemeCardSlot {
+    border: rgb(177, 166, 166) 1px solid;
+    width: 18rem;
     display: flex;
     flex-direction: column;
-    margin: 0px 40px;
-  }
-  /*
-  .more::after{
-    content: "";
-    display: block;
-    width: 20rem;
-    padding-left: 10rem;
+}
+
+@media (max-width: 768px) {
+
+    .SimpleThemeCardSlot {
+        width: 20rem;
+        margin: 4rem 3rem;
+    }
+    .simple-theme-picture {
+        height: 42vh;
+        background-image: url("");
+    }
+    .simple-theme-title span {
+        height: 3rem;
+        font-weight: bold;
+        font-size: 23px;
+
+    }
+    .simple-theme-title {
+        padding: 1.5rem 1.75rem 0.5rem;
+    }
+    .simple-theme-content {
+        text-align: left;
+        padding: 1.0rem 1.75rem;
+        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+    .more {
+        padding-bottom: 1rem;
+        padding-left: 1.75rem;
+    }
+    .more a {
+        color: gray;
+        text-decoration: underline;
+        text-underline-position: under;
+    }
+    .simple-theme-line {
+        border: 1px solid rgb(228, 221, 221);
+        margin: 0 1.8rem;
+        align-items: center;
+    }
+    .simple-theme-playtime {
+        text-align: left;
+        padding: 1.5rem 1.75rem;
+        color: gray;
+    }
     
-    border-bottom: 1px solid red;
-  }
-  */
+    .simple-theme-button button {
+        padding: 0.3rem 2rem;
+        background-color: transparent;
+        color: gray;
+        font-size: 1.2rem;
+        border: 3px solid rgb(160, 156, 156);
+        display: flex;
+        margin-left: 1.45rem;
+        margin-bottom: 1.6rem;
+    }
+}
 
-  .line8{
-   
-    border: 1px solid rgb(228, 221, 221);
-   
-    margin: 0rem 1.8rem;
+/* 데스크톱 */
+@media (min-width: 768px) {
+    .SimpleThemeCardSlot {
+        width: 25rem;
+        border: 1px solid rgb(182, 179, 172);
+        margin: 6rem 3rem;
+    }
+
+    .simple-theme-picture {
+        height: 25.5rem;
+        background-image: url("");
+    }
+    .simple-theme-title span {
+        height: 3rem;
+        font-weight: bold;
+        font-size: 20px;
+        font-weight: bold;
+        font-size: 1.1rem;
+
+    }
+    .simple-theme-title {
+        padding: 1.5rem 1.75rem 0.5rem;
+    }
+    .simple-theme-content {
+        text-align: left;
+        padding: 1.0rem 1.75rem;
+        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .more {
+        padding-bottom: 1rem;
+        padding-left: 1.75rem;
+    }
+    .more a {
+        color: gray;
+        text-decoration: underline;
+        text-underline-position: under;
+    }
+    .simple-theme-line {
+        border: 1px solid rgb(228, 221, 221);
+        margin: 0 1.8rem;
+        align-items: center;
+    }
+    .simple-theme-playtime {
+        text-align: left;
+        padding: 1.5rem 1.75rem;
+        color: gray;
+    }
     
-    align-items: center;
-  }
-  .title8{
-    height: 3rem;
+    .simple-theme-button button {
+        padding: 0.3rem 2rem;
+        background-color: transparent;
+        color: gray;
+        font-size: 1.2rem;
+        border: 3px solid rgb(160, 156, 156);
+        display: flex;
+        margin-left: 1.45rem;
+        margin-bottom: 1.6rem;
+    }
 
-    padding: 1.5rem 1.75rem;
-    font-weight: bold;
-    font-size: 20px;
-  }
+}
 
-  .more{
-    height: 2.5rem;
-    margin-top: 0.8rem;
-  }
-  .more a{
-    padding: 1.5rem 1.75rem;
-    color: gray;
-    text-decoration: underline; 
-    text-underline-position:under;
-  }
-
-  .content8{
-   
-    height: 2rem;
-    text-align: left;
-    padding: 1.5rem 1.75rem;
-  }
-
-  .playtime8{
-    height: 2rem;
-    text-align: left;
-    padding: 1.5rem 1.75rem;
-  }
-
-  .picture8{
-    height: 26rem;
-   
-    background-image: url("");
-  }
-
-  .button8 button{
-    padding: 0.8rem 2rem;
-    background-color: transparent;
-    color: gray;
-    font-size: 20px;
-    border: 3px solid gray;
-    display: flex;
-    margin-top: 0.5rem;
-    margin-left: 1.45rem;
-  }
-  
 </style>
