@@ -51,7 +51,6 @@ export default {
     top: 25%;
     background-attachment: fixed;
     width: 100%;
-    line-height: 5rem;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   }
   /* 모바일 */
@@ -66,7 +65,7 @@ export default {
       text-align: center;
       font-size: 25px;
       color: whitesmoke;
-      
+      line-height: 5rem;
     }
   }
   /* 데스크탑 */
@@ -76,7 +75,7 @@ export default {
       text-align: center;
       font-size: 48px;
       color: whitesmoke;
-      
+      line-height: 8rem;
     }
   }
 
