@@ -97,7 +97,7 @@ export default {
         background-color: transparent;
         color: gray;
         font-size: 1.2rem;
-        border: 3px solid rgb(160, 156, 156);
+        border: 1px solid rgb(160, 156, 156);
         display: flex;
         margin-left: 1.45rem;
         margin-bottom: 1.6rem;
