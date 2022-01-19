@@ -1,24 +1,22 @@
 <template>
-  <div class="card3">
-    <div class="box">
-      <video muted autoplay loop>
-        <source src="@/assets/file.mp4" type="video/mp4">
-      </video>
-      <div class="card3-text">
-        <p>첫번째 이야기</p><br/>
-        <p>그림자 없는 상자</p>
-      </div>
-    </div>  
-
-  </div>
+   <MediaCard :media=media>
+      
+   </MediaCard>  
 </template>
 <script>
+
+
+import MediaCard from "@/components/slot/MediaCard"
+
 export default {
   name: '',
-  components: {},
+  components: { MediaCard },
   data() {
     return {
-       sampleData: ''
+       media:{
+         title: [ '첫번째 이야기' , '그림자 없는 상자' ],
+         url : 'https://video.wixstatic.com/video/11062b_bd7d32dd41fb42d79843cc0ab9a06e53/1080p/mp4/file.mp4',
+       }
     };
   },
   setup() {},
@@ -28,50 +26,3 @@ export default {
   methods: {}
 }
 </script>
-<style>
-  .card3{
-   width: 100%;
-    position: relative;
-    height: 80vh;
-    
-  }
-  video{
-    width: 100%;
-    height: 80vh;
-    overflow: hidden;
-    object-fit: cover;
-  
-  }
-    
-  .card3-text{
-    position: absolute;
-    top: 25%;
-    background-attachment: fixed;
-    width: 100%;
-    
-  }
-
-  @media (max-width:768px) {
-    .card3-text p {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 24px;
-      color: whitesmoke;
-      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    }
-  }
-
-  @media (min-width: 767px) {
-    .card3-text p {
-      margin-top: 10px;
-      text-align: center;
-      font-size: 48px;
-      color: whitesmoke;
-      font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    }
-  }
-
-
-
-  
-</style>

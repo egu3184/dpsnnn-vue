@@ -1,24 +1,23 @@
 <template>
-  <div class="card5">
-    <div class="box">
-      <video muted autoplay loop>
-        <source src="@/assets/flower.mp4" type="video/mp4">
-      </video>
-      <div class="card5-text">
-        <p>두번째 이야기</p><br/>
-        <p>사람들은 그것을 행복이라 부르기로 했다.</p>
-      </div>
-    </div>  
-
-  </div>
+   <MediaCard :media=media>
+      
+   </MediaCard>  
 </template>
 <script>
+
+
+import MediaCard from "@/components/slot/MediaCard"
+
 export default {
   name: '',
-  components: {},
+  components: { MediaCard },
   data() {
     return {
-       sampleData: ''
+       media:{
+         title: [ '두번째 이야기' , '사람들은 그것을 행복이라 부르기로 했다.' ],
+         url : 'https://video.wixstatic.com/video/11062b_00b0cf7d3e8847a4afbde2407008ec49/1080p/mp4/file.mp4',
+         
+       }
     };
   },
   setup() {},
@@ -28,28 +27,3 @@ export default {
   methods: {}
 }
 </script>
-<style>
-  .card5{
-    width: 100%;
-    position: relative;
-    height: 80vh;
-  }
-    
-  .card5-text{
-    position: absolute;
-    top: 25%;
-    
-    width: 100%;
-    
-  }
-  .card5-text p {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 48px;
-    color: whitesmoke;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-   
-  }
-
-  
-</style>
