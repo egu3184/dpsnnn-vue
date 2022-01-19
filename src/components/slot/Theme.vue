@@ -78,7 +78,7 @@ export default {
   /* 데스크톱 */
   @media (min-width: 769px){
    .reservationButton button{
-      padding: 30px 100px;
+      
       font-size: 25px;
       border: 3px solid ;
       
@@ -94,11 +94,6 @@ export default {
       /* 폰트 사이즈 기본값 */
       font-size:23px; 
     }
-    .reservationButton{
-    display: flex;
-    justify-content: left;
-    margin-top: 4rem;
-   } 
   }
 
 
@@ -116,18 +111,7 @@ export default {
       line-height: 3rem;
       margin-bottom: 2.5rem;
     }  
-    .reservationButton button{
-      padding: 15px 50px;
-      font-size: 15px;
-      border: 3px solid;
-      justify-content: center;
-   }
-    .reservationButton{
-      display: flex;
-      justify-content: center;
-      margin-top: 1.5rem;
-      margin-bottom: 1.5rem;
-    }   
+    
   }
 
   .theme-description-content span{   

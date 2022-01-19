@@ -1,10 +1,10 @@
 <template>
-  <div class="reservationButton"> 
-    <slot name="button">
-      <button v-if="button.buttonFontColor == ''" :style=defaultStyle>예약하기</button>
-      <button v-else :style=buttonStyle>예약하기</button>
-    </slot>
-  </div>
+    <div class="reservationButton">
+      <slot name="button">
+        <button v-if="button.buttonFontColor == ''" :style=defaultStyle>예약하기</button>
+        <button v-else :style=buttonStyle>예약하기</button>
+      </slot>
+    </div>
 </template>
 <script>
 export default {
@@ -34,17 +34,18 @@ export default {
 }
 </script>
 <style>
+  
 
   @media (min-width: 769px){
    .reservationButton button{
-      padding: 30px 100px;
-      font-size: 25px;
+      padding: 2rem 5rem;
+      font-size: rem;
       border: 3px solid ;
    }
     .reservationButton{
       display: flex;
-      justify-content: left;
-      margin-top: 4rem;
+      justify-items: center;
+      align-items: center;
     } 
   }
 
@@ -58,7 +59,8 @@ export default {
     .reservationButton{
       display: flex;
       justify-content: center;
-      margin-top: 4rem;
+      align-items: center;
+      
    }   
   }
 
