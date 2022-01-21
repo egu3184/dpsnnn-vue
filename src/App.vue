@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Header />
-    <Content />
+    <div id="content">
+      <router-view></router-view>
+    </div>  
     <Footer />
   </div>
   
@@ -9,12 +11,12 @@
 
 <script>
 
-import Header from "@/components/Header";
-import Footer from "./components/Footer.vue"
-import Content from './components/Content.vue'
+import Header from "@/components/layout/Header";
+import Footer from "./components/layout/Footer.vue"
+
 
   export default({
-    components: {Header, Footer, Content},
+    components: { Header, Footer, },
     setup() {
       
     },

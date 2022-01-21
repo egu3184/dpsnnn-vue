@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Theme from '@/views/Theme.vue'
 
 
 Vue.use(VueRouter)
@@ -11,6 +12,13 @@ const routes = [
     name: 'Home',
     component: Home
   },
+
+  {
+    path: '/theme',
+    name: 'Theme',
+    component: Theme
+
+  }
   
  
 ]
