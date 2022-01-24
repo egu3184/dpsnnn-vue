@@ -1,24 +1,44 @@
 <template>
   <div id="theme">
-    
-     <div class="title2"></div>  
-    
-     <div class="img"><img src="https://cdn.imweb.me/thumbnail/20211116/0ee5f8df51546.jpeg"></div>
-     <div class="container2"></div>
-    
-
+    <ThemeHeader :theme=theme /> 
+    <div class="img">   
+      <div class="img"><img :src=theme.img_src></div>
+    </div>  
+    <div class="container2">
+      <ThemeContent :theme=theme />
+      <div class="themeFooter">
+        <ThemeButton :theme=theme />
+      </div>
+    </div>
   </div>
 </template>
 <script>
 
+import ThemeHeader from "@/components/slot/theme_slot/ThemeHeader" 
+import ThemeContent from "@/components/slot/theme_slot/ThemeContent" 
+import ThemeButton from "@/components/slot/theme_slot/ThemeButton" 
+
 export default {
   name: '',
   components: {
-   
+   ThemeHeader, ThemeContent, ThemeButton
   },
   data() {
     return {
-       sampleData: ''
+       theme:{
+         'title_num':'dps001:',
+         'title_name':'그림자 없는 상자',
+         'img_src': 'https://cdn.imweb.me/thumbnail/20211116/0ee5f8df51546.jpeg',
+         'title': [  ['"미안해 누나. 근데 내가 맞았어.'], ['결국 끝도, 시작도, 누나한테 달렸어."']],
+         'descriptions':[
+              ['안다. 비극에 대처하는 방법은 우리 모두 각자 다르다는 것을.','또한 안다. 어린 나이의 동생에게 막내의 죽음은 감당하기 힘든 일이었을 것이라는 것을.' ],
+              ['하지만 시현아. 누나도 사람이고, 힘들고, 아파.'],
+              ['초자연적인 물체니 뭐니... 동생의 망상을 견뎌주는 것도 이제 한계다.','지쳐버린 나는 이 허무맹랑한 문자를 받고, 마지막으로 쓴소리를 해주러 시현이의 집으로 향했다.']
+          ],
+         
+
+
+       }  
     };
   },
   setup() {},
@@ -31,59 +51,33 @@ export default {
 <style>
   #theme{
     width: 100%;
-    min-height: 1000px; /* 임시 높이(추후 삭제 요망) */
-    background-color: cadetblue;
+    background-color: #2c2524;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: wrap; 
   }
-  .container2{
-    width: 25rem;
-    background-color: rgb(212, 207, 223);
-    
-  }
-  .img{
-    background-color: darkolivegreen; 
-    width: 30rem;
-  }
-  .img img{
-    width: 100%;   
-  }
-
+  /* 모바일 */
   @media (max-width: 798px){
     .img{
-      margin-top: 50%;
+      margin-top: 10%;
       background-color: darkolivegreen; 
-      width: 30rem;
     }
     .img img{
       width: 100%;
-      
     }
-
   }
-
+  /* 데스크탑 */
   @media (min-width: 798px){
-  .img{
-    background-color: darkolivegreen;
-    margin-right: 1%;
-    margin-left: 1%;
-    margin-top: 18%;
-    width: 30rem;
-  }
-  .img img{
-    width: 100%;   
-  }
-  .container2{
-    
-    width: 30rem;
-    background-color: rgb(212, 207, 223);
-    margin-right: 1%;
-    margin-left: 1%;
-    margin-top: 18%;
-    
-  }
-
+    .img{
+      margin-right: 3%;
+      margin-top: 8%;
+      margin-bottom: 10%;
+      width: 35rem;
+    }
+    .img img{
+      width: 100%;   
+    }
+  
   }
 
 

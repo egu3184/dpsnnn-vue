@@ -6,7 +6,7 @@
 <script>
 
 
-import MediaCard from "@/components/slot/MediaCard"
+import MediaCard from "@/components/slot/home_content_slot/MediaCard"
 
 export default {
   name: '',

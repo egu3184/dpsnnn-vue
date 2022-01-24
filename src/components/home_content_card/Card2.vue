@@ -3,7 +3,7 @@
 </template>
 <script>
 
-import Theme from "@/components/slot/Theme"
+import Theme from "@/components/slot/home_content_slot/Theme"
 
 export default {
   name: '',

@@ -27,7 +27,7 @@
 </template>
 <script>
 
-import SimpleThemeCardSlot from "@/components/slot/SimpleThemeCardSlot";
+import SimpleThemeCardSlot from "@/components/slot/home_content_slot/SimpleThemeCardSlot";
 
 export default {
   name: '',

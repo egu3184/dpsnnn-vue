@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import ReservationButton from "@/components/slot/ReservationButton"
+import ReservationButton from "@/components/slot/home_content_slot/ReservationButton"
 
 import { mapGetters, mapState} from 'vuex'
 

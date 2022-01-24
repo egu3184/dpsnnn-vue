@@ -24,9 +24,9 @@
 </template>
 <script>
 
-import ThemeCardTitle from "@/components/slot/ThemeCardTitle"
-import ThemeCardContent from "@/components/slot/ThemeCardContent"
-import ReservationButton from "@/components/slot/ReservationButton"
+import ThemeCardTitle from "@/components/slot/home_content_slot/ThemeCardTitle"
+import ThemeCardContent from "@/components/slot/home_content_slot/ThemeCardContent"
+import ReservationButton from "@/components/slot/home_content_slot/ReservationButton"
 
 export default {
   name: '',

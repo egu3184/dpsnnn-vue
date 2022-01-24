@@ -11,7 +11,7 @@
 </template>
 <script>
 
-import MediaCardTitle from "@/components/slot/MediaCardTitle"
+import MediaCardTitle from "@/components/slot/home_content_slot/MediaCardTitle"
 
 export default {
   name: '',
