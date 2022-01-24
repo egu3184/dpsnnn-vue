@@ -42,7 +42,7 @@ export default {
   /* 데스크톱 */
    @media (min-width: 798px){
     .themeFooter{
-      padding: 12% 35%;
+      padding: 9% 35%;
     }
     .themeFooter button{
       padding: 7% 15%;

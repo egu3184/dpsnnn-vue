@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import Theme from '@/views/Theme.vue'
-
+import Theme_box from '@/views/Theme_box.vue'
+import Theme_happy from '@/views/Theme_happy.vue'
 
 Vue.use(VueRouter)
 
@@ -14,12 +14,18 @@ const routes = [
   },
 
   {
-    path: '/theme',
-    name: 'Theme',
-    component: Theme
+    path: '/box',
+    name: 'box',
+    component: Theme_box
+
+  },
+  
+  {
+    path: '/happy',
+    name: 'happy',
+    component: Theme_happy
 
   }
-  
  
 ]
 
