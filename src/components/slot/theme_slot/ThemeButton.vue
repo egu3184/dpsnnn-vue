@@ -32,6 +32,12 @@ export default {
     border: 0;
     color: rgb(217,197,180);
   }
+
+  .footer button:hover{
+    background-color: #318f87;
+    color: rgb(255, 255, 255);
+  }
+
   .themeFooter{
     padding: 12% 35%;
   }
