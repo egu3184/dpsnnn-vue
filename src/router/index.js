@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Theme_box from '@/views/Theme_box.vue'
 import Theme_happy from '@/views/Theme_happy.vue'
+import Book from "@/views/Book.vue"
 
 Vue.use(VueRouter)
 
@@ -19,11 +20,17 @@ const routes = [
     component: Theme_box
 
   },
-  
+
   {
     path: '/happy',
     name: 'happy',
     component: Theme_happy
+
+  },
+  {
+    path: '/book',
+    name: 'book',
+    component: Book
 
   }
  
