@@ -3,7 +3,7 @@
     <div class="blank"></div>
     <div class="title"><span>Reservation</span></div>
     <div class="selectBar"><a href="#">예약하기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">조회하기</a></div>
-    <div class="progress">
+    <div class="progress2">
       <div class="step step1">
         <p>Step1</p>
         <p>지점/날짜/테마 선택</p>
@@ -100,16 +100,19 @@ export default {
     text-decoration-line: none;
     text-decoration: none;
   }
-  .progress{
-    padding: 3% 5%;
+
+  .progress2{
+    padding: 1% 5%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: rgb(233, 224, 224);
+    flex-wrap: wrap;
   }
   .step{
-    width: 25%;
-    background-color: #318f88;
+    width: 18rem;
+    background-color: #287a75;
     margin: 0rem 0rem 0rem 1.5rem;
     color: whitesmoke;
     font-size: 1rem;
@@ -117,16 +120,16 @@ export default {
     
   }
   .step p{
-    line-height: 0.7rem;
+    line-height: 0.6rem;
     margin: 1rem 2rem 1rem 2rem;
   }
   .step :nth-child(2){
-    font-size: 1.3rem;
+    font-size: 1.15rem;
   }
  .triangle {
     width: 0px;
     height: 0px;
-    border-left: 12px solid #318f88;
+    border-left: 12px solid #287a75;
     border-top: 6px solid transparent;
     border-bottom: 12px solid transparent;
   }
@@ -141,14 +144,31 @@ export default {
     .blank{
       padding: 21%;
     }
-    .progress{
-      
-      padding-top: 20%;
-      padding-bottom: 20%;
+    .progress2{
+      width: 100%;
+      padding: 20%, 0%;
+      padding-left: 0;
+      padding-right: 0;
     }
     .step{
-      display: block
-      
+      width: 150px;
+      height: 70px;
+      margin-left: 16px;
+      margin-bottom: 5px;
+    }
+    .step :nth-child(1){
+      font-size: 0.8rem;
+       margin-left: 16px;
+       margin-right: 16px;
+    }
+
+    .step :nth-child(2){
+      font-size: 0.8rem;
+       margin-left: 16px;
+       margin-right: 16px;
+    }
+    .step4{
+      margin-right: 0.8rem;
     }
   
   }
