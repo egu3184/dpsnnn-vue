@@ -6,7 +6,7 @@
     <div class="progress2">
       <div class="step step1">
         <p>Step1</p>
-        <p>지점/날짜/테마 선택</p>
+        <p>지점/날짜/테마</p>
       </div>
       <div class="triangle triangle1"></div>
       <div class="step step2">
@@ -24,20 +24,25 @@
          <p>예약완료</p>
       </div>
     </div>
-    <div class="container">
-      <div class="branch">
+    <div class="book_container">
+      <div class="book_item branch">
+        <dt>지점</dt>
+        <dd>
+          <ul>
+            <li><a href="#">강남점</a></li>
+            <li><a href="#">홍대점</a></li>
+          </ul> 
+        </dd>
+      </div>
+      <div class="book_item cal">
         <dt></dt>
         <dd></dd>
       </div>
-      <div class="cal">
+      <div class="book_item theme">
         <dt></dt>
         <dd></dd>
       </div>
-      <div class="theme">
-        <dt></dt>
-        <dd></dd>
-      </div>
-      <div class="time">
+      <div class="book_item time">
         <dt></dt>
         <dd></dd>
       </div>
@@ -71,12 +76,15 @@ export default {
   #book{
     height: 1000px;
     background-color: rgb(34, 151, 167);
+    margin: 0rem 1rem;
   }
+   /* 1 layer*/
   .blank{
     width: 100%;
     padding: 4.5%;
     background-color: brown;
   }
+  /* 2 layer */
   .title{
     width: 100%;
     padding: 0.6%;
@@ -85,6 +93,7 @@ export default {
     font-size: 1.1rem;
     background-color: burlywood;
   }
+  /* 3 layer */
   .selectBar{
     width: 100%;
     padding: 2%;
@@ -92,8 +101,10 @@ export default {
     text-align: center;
     text-decoration-line: none;
     text-decoration: none;
-    color: black;
     font-size: 0.9rem;
+  }
+  .selectBar a{
+    color: black;
   }
   .selectBar a:link{
     color: black;
@@ -101,6 +112,7 @@ export default {
     text-decoration: none;
   }
 
+  /* 4 layer */
   .progress2{
     padding: 1% 5%;
     width: 100%;
@@ -111,13 +123,12 @@ export default {
     flex-wrap: wrap;
   }
   .step{
-    width: 18rem;
+    width: 15rem;
     background-color: #287a75;
-    margin: 0rem 0rem 0rem 1.5rem;
+    margin: 0rem 0rem 0.8rem 1.5rem;
     color: whitesmoke;
     font-size: 1rem;
-    border-radius: 11px;
-    
+    border-radius: 5px;
   }
   .step p{
     line-height: 0.6rem;
@@ -125,6 +136,9 @@ export default {
   }
   .step :nth-child(2){
     font-size: 1.15rem;
+  }
+  .step4{
+    margin-right: 1rem;
   }
  .triangle {
     width: 0px;
@@ -140,6 +154,97 @@ export default {
      border-left: 12px solid rgb(165, 159, 159);
   }
 
+
+  /* 5 layer */
+  .book_container{
+    background-color: azure;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+
+  }
+
+  .branch{
+    width: 15rem;
+    height: 25rem;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4px;
+    border: 2px solid rgb(207, 199, 199);
+  }
+  .branch dt{
+    padding: 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 2px solid rgb(165, 159, 159);
+    margin: 0 0.6rem;
+    color: rgb(126, 122, 122);
+  }
+  .branch dd ul{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem;
+    
+  }
+  .branch dd ul li{
+    border : 2px solid rgb(165, 159, 159);
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    list-style: none;
+    
+  }
+  .branch dd ul li a{
+    color: rgb(95, 92, 92);
+    font-weight: bold;
+    display: block;
+  }
+  .branch dd ul li a:hover{
+    text-decoration: none;
+  }
+
+
+
+  .cal{
+    width: 25rem;
+    height: 25rem;
+    background-color: rgb(148, 95, 95);
+  }
+
+  .theme{
+    width: 25rem;
+    height: 25rem;
+    background-color: grey;
+  }
+
+  .time{
+    width: 25rem;
+    height: 25rem;
+    background-color: rgb(204, 55, 55);
+  }
+  .book_item{
+    margin: 0.3rem 0.3rem;
+  }
+  
+
+
+
+
+
+   @media (max-width: 1280px){
+     .step{
+       width: 28rem;
+     }
+   }
+    @media (max-width: 1111px){
+     .step{
+       width: 25rem;
+     }
+   }
+
   @media (max-width: 798px){
     .blank{
       padding: 21%;
@@ -151,7 +256,7 @@ export default {
       padding-right: 0;
     }
     .step{
-      width: 150px;
+      width: 8.3rem;
       height: 70px;
       margin-left: 16px;
       margin-bottom: 5px;
@@ -170,7 +275,17 @@ export default {
     .step4{
       margin-right: 0.8rem;
     }
-  
+
+    .branch{
+      width: 100%;
+      height: 30vh;
+    }
+    .branch dt{
+      font-size: 1.5rem;
+    }
+
+
+
   }
 
   
