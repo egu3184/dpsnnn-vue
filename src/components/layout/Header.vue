@@ -1,6 +1,5 @@
 <template>
   <header>
-    
       <div class="main"><a href="#">dpsnnn</a></div>
       <ul class="menu">
         <li><a href="#">단편선</a></li>
@@ -9,7 +8,6 @@
         <li><a href="#">두번째 이야기</a></li>
         <li><a href="#">Plans & Pricing</a></li>
        </ul> 
-   
   </header>  
 </template>
 
@@ -17,7 +15,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 header{
   width: 100%;
   background-color: transparent;

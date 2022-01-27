@@ -253,7 +253,22 @@ export default {
     background-color: rgb(255, 255, 255);
     border-radius: 4px;
     border: 2px solid rgb(207, 199, 199);
+    
   }
+   .cal dt{
+    padding: 1rem;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0.6rem;
+    color: rgb(126, 122, 122);
+  }
+
+  .cal dd{
+    margin-left: 16%;
+  }
+
+
 
   .theme{
     width: 15rem;
