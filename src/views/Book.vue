@@ -39,7 +39,7 @@
         <dd>
            <b-row>
               <b-col md="auto">
-                <b-calendar v-model="value" @context="onContext" locale="en-US"></b-calendar>
+                <b-calendar v-model="value" :min="min" :max="max" :hide-header="hideHeader" @context="onContext" locale="en-US"></b-calendar>
               </b-col>
               <b-col>
                 <p>Value: <b>'{{ value }}'</b></p>
@@ -86,9 +86,25 @@ export default {
   
   },
   data() {
+
+    const now = new Date()
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const minDate = new Date(today)
+    minDate.setMonth(minDate.getMonth())
+    minDate.setDate(minDate.getDate())
+
+    const maxDate = new Date(today)
+    maxDate.setMonth(maxDate.getMonth())
+    maxDate.setDate(31)
+
     return {
        value: "",
        context: 'null',
+       min: minDate,
+       max: maxDate,
+       hideHeader: true,
+
+       
     };
   },
   setup() {},
