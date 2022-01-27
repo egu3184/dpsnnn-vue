@@ -29,22 +29,47 @@
         <dt>지점</dt>
         <dd>
           <ul>
-            <li><a href="#">강남점</a></li>
+            <li><a href="#" class="on">강남점</a></li>
             <li><a href="#">홍대점</a></li>
           </ul> 
         </dd>
       </div>
       <div class="book_item cal">
-        <dt></dt>
-        <dd></dd>
+        <dt>날짜</dt>
+        <dd>
+           <b-row>
+              <b-col md="auto">
+                <b-calendar v-model="value" @context="onContext" locale="en-US"></b-calendar>
+              </b-col>
+              <b-col>
+                <p>Value: <b>'{{ value }}'</b></p>
+                <p class="mb-0">Context:</p>
+                <pre class="small">{{ context }}</pre>
+              </b-col>
+            </b-row>
+        </dd>
       </div>
       <div class="book_item theme">
-        <dt></dt>
-        <dd></dd>
+        <dt>테마</dt>
+        <dd>
+          <ul>
+            <li ><a href="#" class="on">그림자없는 상자</a></li>
+            <li><a href="#">그것을 행복이라<br/>부르기로 했다.</a></li>
+          </ul> 
+        </dd>
       </div>
       <div class="book_item time">
-        <dt></dt>
-        <dd></dd>
+        <dt>시간</dt>
+        <dd>
+          <ul>
+            <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 10:00</a></li>
+            <li><a href="#" class="on"><b-icon icon="check-square" scale="1" variant="light"></b-icon> 12:00</a></li>
+            <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 14:30</a></li>
+            <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 16:30</a></li>
+            <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 18:30</a></li>
+            <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 20:30</a></li>
+          </ul>  
+        </dd>
       </div>
     </div> 
     <div class="">
@@ -62,46 +87,58 @@ export default {
   },
   data() {
     return {
-       
+       value: "",
+       context: 'null',
     };
   },
   setup() {},
   created() {},
   mounted() {},
   unmounted() {},
-  methods: {}
+  methods: {
+    onContext(ctx){
+      this.context = ctx
+    }
+  }
 }
 </script>
 <style>
+
+  .header{
+    background-color: cadetblue;
+  }
+
   #book{
     height: 1000px;
-    background-color: rgb(34, 151, 167);
+    background-color: rgb(247, 247, 247);
     margin: 0rem 1rem;
   }
    /* 1 layer*/
   .blank{
     width: 100%;
-    padding: 4.5%;
-    background-color: brown;
+    padding: 5%;
+    background-color: #287a75;
   }
   /* 2 layer */
   .title{
     width: 100%;
     padding: 0.6%;
+    padding-top: 3%;
     text-align: center;
     font-weight: bold;
     font-size: 1.1rem;
-    background-color: burlywood;
+    background-color: rgb(247, 247, 247);
   }
   /* 3 layer */
   .selectBar{
     width: 100%;
     padding: 2%;
-    background-color: olivedrab;
+    background-color: rgb(247, 247, 247);
     text-align: center;
     text-decoration-line: none;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
+    font-weight: bold;
   }
   .selectBar a{
     color: black;
@@ -119,7 +156,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgb(233, 224, 224);
+    background-color: rgb(247, 247, 247);
     flex-wrap: wrap;
   }
   .step{
@@ -157,7 +194,7 @@ export default {
 
   /* 5 layer */
   .book_container{
-    background-color: azure;
+    background-color: rgb(247, 247, 247);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -169,17 +206,16 @@ export default {
 
   .branch{
     width: 15rem;
-    height: 25rem;
+    height: 30rem;
     background-color: rgb(255, 255, 255);
     border-radius: 4px;
     border: 2px solid rgb(207, 199, 199);
   }
   .branch dt{
     padding: 1rem;
-    font-size: 2rem;
+    font-size: 1.7rem;
     font-weight: bold;
     text-align: center;
-    border-bottom: 2px solid rgb(165, 159, 159);
     margin: 0 0.6rem;
     color: rgb(126, 122, 122);
   }
@@ -190,14 +226,17 @@ export default {
     
   }
   .branch dd ul li{
-    border : 2px solid rgb(165, 159, 159);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     margin-bottom: 0.5rem;
     text-align: center;
     list-style: none;
+    border-radius: 4px;
     
   }
   .branch dd ul li a{
+    padding-top: 0.5rem ;
+    padding-bottom: 0.5rem;
+    border : 2px solid rgb(165, 159, 159);
     color: rgb(95, 92, 92);
     font-weight: bold;
     display: block;
@@ -210,21 +249,116 @@ export default {
 
   .cal{
     width: 25rem;
-    height: 25rem;
-    background-color: rgb(148, 95, 95);
+    height: 30rem;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4px;
+    border: 2px solid rgb(207, 199, 199);
   }
 
   .theme{
-    width: 25rem;
-    height: 25rem;
-    background-color: grey;
+    width: 15rem;
+    height: 30rem;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4px;
+    border: 2px solid rgb(207, 199, 199);
   }
+  .theme dt{
+    padding: 1rem;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 2px solid rgb(165, 159, 159);
+    margin: 0 0.6rem;
+    color: rgb(126, 122, 122);
+  }
+  .theme dd ul{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem;
+    
+  }
+  .theme dd ul li{
+    
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    list-style: none;
+    border-radius: 4px;
+    
+  }
+  .theme dd ul li a{
+    padding-top: 0.5rem ;
+    padding-bottom: 0.5rem;
+    border : 2px solid rgb(165, 159, 159);
+    color: rgb(95, 92, 92);
+    font-weight: bold;
+    display: block;
+  }
+  .theme dd ul li a:hover{
+    text-decoration: none;
+  }
+
+
 
   .time{
     width: 25rem;
-    height: 25rem;
-    background-color: rgb(204, 55, 55);
+    height: 30rem;
+    background-color: rgb(255, 255, 255);
+    border-radius: 4px;
+    border: 2px solid rgb(207, 199, 199);
   }
+
+  .time dt{
+    padding: 1rem;
+    font-size: 1.7rem;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 2px solid rgb(165, 159, 159);
+    margin: 0 0.6rem;
+    color: rgb(126, 122, 122);
+  }
+  .time dd ul{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1rem;
+    
+  }
+  .time dd ul li{
+    
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    list-style: none;
+    border-radius: 4px;
+    
+  }
+  .time dd ul li a{
+    padding-top: 0.35rem ;
+    padding-bottom: 0.35rem;
+    border : 2px solid rgb(165, 159, 159);
+    color: rgb(95, 92, 92);
+    font-weight: bold;
+    display: block;
+  }
+  .time dd ul li a:hover{
+    text-decoration: none;
+  }
+
+  .on{
+    background-color: #287a75;
+    color: #fff !important;
+    border: 1px solid #287a75 !important;
+  }
+  .none{
+    background-color: rgb(165, 159, 159);
+    color: #fff !important;
+    border: 1px solid rgb(165, 159, 159) !important;
+  }
+
+
+
+
+
   .book_item{
     margin: 0.3rem 0.3rem;
   }
@@ -284,6 +418,15 @@ export default {
       font-size: 1.5rem;
     }
 
+    .theme{
+      width: 100%;
+      height: 35vh;
+    }
+    .theme dt{
+      font-size: 1.5rem;
+     
+    }
+    
 
 
   }
