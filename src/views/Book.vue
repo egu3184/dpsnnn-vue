@@ -29,8 +29,8 @@
         <dt>지점</dt>
         <dd>
           <ul>
-            <li><a href="#" class="on">강남점</a></li>
-            <li><a href="#">홍대점</a></li>
+            <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'a'}" v-on:click="selectBranch('a')">강남점</a></li>
+            <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'b'}" v-on:click="selectBranch('b')" >홍대점</a></li>
           </ul> 
         </dd>
       </div>
@@ -53,8 +53,8 @@
         <dt>테마</dt>
         <dd>
           <ul>
-            <li ><a href="#" class="on">그림자없는 상자</a></li>
-            <li><a href="#">그것을 행복이라<br/>부르기로 했다.</a></li>
+            <li ><a href="javascript:return false;" :class="{on : activatedTheme == 'box'}" v-on:click="selectTheme('box')">그림자없는 상자</a></li>
+            <li><a href="javascript:return false;" :class="{on : activatedTheme == 'happy'}" v-on:click="selectTheme('happy')" >그것을 행복이라<br/>부르기로 했다.</a></li>
           </ul> 
         </dd>
       </div>
@@ -74,16 +74,18 @@
     </div> 
     <div class="">
       <button>다음으로</button>
+      <ReservationButton :defaultColor=defaultColor></ReservationButton>
     </div>
   </div> 
 </template>
 <script>
 
+import ReservationButton from '@/components/slot/home_content_slot/ReservationButton.vue'
 
 export default {
   name: '',
   components: {
-  
+    ReservationButton
   },
   data() {
 
@@ -103,6 +105,11 @@ export default {
        min: minDate,
        max: maxDate,
        hideHeader: true,
+       defaultColor: '#287a75',
+      
+       activatedBranch: '',
+       activatedTheme: '',
+
 
        
     };
@@ -111,10 +118,32 @@ export default {
   created() {},
   mounted() {},
   unmounted() {},
+  watch:{
+    
+  },
   methods: {
     onContext(ctx){
       this.context = ctx
+    },
+
+    selectBranch(branch){
+      // this.branch = branch;
+      // if(branch == 'gangnam'){
+      //   this.isGangnameActive = true;
+      //    this.isHongdaeActive = false;
+      // }else if(branch == 'hongdae'){
+      //    this.isGangnameActive = false;
+      //    this.isHongdaeActive = true;
+      // }
+      this.activatedBranch = branch;
+     
+    },
+    selectTheme(theme){
+      this.activatedTheme = theme;
     }
+
+
+
   }
 }
 </script>
@@ -125,7 +154,7 @@ export default {
   }
 
   #book{
-    height: 1000px;
+    
     background-color: rgb(247, 247, 247);
     margin: 0rem 1rem;
   }
