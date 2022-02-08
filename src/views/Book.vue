@@ -29,8 +29,11 @@
         <dt>지점</dt>
         <dd>
           <ul>
-            <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'a'}" v-on:click="selectBranch('a')">강남점</a></li>
-            <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'b'}" v-on:click="selectBranch('b')" >홍대점</a></li>
+            <!-- <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'a'}" v-on:click="selectBranch('a')">강남점</a></li>
+            <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'b'}" v-on:click="selectBranch('b')" >홍대점</a></li> -->
+            <div :key="index" v-for="(branch, index) in branchName">
+              <li><a href="javascript:void(0);"  :class="{on : activatedBranch == branch}" v-on:click="selectBranch(branch)">{{branch}}</a></li>
+            </div>  
           </ul> 
         </dd>
       </div>
@@ -42,7 +45,7 @@
                 <b-calendar v-model="value" :min="min" :max="max" :hide-header="hideHeader" @context="onContext" locale="en-US"></b-calendar>
               </b-col>
               <b-col>
-                <p>Value: <b>'{{ value }}'</b></p>
+                <p>Value: <b>'{{ context.selectedYMD }}'</b></p>
                 <p class="mb-0">Context:</p>
                 <pre class="small">{{ context }}</pre>
               </b-col>
@@ -53,8 +56,11 @@
         <dt>테마</dt>
         <dd>
           <ul>
-            <li ><a href="javascript:return false;" :class="{on : activatedTheme == 'box'}" v-on:click="selectTheme('box')">그림자없는 상자</a></li>
-            <li><a href="javascript:return false;" :class="{on : activatedTheme == 'happy'}" v-on:click="selectTheme('happy')" >그것을 행복이라<br/>부르기로 했다.</a></li>
+            <!-- <li ><a href="javascript:return false;" :class="{on : activatedTheme == 'box'}" v-on:click="selectTheme('box')">그림자없는 상자</a></li>
+            <li><a href="javascript:return false;" :class="{on : activatedTheme == 'happy'}" v-on:click="selectTheme('happy')" >그것을 행복이라<br/>부르기로 했다.</a></li> -->
+            <div :key="index" v-for="(theme, index) in themeName">
+              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme}" v-on:click="selectTheme(theme)">{{theme}}</a></li>
+            </div>  
           </ul> 
         </dd>
       </div>
@@ -72,24 +78,25 @@
         </dd>
       </div>
     </div> 
-    <div class="">
-      <button>다음으로</button>
-      <ReservationButton :defaultColor=defaultColor></ReservationButton>
+    <div>
+      <button  v-on:click="dd">다음으로</button>
+      <button v-on:click="test">다다음으로</button>
+    
     </div>
   </div> 
 </template>
 <script>
 
-import ReservationButton from '@/components/slot/home_content_slot/ReservationButton.vue'
+import axios from 'axios'
 
 export default {
   name: '',
   components: {
-    ReservationButton
+    
   },
   data() {
 
-    const now = new Date()
+    const now = new Date()  //현재 날짜 및 시간
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
     const minDate = new Date(today)
     minDate.setMonth(minDate.getMonth())
@@ -97,49 +104,110 @@ export default {
 
     const maxDate = new Date(today)
     maxDate.setMonth(maxDate.getMonth())
-    maxDate.setDate(31)
+    maxDate.setDate(15)
+
+   
+    
 
     return {
-       value: "",
+       value: today,
        context: 'null',
        min: minDate,
        max: maxDate,
        hideHeader: true,
        defaultColor: '#287a75',
+       
       
-       activatedBranch: '',
-       activatedTheme: '',
+       branchName:[
+         '강남점', '홍대점', '건대점', '혜화점'
+       ],
+       themeName:[
+         '그림자없는 상자',
+         '그것을 행복이라 부르기로 했다.'
+       ],
+       siba : [],
 
+       activatedBranch: '강남점', //기본값
+       activatedTheme: '',
+       //activatedDate: context.selectedYMD,
+       activatedDate :'',
 
        
     };
   },
   setup() {},
   created() {},
-  mounted() {},
+  mounted() { },
   unmounted() {},
-  watch:{
+  updated(){
     
+  
+   
+  },
+  watch:{
+   
   },
   methods: {
     onContext(ctx){
-      this.context = ctx
+      this.context = ctx,
+      this.activatedDate = ctx.selectedYMD
+
     },
 
     selectBranch(branch){
-      // this.branch = branch;
-      // if(branch == 'gangnam'){
-      //   this.isGangnameActive = true;
-      //    this.isHongdaeActive = false;
-      // }else if(branch == 'hongdae'){
-      //    this.isGangnameActive = false;
-      //    this.isHongdaeActive = true;
-      // }
       this.activatedBranch = branch;
-     
     },
     selectTheme(theme){
       this.activatedTheme = theme;
+    },
+    dd(){
+      this.siba.push("1");
+      console.log(this.siba);
+    },
+   
+    async test(){
+       this.siba.push("2");
+      console.log(this.siba);
+      //3개의 값이 모두 있을 때만 비동기 통신
+      if(this.activatedBranch != ''&& this.activatedTheme !='' && this.activatedDate != ''){
+        console.log(this.activatedBranch);
+        console.log(this.activatedDate);
+        console.log(this.activatedTheme);
+         this.siba.push("3");
+         console.log(this.siba);
+           
+        const response = await axios({ 
+          method: 'get',
+          url: 'http://localhost:2030/slots',
+          responseType: 'json',
+          params:{
+            slotDate:this.activatedDate,
+            theme:this.activatedTheme,
+            branch: this.activatedBranch
+          }
+          
+        }).then((response)=>{
+          console.log(response);
+          console.log(response.data);
+          console.log(response.data.list);
+          console.log(response.data.list[1].slotTime);
+        
+          // for(var i in response.data.list){
+          //     //console.log(response.data.list[i].slotTime);
+          //     const times = response.data.list[i].slotTime;
+          //     console.log(times);
+          //     //this.reservationTime.push(time);
+          // }
+          this.siba.push("1");
+          console.log(this.siba);
+
+          
+        });
+
+
+
+
+      }
     }
 
 
