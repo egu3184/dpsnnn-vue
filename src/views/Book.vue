@@ -69,7 +69,12 @@
         <dd>
           <ul>
             <div v-for="(time, index) in slotTimes" :key="index">
-              <li><a href="javascript:void(0);" :class="{on : activatedTime == time.id}" v-on:click="selectTime(time.id)" >{{time.time}}</a></li>
+              <div v-if="time.isShowed == true && time.isOpened == true && time.isReserved == false">
+               <li><a href="javascript:void(0);" :class="{on : activatedTime == time.id}" v-on:click="selectTime(time.id)" >{{time.time}}</a></li>
+              </div>
+              <div v-else-if="time.isShowed == true && time.isOpened == true && time.isReserved == true">  
+                <li><a href="javascript:void(0);" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon>  {{time.time}}</a></li>
+              </div>
             <!-- <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 10:00</a></li>
             <li><a href="#" class="on"><b-icon icon="check-square" scale="1" variant="light"></b-icon> 12:00</a></li>
             <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 14:30</a></li>
@@ -119,7 +124,7 @@ export default {
        themeName:[],
        slotTimes : [],
 
-       activatedBranch: '', //기본값
+       activatedBranch: '', 
        activatedTheme: '',
        //activatedDate: context.selectedYMD,
        activatedDate :'',
@@ -176,8 +181,8 @@ export default {
   methods: {
     onContext(ctx){
       this.context = ctx,
-      this.activatedDate = ctx.selectedYMD
-
+      this.activatedDate = ctx.selectedYMD,
+      this.getSlotTime();
     },
     selectBranch(branch){
       this.activatedBranch = branch;
