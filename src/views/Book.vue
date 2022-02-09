@@ -32,7 +32,7 @@
             <!-- <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'a'}" v-on:click="selectBranch('a')">강남점</a></li>
             <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'b'}" v-on:click="selectBranch('b')" >홍대점</a></li> -->
             <div :key="index" v-for="(branch, index) in branchName">
-              <li><a href="javascript:void(0);"  :class="{on : activatedBranch == branch}" v-on:click="selectBranch(branch)">{{branch}}</a></li>
+              <li><a href="javascript:void(0);"  :class="{on : activatedBranch == branch.name}" v-on:click="selectBranch(branch.name)">{{branch.name}}</a></li>
             </div>  
           </ul> 
         </dd>
@@ -59,7 +59,7 @@
             <!-- <li ><a href="javascript:return false;" :class="{on : activatedTheme == 'box'}" v-on:click="selectTheme('box')">그림자없는 상자</a></li>
             <li><a href="javascript:return false;" :class="{on : activatedTheme == 'happy'}" v-on:click="selectTheme('happy')" >그것을 행복이라<br/>부르기로 했다.</a></li> -->
             <div :key="index" v-for="(theme, index) in themeName">
-              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme}" v-on:click="selectTheme(theme)">{{theme}}</a></li>
+              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme.name}" v-on:click="selectTheme(theme.name) , dd()">{{theme.name}}</a></li>
             </div>  
           </ul> 
         </dd>
@@ -118,16 +118,11 @@ export default {
        defaultColor: '#287a75',
        
       
-       branchName:[
-         '강남점', '홍대점', '건대점', '혜화점'
-       ],
-       themeName:[
-         '그림자없는 상자',
-         '그것을 행복이라 부르기로 했다.'
-       ],
+       branchName:[],
+       themeName:[],
        siba : [],
 
-       activatedBranch: '강남점', //기본값
+       activatedBranch: '', //기본값
        activatedTheme: '',
        //activatedDate: context.selectedYMD,
        activatedDate :'',
@@ -137,7 +132,47 @@ export default {
   },
   setup() {},
   created() {},
-  mounted() { },
+  mounted() { 
+    //페이지 열리자마자 실행
+    axios({
+      method: "get",
+      url: "http://localhost:2030/themes",
+      responseType: "json"
+    }).then((response)=>{
+      console.log(response);
+      for(var i in response.data.pageList.content){
+        // let themeObject = new Object();
+        // themeObject.id = response.data.pageList.content[i].id;
+        // themeObject.themeName = response.data.pageList.content[i].themeName;
+        // this.themeName.push(themeObject);
+        this.themeName.push(
+          {
+            id: response.data.pageList.content[i].id,
+            name : response.data.pageList.content[i].themeName
+          }
+        );
+      }
+    });
+
+    axios({
+      method: "get",
+      url: "http://localhost:2030/branches",
+      responseType: "json"
+
+    }).then((response)=>{
+      console.log(response);
+      for(var j in response.data.list){
+        this.branchName.push(
+          {
+            id: response.data.list[j].id,
+            name: response.data.list[j].branchName
+          }
+        );
+      }
+      
+    });
+
+  },
   unmounted() {},
   updated(){
     
@@ -161,8 +196,7 @@ export default {
       this.activatedTheme = theme;
     },
     dd(){
-      this.siba.push("1");
-      console.log(this.siba);
+      alert("꺄");
     },
    
     async test(){
@@ -188,9 +222,9 @@ export default {
           
         }).then((response)=>{
           console.log(response);
-          console.log(response.data);
-          console.log(response.data.list);
-          console.log(response.data.list[1].slotTime);
+          // console.log(response.data);
+          // console.log(response.data.list);
+          // console.log(response.data.list[1].slotTime);
         
           // for(var i in response.data.list){
           //     //console.log(response.data.list[i].slotTime);
