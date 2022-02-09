@@ -32,7 +32,7 @@
             <!-- <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'a'}" v-on:click="selectBranch('a')">강남점</a></li>
             <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'b'}" v-on:click="selectBranch('b')" >홍대점</a></li> -->
             <div :key="index" v-for="(branch, index) in branchName">
-              <li><a href="javascript:void(0);"  :class="{on : activatedBranch == branch.name}" v-on:click="selectBranch(branch.name)">{{branch.name}}</a></li>
+              <li><a href="javascript:void(0);"  :class="{on : activatedBranch == branch.id}" v-on:click="selectBranch(branch.id), getSlotTime()">{{branch.name}}</a></li>
             </div>  
           </ul> 
         </dd>
@@ -44,11 +44,11 @@
               <b-col md="auto">
                 <b-calendar v-model="value" :min="min" :max="max" :hide-header="hideHeader" @context="onContext" locale="en-US"></b-calendar>
               </b-col>
-              <b-col>
+              <!-- <b-col>
                 <p>Value: <b>'{{ context.selectedYMD }}'</b></p>
                 <p class="mb-0">Context:</p>
                 <pre class="small">{{ context }}</pre>
-              </b-col>
+              </b-col> -->
             </b-row>
         </dd>
       </div>
@@ -59,7 +59,7 @@
             <!-- <li ><a href="javascript:return false;" :class="{on : activatedTheme == 'box'}" v-on:click="selectTheme('box')">그림자없는 상자</a></li>
             <li><a href="javascript:return false;" :class="{on : activatedTheme == 'happy'}" v-on:click="selectTheme('happy')" >그것을 행복이라<br/>부르기로 했다.</a></li> -->
             <div :key="index" v-for="(theme, index) in themeName">
-              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme.name}" v-on:click="selectTheme(theme.name) , dd()">{{theme.name}}</a></li>
+              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme.id}" v-on:click="selectTheme(theme.id) , getSlotTime()">{{theme.name}}</a></li>
             </div>  
           </ul> 
         </dd>
@@ -68,19 +68,21 @@
         <dt>시간</dt>
         <dd>
           <ul>
-            <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 10:00</a></li>
+            <div v-for="(time, index) in slotTimes" :key="index">
+              <li><a href="javascript:void(0);" :class="{on : activatedTime == time.id}" v-on:click="selectTime(time.id)" >{{time.time}}</a></li>
+            <!-- <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 10:00</a></li>
             <li><a href="#" class="on"><b-icon icon="check-square" scale="1" variant="light"></b-icon> 12:00</a></li>
             <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 14:30</a></li>
             <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 16:30</a></li>
             <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 18:30</a></li>
-            <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 20:30</a></li>
+            <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 20:30</a></li> -->
+            </div>
           </ul>  
         </dd>
       </div>
     </div> 
     <div>
       <button  v-on:click="dd">다음으로</button>
-      <button v-on:click="test">다다음으로</button>
     
     </div>
   </div> 
@@ -101,13 +103,9 @@ export default {
     const minDate = new Date(today)
     minDate.setMonth(minDate.getMonth())
     minDate.setDate(minDate.getDate())
-
     const maxDate = new Date(today)
     maxDate.setMonth(maxDate.getMonth())
     maxDate.setDate(15)
-
-   
-    
 
     return {
        value: today,
@@ -117,15 +115,15 @@ export default {
        hideHeader: true,
        defaultColor: '#287a75',
        
-      
        branchName:[],
        themeName:[],
-       siba : [],
+       slotTimes : [],
 
        activatedBranch: '', //기본값
        activatedTheme: '',
        //activatedDate: context.selectedYMD,
        activatedDate :'',
+       activatedTime : '',
 
        
     };
@@ -171,44 +169,35 @@ export default {
       }
       
     });
-
   },
   unmounted() {},
-  updated(){
-    
-  
-   
-  },
-  watch:{
-   
-  },
+  updated(){ },
+  watch:{},
   methods: {
     onContext(ctx){
       this.context = ctx,
       this.activatedDate = ctx.selectedYMD
 
     },
-
     selectBranch(branch){
       this.activatedBranch = branch;
     },
     selectTheme(theme){
       this.activatedTheme = theme;
     },
+    selectTime(time){
+      this.activatedTime = time;
+    },
     dd(){
       alert("꺄");
     },
    
-    async test(){
-       this.siba.push("2");
-      console.log(this.siba);
+    async getSlotTime(){
       //3개의 값이 모두 있을 때만 비동기 통신
       if(this.activatedBranch != ''&& this.activatedTheme !='' && this.activatedDate != ''){
         console.log(this.activatedBranch);
         console.log(this.activatedDate);
         console.log(this.activatedTheme);
-         this.siba.push("3");
-         console.log(this.siba);
            
         const response = await axios({ 
           method: 'get',
@@ -216,24 +205,26 @@ export default {
           responseType: 'json',
           params:{
             slotDate:this.activatedDate,
-            theme:this.activatedTheme,
-            branch: this.activatedBranch
+            themeId:this.activatedTheme,
+            branchId: this.activatedBranch
           }
           
-        }).then((response)=>{
-          console.log(response);
-          // console.log(response.data);
-          // console.log(response.data.list);
-          // console.log(response.data.list[1].slotTime);
-        
-          // for(var i in response.data.list){
-          //     //console.log(response.data.list[i].slotTime);
-          //     const times = response.data.list[i].slotTime;
-          //     console.log(times);
-          //     //this.reservationTime.push(time);
-          // }
-          this.siba.push("1");
-          console.log(this.siba);
+        }).then((response)=>{ //화살표 함수로 써야 컴포넌트 데이터에 this로 접근 가능
+          this.slotTimes = [];  //재호출시 무한 추가 방지를 위한 초기화 작업
+          for(var i in response.data.list){
+
+              this.slotTimes.push(
+                {
+                  id: response.data.list[i].id,
+                  time: response.data.list[i].slotTime,
+                  isShowed: response.data.list[i].showed,
+                  isReserved: response.data.list[i].reserved,
+                  isOpened: response.data.list[i].opened,
+                }
+              );
+          }
+          console.log(this.slotTimes);
+         
 
           
         });
