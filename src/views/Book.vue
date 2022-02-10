@@ -70,7 +70,11 @@
           <ul>
             <div v-for="(time, index) in slotTimes" :key="index">
               <div v-if="time.isShowed == true && time.isOpened == true && time.isReserved == false">
-               <li><a href="javascript:void(0);" :class="{on : activatedTime == time.id}" v-on:click="selectTime(time.id)" >{{time.time}}</a></li>
+               <li><a href="javascript:void(0);" :class="{on : activatedTime == time.id}" v-on:click="selectTime(time.id)" >
+                 <b-icon v-if="activatedTime == time.id" icon="check-square" ></b-icon>
+                 <b-icon v-else-if="activatedTime != time.id" icon="square" ></b-icon>    
+                 {{time.time}}</a>
+                </li>
               </div>
               <div v-else-if="time.isShowed == true && time.isOpened == true && time.isReserved == true">  
                 <li><a href="javascript:void(0);" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon>  {{time.time}}</a></li>
@@ -129,7 +133,7 @@ export default {
        //activatedDate: context.selectedYMD,
        activatedDate :'',
        activatedTime : '',
-
+      
        
     };
   },
@@ -183,6 +187,7 @@ export default {
       this.context = ctx,
       this.activatedDate = ctx.selectedYMD,
       this.getSlotTime();
+
     },
     selectBranch(branch){
       this.activatedBranch = branch;
@@ -246,7 +251,6 @@ export default {
 }
 </script>
 <style>
-
   .header{
     background-color: cadetblue;
   }
