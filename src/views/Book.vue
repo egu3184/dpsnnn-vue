@@ -37,7 +37,19 @@
           </ul> 
         </dd>
       </div>
-      <div class="book_item cal">
+      <div class="book_item theme">
+        <dt>테마</dt>
+        <dd>
+          <ul>
+            <!-- <li ><a href="javascript:return false;" :class="{on : activatedTheme == 'box'}" v-on:click="selectTheme('box')">그림자없는 상자</a></li>
+            <li><a href="javascript:return false;" :class="{on : activatedTheme == 'happy'}" v-on:click="selectTheme('happy')" >그것을 행복이라<br/>부르기로 했다.</a></li> -->
+            <div :key="index" v-for="(theme, index) in themeName">
+              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme.id}" v-on:click="selectTheme(theme.id) , getSlotTime()">{{theme.name}}</a></li>
+            </div>  
+          </ul> 
+        </dd>
+      </div>
+       <div class="book_item cal">
         <dt>날짜</dt>
         <dd>
            <b-row>
@@ -50,18 +62,6 @@
                 <pre class="small">{{ context }}</pre>
               </b-col> -->
             </b-row>
-        </dd>
-      </div>
-      <div class="book_item theme">
-        <dt>테마</dt>
-        <dd>
-          <ul>
-            <!-- <li ><a href="javascript:return false;" :class="{on : activatedTheme == 'box'}" v-on:click="selectTheme('box')">그림자없는 상자</a></li>
-            <li><a href="javascript:return false;" :class="{on : activatedTheme == 'happy'}" v-on:click="selectTheme('happy')" >그것을 행복이라<br/>부르기로 했다.</a></li> -->
-            <div :key="index" v-for="(theme, index) in themeName">
-              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme.id}" v-on:click="selectTheme(theme.id) , getSlotTime()">{{theme.name}}</a></li>
-            </div>  
-          </ul> 
         </dd>
       </div>
       <div class="book_item time">
@@ -90,9 +90,8 @@
         </dd>
       </div>
     </div> 
-    <div>
-      <button  v-on:click="dd">다음으로</button>
-    
+    <div class="next-div">
+      <button  v-on:click="dd" class="next">다음으로</button>
     </div>
   </div> 
 </template>
@@ -112,15 +111,17 @@ export default {
     const minDate = new Date(today)
     minDate.setMonth(minDate.getMonth())
     minDate.setDate(minDate.getDate())
-    const maxDate = new Date(today)
-    maxDate.setMonth(maxDate.getMonth())
-    maxDate.setDate(15)
+    //const maxDate = new Date(today)
+    //maxDate.setMonth(maxDate.getMonth())
+    //maxDate.setDate(maxDate.getDate())
+    
 
     return {
        value: today,
        context: 'null',
        min: minDate,
-       max: maxDate,
+       //max: maxDate,
+       max : '',
        hideHeader: true,
        defaultColor: '#287a75',
        
@@ -128,12 +129,13 @@ export default {
        themeName:[],
        slotTimes : [],
 
-       activatedBranch: '', 
-       activatedTheme: '',
-       //activatedDate: context.selectedYMD,
+       activatedBranch: 1,  //초기값 
+       activatedTheme: 1,   //초기값
        activatedDate :'',
        activatedTime : '',
       
+       currentTap : 0,
+
        
     };
   },
@@ -148,10 +150,6 @@ export default {
     }).then((response)=>{
       console.log(response);
       for(var i in response.data.pageList.content){
-        // let themeObject = new Object();
-        // themeObject.id = response.data.pageList.content[i].id;
-        // themeObject.themeName = response.data.pageList.content[i].themeName;
-        // this.themeName.push(themeObject);
         this.themeName.push(
           {
             id: response.data.pageList.content[i].id,
@@ -178,6 +176,18 @@ export default {
       }
       
     });
+
+    axios({
+      method: "get",
+      url: "http://localhost:2030/slots/date",
+      params:{
+        branchId : 1,
+        themeId : 1
+      }
+    }).then((response)=>{
+      this.max = response.data.data;
+      console.log("OpenedDate"+this.OpenedDate)
+    });
   },
   unmounted() {},
   updated(){ },
@@ -199,15 +209,15 @@ export default {
       this.activatedTime = time;
     },
     dd(){
-      alert("꺄");
+      alert(this.max);
     },
    
     async getSlotTime(){
       //3개의 값이 모두 있을 때만 비동기 통신
       if(this.activatedBranch != ''&& this.activatedTheme !='' && this.activatedDate != ''){
-        console.log(this.activatedBranch);
-        console.log(this.activatedDate);
-        console.log(this.activatedTheme);
+        // console.log(this.activatedBranch);
+        // console.log(this.activatedDate);
+        // console.log(this.activatedTheme);
            
         const response = await axios({ 
           method: 'get',
@@ -234,19 +244,9 @@ export default {
               );
           }
           console.log(this.slotTimes);
-         
-
-          
         });
-
-
-
-
       }
     }
-
-
-
   }
 }
 </script>
@@ -254,9 +254,23 @@ export default {
   .header{
     background-color: cadetblue;
   }
+  .next-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .next{
+    background-color: #363636;
+    color: rgb(247, 247, 247);
+    border: 1px solid #363636; ;
+    font-size: 1.2rem;
+    padding: 1.0rem 2.5rem;
+    margin: 5rem 0rem;
+  }
+  
 
   #book{
-    
     background-color: rgb(247, 247, 247);
     margin: 0rem 1rem;
   }
@@ -264,7 +278,7 @@ export default {
   .blank{
     width: 100%;
     padding: 5%;
-    background-color: #287a75;
+    background-color: rgb(247, 247, 247);
   }
   /* 2 layer */
   .title{
@@ -468,6 +482,7 @@ export default {
     background-color: rgb(255, 255, 255);
     border-radius: 4px;
     border: 2px solid rgb(207, 199, 199);
+    overflow: scroll;
   }
 
   .time dt{
