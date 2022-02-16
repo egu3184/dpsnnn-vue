@@ -38,7 +38,7 @@ export default {
     
     scrollEvents(){
       this.scrollPosition = window.scrollY;
-      console.log(this.scrollPosition);
+      // console.log(this.scrollPosition);
       
       // if(this.scrollPosition > 100){
       //   this.isScrolled = true

@@ -29,10 +29,8 @@
         <dt>지점</dt>
         <dd>
           <ul>
-            <!-- <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'a'}" v-on:click="selectBranch('a')">강남점</a></li>
-            <li><a href="javascript:return false;"  :class="{on : activatedBranch == 'b'}" v-on:click="selectBranch('b')" >홍대점</a></li> -->
             <div :key="index" v-for="(branch, index) in branchName">
-              <li><a href="javascript:void(0);"  :class="{on : activatedBranch == branch.id}" v-on:click="selectBranch(branch.id), getSlotTime()">{{branch.name}}</a></li>
+              <li><a href="javascript:void(0);"  :class="{on : activatedBranch == branch.id}" v-on:click="selectBranch(branch.id), getSlotTime(), getSlotMaxDateAndDisableDate()">{{branch.name}}</a></li>
             </div>  
           </ul> 
         </dd>
@@ -41,20 +39,18 @@
         <dt>테마</dt>
         <dd>
           <ul>
-            <!-- <li ><a href="javascript:return false;" :class="{on : activatedTheme == 'box'}" v-on:click="selectTheme('box')">그림자없는 상자</a></li>
-            <li><a href="javascript:return false;" :class="{on : activatedTheme == 'happy'}" v-on:click="selectTheme('happy')" >그것을 행복이라<br/>부르기로 했다.</a></li> -->
             <div :key="index" v-for="(theme, index) in themeName">
-              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme.id}" v-on:click="selectTheme(theme.id) , getSlotTime()">{{theme.name}}</a></li>
+              <li><a href="javascript:void(0);" :class="{on : activatedTheme == theme.id}" v-on:click="selectTheme(theme.id) , getSlotTime(), getSlotMaxDateAndDisableDate()">{{theme.name}}</a></li>
             </div>  
           </ul> 
         </dd>
       </div>
        <div class="book_item cal">
-        <dt>날짜</dt>
+        <dt>날짜{{min}}</dt>
         <dd>
            <b-row>
               <b-col md="auto">
-                <b-calendar v-model="value" :min="min" :max="max" :hide-header="hideHeader" @context="onContext" locale="en-US"></b-calendar>
+                <b-calendar :date-disabled-fn="dateDisabled" v-model="value" :min="min" :max="max" :hide-header="hideHeader" @context="onContext" locale="en-US"></b-calendar>
               </b-col>
               <!-- <b-col>
                 <p>Value: <b>'{{ context.selectedYMD }}'</b></p>
@@ -79,12 +75,6 @@
               <div v-else-if="time.isShowed == true && time.isOpened == true && time.isReserved == true">  
                 <li><a href="javascript:void(0);" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon>  {{time.time}}</a></li>
               </div>
-            <!-- <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 10:00</a></li>
-            <li><a href="#" class="on"><b-icon icon="check-square" scale="1" variant="light"></b-icon> 12:00</a></li>
-            <li><a href="#"><b-icon icon="square" scale="1" variant="secondary"></b-icon> 14:30</a></li>
-            <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 16:30</a></li>
-            <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 18:30</a></li>
-            <li><a href="#" class="none"><b-icon icon="x-square" scale="1" variant="light"></b-icon> 20:30</a></li> -->
             </div>
           </ul>  
         </dd>
@@ -108,7 +98,7 @@ export default {
 
     const now = new Date()  //현재 날짜 및 시간
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-    const minDate = new Date(today)
+    const minDate = new Date()
     minDate.setMonth(minDate.getMonth())
     minDate.setDate(minDate.getDate())
     //const maxDate = new Date(today)
@@ -119,7 +109,7 @@ export default {
     return {
        value: today,
        context: 'null',
-       min: minDate,
+       min: this.toStringByFormattingDate(minDate),
        //max: maxDate,
        max : '',
        hideHeader: true,
@@ -135,6 +125,7 @@ export default {
        activatedTime : '',
       
        currentTap : 0,
+       isNotShowSlotDate : [],
 
        
     };
@@ -143,51 +134,9 @@ export default {
   created() {},
   mounted() { 
     //페이지 열리자마자 실행
-    axios({
-      method: "get",
-      url: "http://localhost:2030/themes",
-      responseType: "json"
-    }).then((response)=>{
-      console.log(response);
-      for(var i in response.data.pageList.content){
-        this.themeName.push(
-          {
-            id: response.data.pageList.content[i].id,
-            name : response.data.pageList.content[i].themeName
-          }
-        );
-      }
-    });
-
-    axios({
-      method: "get",
-      url: "http://localhost:2030/branches",
-      responseType: "json"
-
-    }).then((response)=>{
-      console.log(response);
-      for(var j in response.data.list){
-        this.branchName.push(
-          {
-            id: response.data.list[j].id,
-            name: response.data.list[j].branchName
-          }
-        );
-      }
-      
-    });
-
-    axios({
-      method: "get",
-      url: "http://localhost:2030/slots/date",
-      params:{
-        branchId : 1,
-        themeId : 1
-      }
-    }).then((response)=>{
-      this.max = response.data.data;
-      console.log("OpenedDate"+this.OpenedDate)
-    });
+    this.getBranchAndTheme();
+    this.getSlotMaxDateAndDisableDate();
+     
   },
   unmounted() {},
   updated(){ },
@@ -211,15 +160,51 @@ export default {
     dd(){
       alert(this.max);
     },
+
+
+
+    getBranchAndTheme(){
+       //테마 정보 가지고 오기
+       axios({
+        method: "get",
+        url: "http://localhost:2030/themes",
+        responseType: "json"
+      }).then((response)=>{
+        //console.log(response);
+        for(var i in response.data.pageList.content){
+          this.themeName.push(
+            {
+              id: response.data.pageList.content[i].id,
+              name : response.data.pageList.content[i].themeName
+            }
+          );
+        }
+      });
+      //지점 정보 가지고 오기
+      axios({
+        method: "get",
+        url: "http://localhost:2030/branches",
+        responseType: "json"
+      }).then((response)=>{
+        //console.log(response);
+        for(var j in response.data.list){
+          this.branchName.push(
+            {
+              id: response.data.list[j].id,
+              name: response.data.list[j].branchName
+            }
+          );
+        }
+      });
+    },
+
    
+    //슬롯의 타임테이블을 가지고 오는 메서드
     async getSlotTime(){
       //3개의 값이 모두 있을 때만 비동기 통신
       if(this.activatedBranch != ''&& this.activatedTheme !='' && this.activatedDate != ''){
-        // console.log(this.activatedBranch);
-        // console.log(this.activatedDate);
-        // console.log(this.activatedTheme);
            
-        const response = await axios({ 
+        await axios({ 
           method: 'get',
           url: 'http://localhost:2030/slots',
           responseType: 'json',
@@ -243,10 +228,72 @@ export default {
                 }
               );
           }
-          console.log(this.slotTimes);
+      
         });
       }
+    },
+      
+    async getSlotMaxDateAndDisableDate(){
+      //maxDate 설정 - 생성된 슬롯 중 가장 마지막의 날짜를 가지고 오기
+      await axios({
+        method: "get",
+        url: "http://localhost:2030/slots/date",
+        params:{
+          branchId : this.activatedBranch,
+          themeId : this.activatedTheme
+        }
+      }).then((response)=>{
+        this.max = response.data.data;
+        //console.log("먼저 실행됨")
+      });
+      //minDate와 maxDate 사이의 날짜 중 공개되지 않은 date들 가져오기
+      await axios({
+        method: "get",
+        url: "http://localhost:2030/slots/date/disabled",
+        params:{
+          max: this.max,
+          min: this.min
+        }
+      }).then((response)=>{
+        //console.log(response);
+         for(var i in response.data.list){
+           this.isNotShowSlotDate.push(response.data.list[i]);
+        }
+        // for(var j in this.isNotShowSlotDate){
+        //   console.log("date = "+this.isNotShowSlotDate[j]);
+        // }
+      });
+    },
+    //날짜 데이터를 yyyy-mm-dd로 바꿔주는 메서드
+    toStringByFormattingDate(date,delimiter='-'){
+      const year = date.getFullYear();
+      const month = this.leftPad(date.getMonth()+1);
+      const day = this.leftPad(date.getDate());
+      return [year, month, day].join(delimiter);
+    },
+    //한 자리수의 월,일의 앞에 0을 붙여주는 메서드
+    leftPad(value) { 
+      if (value >= 10) { 
+        return value; 
+      } 
+      return `0${value}`; 
+    },
+    //공개하지 않은 date를 달력에서 비활성화하는 메서드
+    dateDisabled(ymd, date){ 
+      //console.log("ymd = "+ymd);
+      let dateOfString = '';
+      for(var d in this.isNotShowSlotDate){
+        if(ymd == this.isNotShowSlotDate[d]){
+          dateOfString = this.isNotShowSlotDate[d]
+        }
+      }
+      const no = new Date(dateOfString);
+      const gkgk = this.toStringByFormattingDate(no);
+      //console.log(gkgk);
+      return ymd === gkgk;
     }
+
+
   }
 }
 </script>
