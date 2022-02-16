@@ -4,27 +4,27 @@
     <div class="title"><span>Reservation</span></div>
     <div class="selectBar"><a href="#">예약하기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">조회하기</a></div>
     <div class="progress2">
-      <div class="step step1">
+      <div class="step step1" :class="{on : currentTap == 0}">
         <p>Step1</p>
         <p>지점/날짜/테마</p>
       </div>
-      <div class="triangle triangle1"></div>
-      <div class="step step2">
+      <div class="triangle triangle1" :class="{triangle_on : currentTap == 0}"></div>
+      <div class="step step2" :class="{on : currentTap == 1}">
          <p>Step2</p>
          <p>예약정보 입력</p>
       </div>
-      <div class="triangle triangle2"></div>
-      <div class="step step3">
+      <div class="triangle triangle2 triangle_On" :class="{triangle_on : currentTap == 1}"></div>
+      <div class="step step3" :class="{on : currentTap == 2}">
          <p>Step3</p>
          <p>결제하기</p>
       </div>
-      <div class="triangle triangle3"></div>
-      <div class="step step4">
+      <div class="triangle triangle3" :class="{triangle_on : currentTap == 2}"></div>
+      <div class="step step4" :class="{on : currentTap == 3}">
          <p>Step4</p>
          <p>예약완료</p>
       </div>
     </div>
-    <div class="book_container">
+    <div class="book_container" v-if="currentTap == 0">
       <div class="book_item branch">
         <dt>지점</dt>
         <dd>
@@ -80,8 +80,10 @@
         </dd>
       </div>
     </div> 
-    <div class="next-div">
-      <button  v-on:click="dd" class="next">다음으로</button>
+    <div class="button-div">
+      <button class="prev" v-on:click="currentTap-=1" v-if="currentTap > 0">이전으로</button>
+      <button class="next" v-on:click="currentTap+=1" v-if="currentTap < 3" >다음으로</button>
+      <p>{{currentTap}}</p>
     </div>
   </div> 
 </template>
@@ -301,7 +303,7 @@ export default {
   .header{
     background-color: cadetblue;
   }
-  .next-div{
+  .button-div{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -313,7 +315,16 @@ export default {
     border: 1px solid #363636; ;
     font-size: 1.2rem;
     padding: 1.0rem 2.5rem;
-    margin: 5rem 0rem;
+    margin: 5rem 0.8rem;
+  }
+
+  .prev{
+    background-color: #363636;
+    color: rgb(247, 247, 247);
+    border: 1px solid #363636; ;
+    font-size: 1.2rem;
+    padding: 1.0rem 2.5rem;
+    margin: 5rem 0.8rem;
   }
   
 
@@ -369,7 +380,7 @@ export default {
   }
   .step{
     width: 15rem;
-    background-color: #287a75;
+    background-color: rgb(165, 159, 159);
     margin: 0rem 0rem 0.8rem 1.5rem;
     color: whitesmoke;
     font-size: 1rem;
@@ -388,7 +399,7 @@ export default {
  .triangle {
     width: 0px;
     height: 0px;
-    border-left: 12px solid #287a75;
+    border-left: 12px solid rgb(165, 159, 159);
     border-top: 6px solid transparent;
     border-bottom: 12px solid transparent;
   }
@@ -578,7 +589,12 @@ export default {
     color: #fff !important;
     border: 1px solid rgb(165, 159, 159) !important;
   }
-
+  .triangle_on{
+    border-left : 12px solid #287a75;
+  }
+  .triangle_none{
+     border-left : 12px solid rgb(165, 159, 159);
+  }
 
 
 
