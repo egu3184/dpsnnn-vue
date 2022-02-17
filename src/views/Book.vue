@@ -82,7 +82,7 @@
     </div> 
     <div class="button-div">
       <button class="prev" v-on:click="currentTap-=1" v-if="currentTap > 0">이전으로</button>
-      <button class="next" v-on:click="currentTap+=1" v-if="currentTap < 3" >다음으로</button>
+      <button class="next" v-on:click="nextStep" v-if="currentTap < 3" >다음으로</button>
       <p>{{currentTap}}</p>
     </div>
   </div> 
@@ -204,7 +204,7 @@ export default {
     //슬롯의 타임테이블을 가지고 오는 메서드
     async getSlotTime(){
       //3개의 값이 모두 있을 때만 비동기 통신
-      if(this.activatedBranch != ''&& this.activatedTheme !='' && this.activatedDate != ''){
+      if(!!this.activatedBranch&&!!this.activatedTheme&&!!this.activatedDate){
            
         await axios({ 
           method: 'get',
@@ -293,6 +293,30 @@ export default {
       const gkgk = this.toStringByFormattingDate(no);
       //console.log(gkgk);
       return ymd === gkgk;
+    },
+    //예약 다음으로 버튼 누를 시
+    nextStep(){
+      //선택값 4종 확인
+      // !! 논리연산자로 빈문자열(""), false, NaN, udefined, null, 0을 잡아냄
+      if(!!this.activatedTheme&&!!this.activatedBranch&&!!this.activatedDate&&!!this.activatedTime ){
+         //해당 슬롯이 예약 가능한지 확인 
+         axios({
+           method: "get",
+           url: "http://localhost:2030/slots/"+this.activatedTime,
+         }).then((response)=>{
+           console.log(response);
+         });
+         //가능하면 currentTeb에 +1 해줌.
+
+
+      }else{
+        if(!this.activatedTheme) alert("원하시는 테마를 선택하세요");
+        else if(!this.activatedBranch) alert("원하시는 지점을 선택하세요")
+        else if(!this.activatedDate) alert("예약 날짜를 선택하세요")
+        else if(!this.activatedTime) alert("예약 시간을 선택하세요")
+      }
+
+     
     }
 
 
