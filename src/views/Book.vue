@@ -172,14 +172,14 @@ export default {
         url: "http://localhost:2030/themes",
         responseType: "json"
       }).then((response)=>{
-        //console.log(response);
-        for(var i in response.data.pageList.content){
+        console.log(response)
+        for(var i in response.data.list){
           this.themeName.push(
             {
-              id: response.data.pageList.content[i].id,
-              name : response.data.pageList.content[i].themeName
+              id : response.data.list[i].themeId,
+              name : response.data.list[i].themeName,
             }
-          );
+          ) 
         }
       });
       //지점 정보 가지고 오기
@@ -188,11 +188,11 @@ export default {
         url: "http://localhost:2030/branches",
         responseType: "json"
       }).then((response)=>{
-        //console.log(response);
+        console.log(response);
         for(var j in response.data.list){
           this.branchName.push(
             {
-              id: response.data.list[j].id,
+              id: response.data.list[j].branchId,
               name: response.data.list[j].branchName
             }
           );
@@ -218,11 +218,12 @@ export default {
           
         }).then((response)=>{ //화살표 함수로 써야 컴포넌트 데이터에 this로 접근 가능
           this.slotTimes = [];  //재호출시 무한 추가 방지를 위한 초기화 작업
+          console.log(response);
           for(var i in response.data.list){
 
               this.slotTimes.push(
                 {
-                  id: response.data.list[i].id,
+                  id: response.data.list[i].slotId,
                   time: response.data.list[i].slotTime,
                   isShowed: response.data.list[i].showed,
                   isReserved: response.data.list[i].reserved,
@@ -236,6 +237,8 @@ export default {
     },
       
     async getSlotMaxDateAndDisableDate(){
+      this.max = ""; //초기화
+      this.isNotShowSlotDate = [];
       //maxDate 설정 - 생성된 슬롯 중 가장 마지막의 날짜를 가지고 오기
       await axios({
         method: "get",
@@ -257,13 +260,14 @@ export default {
           min: this.min
         }
       }).then((response)=>{
-        //console.log(response);
+        console.log(response);
          for(var i in response.data.list){
            this.isNotShowSlotDate.push(response.data.list[i]);
         }
-        // for(var j in this.isNotShowSlotDate){
-        //   console.log("date = "+this.isNotShowSlotDate[j]);
-        // }
+        
+      }).catch((error)=> {
+        this.errorMessage(error);
+        alert("현재 예약 가능한 날짜가 없습니다.")
       });
     },
     //날짜 데이터를 yyyy-mm-dd로 바꿔주는 메서드
@@ -314,10 +318,29 @@ export default {
         else if(!this.activatedBranch) alert("원하시는 지점을 선택하세요")
         else if(!this.activatedDate) alert("예약 날짜를 선택하세요")
         else if(!this.activatedTime) alert("예약 시간을 선택하세요")
-      }
-
-     
+      } 
+    },
+    //Axios 에러 처리
+    errorMessage(error){
+       if (error.response) {
+          // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+        else if (error.request) {
+          // 요청이 이루어 졌으나 응답을 받지 못했습니다.
+          // `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는 Node.js의 http.ClientRequest 인스턴스입니다.
+          console.log(error.request);
+        }
+        else {
+          // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
     }
+
+
 
 
   }
