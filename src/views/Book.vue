@@ -97,6 +97,7 @@ import axios from 'axios'
 // CommonJS
 const Swal = require('sweetalert2')
 
+
 export default {
   name: '',
   components: {
@@ -228,7 +229,6 @@ export default {
           this.slotTimes = [];  //재호출시 무한 추가 방지를 위한 초기화 작업
           console.log(response);
           for(var i in response.data.list){
-
               this.slotTimes.push(
                 {
                   id: response.data.list[i].slotId,
@@ -238,8 +238,7 @@ export default {
                   isOpened: response.data.list[i].opened,
                 }
               );
-          }
-      
+            }
         });
       }
     },
@@ -247,6 +246,8 @@ export default {
     async getSlotMaxDateAndDisableDate(){
       this.max = ""; //초기화
       this.isNotShowSlotDate = [];
+      this.availableSlotDate = [],
+      this.intervalTotalSlotDate = []
       //maxDate 설정 - 생성된 슬롯 중 가장 마지막의 날짜를 가지고 오기
       await axios({
         method: "get",
@@ -256,30 +257,35 @@ export default {
           themeId : this.activatedTheme
         }
       }).then((response)=>{
-        this.max = response.data.data;
-        this.makeDateList(this.min, this.max);
+        this.max = response.data.data;  //max값 설정
+        this.makeDateList(this.min, this.max); //minDate~maxDate까지 날짜 만드는 메서드
       });
       //minDate와 maxDate 사이의 날짜 중 공개되지 않은 date들 가져오기
-      await axios({
-        method: "get",
-        url: "http://localhost:2030/slots/date/disabled",
-        responseType:"json",
-        params:{
-          max: this.max,
-          min: this.min
-        }
-      }).then((response)=>{
-        console.log(response);
-         for(let i in response.data.list){
-           this.isNotShowSlotDate.push(response.data.list[i]);
-        }
-        this.getAvailableSlotDate();
-        console.log(this.isNotShowSlotDate);
+      if(!!this.max){ //테마 변경시 date가 아무 것도 없을 때 max가 ''이기 때문에 500번 에러가 나는 것을 방지
+        await axios({
+          method: "get",
+          url: "http://localhost:2030/slots/date/disabled",
+          responseType:"json",
+          params:{
+            max: this.max,
+            min: this.min
+          }
+        }).then((response)=>{
+          console.log(response);
+          for(let i in response.data.list){
+            this.isNotShowSlotDate.push(response.data.list[i]);
+          }
+          this.getAvailableSlotDate();
+          console.log(this.isNotShowSlotDate);
 
-      }).catch((error)=> {
-        console.log(error);
+        }).catch((error)=> {
+          console.log(error);
+          this.alert_Error("현재 예약 가능한 날짜가 없습니다.")
+        });
+      }else{
         this.alert_Error("현재 예약 가능한 날짜가 없습니다.")
-      });
+      }
+      
     },
     //날짜 데이터를 yyyy-mm-dd로 바꿔주는 메서드
     toStringByFormattingDate(date,delimiter='-'){
