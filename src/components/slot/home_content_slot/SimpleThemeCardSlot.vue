@@ -54,7 +54,7 @@ export default {
     }
     .simple-theme-picture {
         height: 42vh;
-        background-image: url("");
+        /* background-image: url(""); */
     }
     .simple-theme-title span {
         height: 3rem;
@@ -114,7 +114,7 @@ export default {
 
     .simple-theme-picture {
         height: 25.5rem;
-        background-image: url("");
+        /* background-image: url(""); */
     }
     .simple-theme-title span {
         height: 3rem;

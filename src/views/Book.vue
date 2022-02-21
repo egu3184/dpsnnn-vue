@@ -50,7 +50,7 @@
         <dd>
            <b-row>
               <b-col md="auto">
-                <b-calendar :date-disabled-fn="dateDisabled" v-model="value" :min="min" :max="max" :hide-header="hideHeader" @context="onContext" locale="en-US"></b-calendar>
+                <b-calendar :date-info-fn="dateClass" :date-disabled-fn="dateDisabled" v-model="value" :min="min" :max="max" :hide-header="hideHeader" @context="onContext" locale="en-US"></b-calendar>
               </b-col>
               <!-- <b-col>
                 <p>Value: <b>'{{ context.selectedYMD }}'</b></p>
@@ -79,7 +79,11 @@
           </ul>  
         </dd>
       </div>
-    </div> 
+    </div>
+    <div id="book_container2" v-if="currentTap == 1">
+      
+    </div>
+
     <div class="button-div">
       <button class="prev" v-on:click="currentTap-=1" v-if="currentTap > 0">이전으로</button>
       <button class="next" v-on:click="nextStep" v-if="currentTap < 3" >다음으로</button>
@@ -90,6 +94,8 @@
 <script>
 
 import axios from 'axios'
+// CommonJS
+const Swal = require('sweetalert2')
 
 export default {
   name: '',
@@ -128,10 +134,12 @@ export default {
       
        currentTap : 0,
        isNotShowSlotDate : [],
-
+       availableSlotDate : [],
+       intervalTotalSlotDate : []
        
     };
   },
+  
   setup() {},
   created() {},
   mounted() { 
@@ -249,25 +257,28 @@ export default {
         }
       }).then((response)=>{
         this.max = response.data.data;
-        //console.log("먼저 실행됨")
+        this.makeDateList(this.min, this.max);
       });
       //minDate와 maxDate 사이의 날짜 중 공개되지 않은 date들 가져오기
       await axios({
         method: "get",
         url: "http://localhost:2030/slots/date/disabled",
+        responseType:"json",
         params:{
           max: this.max,
           min: this.min
         }
       }).then((response)=>{
         console.log(response);
-         for(var i in response.data.list){
+         for(let i in response.data.list){
            this.isNotShowSlotDate.push(response.data.list[i]);
         }
-        
+        this.getAvailableSlotDate();
+        console.log(this.isNotShowSlotDate);
+
       }).catch((error)=> {
-        this.errorMessage(error);
-        alert("현재 예약 가능한 날짜가 없습니다.")
+        console.log(error);
+        this.alert_Error("현재 예약 가능한 날짜가 없습니다.")
       });
     },
     //날짜 데이터를 yyyy-mm-dd로 바꿔주는 메서드
@@ -293,10 +304,45 @@ export default {
           dateOfString = this.isNotShowSlotDate[d]
         }
       }
-      const no = new Date(dateOfString);
-      const gkgk = this.toStringByFormattingDate(no);
+      // const no = new Date(dateOfString);
+      // const gkgk = this.toStringByFormattingDate(no);
       //console.log(gkgk);
-      return ymd === gkgk;
+      return ymd === this.toStringByFormattingDate(new Date(dateOfString));
+    },
+    
+    //getAvailableSlotDate에 필요한 minDate와 maxDate로 전체 날짜 리스트 생성
+    makeDateList(min, max){
+      const minite = 1000 * 60;
+      const hour = minite * 60;
+      const day = hour * 24;
+      let minDate = new Date(min);
+      let maxDate = new Date(max);
+      let spendTime = maxDate.getTime() - minDate.getTime();
+      let interval = Math.round(spendTime/day);
+      let date = new Date(minDate);
+      for(let i=0; i< interval+1; i++){
+        this.intervalTotalSlotDate.push(new Date(date.getTime()))
+        date.setDate(date.getDate()+1)
+      }
+    },
+    //달력 예약 가능일 색상 강조
+    dateClass(ymd, date){
+      let bool = false
+      let calendarDate = this.toStringByFormattingDate(new Date(ymd))
+      for(let i in this.availableSlotDate){
+        if(calendarDate == this.availableSlotDate[i] ){
+          bool = true;
+        }
+      }
+      return bool == true? 'table-primary' : ''
+    },
+    //전체날짜(minDate~maxDate 사이의 총 날짜)-disable 
+    getAvailableSlotDate(){
+      let list = []    
+      for(var n in this.intervalTotalSlotDate){
+        list.push(this.toStringByFormattingDate(this.intervalTotalSlotDate[n]))
+      }
+      this.availableSlotDate = list.filter(x=> !this.isNotShowSlotDate.includes(x));
     },
     //예약 다음으로 버튼 누를 시
     nextStep(){
@@ -308,18 +354,46 @@ export default {
            method: "get",
            url: "http://localhost:2030/slots/"+this.activatedTime,
          }).then((response)=>{
-           console.log(response);
-         });
-         //가능하면 currentTeb에 +1 해줌.
+           //console.log(response);
+           //예약 가능하면 currentTeb에 +1 해줌.
+           if(!response.data.data.reserved){
+              this.currentTap += 1 
+           }else{
+             //alert("이미 예약된 시간입니다 :(")
+             this.alert_Error("이미 예약된 시간입니다.")
+             
+           }
+           
+        });
+         
 
 
       }else{
-        if(!this.activatedTheme) alert("원하시는 테마를 선택하세요");
-        else if(!this.activatedBranch) alert("원하시는 지점을 선택하세요")
-        else if(!this.activatedDate) alert("예약 날짜를 선택하세요")
-        else if(!this.activatedTime) alert("예약 시간을 선택하세요")
+        if(!this.activatedTheme) this.alert_Warning("예약 테마를 선택하세요.");
+        else if(!this.activatedBranch) this.alert_Warning("원하시는 지점을 선택하세요.");
+        else if(!this.activatedDate) this.alert_Warning("예약 날짜를 선택하세요.");
+        else if(!this.activatedTime) //alert("예약 시간을 선택하세요")
+          this.alert_Warning("예약 시간을 선택하세요.");
       } 
     },
+    alert_Warning(text){
+       Swal.fire({
+            icon: 'warning',
+            title: '잠시만요!',
+            text: text,
+            confirmButtonColor: '#3085d6',
+           
+       })
+    },
+    alert_Error(text){
+       Swal.fire({
+            icon: 'error',
+            title: '오.. 이런',
+            text: text,
+            confirmButtonColor: '#3085d6'
+       })
+    },
+
     //Axios 에러 처리
     errorMessage(error){
        if (error.response) {
@@ -344,9 +418,12 @@ export default {
 
 
   }
+  
 }
 </script>
 <style>
+
+
   .header{
     background-color: cadetblue;
   }
