@@ -1,44 +1,46 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+const Swal = require('sweetalert2')
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {  //data
-    title: 'Fucking bitch',
-    users: [
-      {userId: 1, name: 'egu', addres: 'Seoul'},
-      {userId: 2, name: 'trupp', addres: 'Gyeonggi'},
-      {userId: 3, name: 'Taru', addres: 'Jeju'},
-      {userId: 4, name: 'Magarette', addres: 'Seoul'}
-    ]
+    
+    activatedBranch: 1,  //초기값 
+    activatedTheme: 1,   //초기값
+    activatedDate :'',
+    activatedTime : '',
 
   },
-  getters: {  //computed
-    // testTitle: state=>{
-    //   return state.title
-    // },
-    allUserCount: state=>{
-      return state.users.length
-    },
-    countOfSeoul: state=>{
-        let count = 0
-        state.users.forEach(user =>{
-        if(user.addres === 'Seoul'){
-          count++
-        }
-       
-      })
-      return count
-    },
-    percentOfSeoul: (state, getters) =>{
-      return Math.round(getters.countOfSeoul / getters.allUserCount * 100)
-    }
+  getters: {  
+    
   },
+
   mutations: {
-   
-  },
+    setActivatedTheme(state, value){
+      state.activatedTheme = value
+    },
+    setActivatedBranch(state, value){
+      state.activatedBranch = value
+    },
+    setActivatedDate(state, value){
+      state.activatedDate = value
+    },
+    setActivatedTime(state, value){
+      state.activatedTime = value
+    },
+    alert_Warning(state, text) {
+      Swal.fire(
+          {icon: 'warning', title: '잠시만요!', text: text, confirmButtonColor: '#3085d6'}
+      )
+    },
+    alert_Error(state,text) {
+        Swal.fire(
+            {icon: 'error', title: '오.. 이런', text: text, confirmButtonColor: '#3085d6'}
+        )
+    },
 
+  },
   actions:{
     
   }
