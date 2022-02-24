@@ -62,7 +62,7 @@
                                     :class="{on : activatedTime == time.id}"
                                     v-on:click="selectTime(time.id)">
                                     <b-icon v-if="activatedTime == time.id" icon="check-square"></b-icon>
-                                    <b-icon v-else-if="activatedTime != time.id" icon="square"></b-icon>
+                                    <b-icon v-else-if="activatedTime != time.id" icon="square"></b-icon>&nbsp;
                                    {{time.alterdSlotTime}}</a>
                             </li>
                         </div>

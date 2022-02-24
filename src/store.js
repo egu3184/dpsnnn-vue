@@ -10,7 +10,7 @@ export const store = new Vuex.Store({
     activatedTheme: 1,   //초기값
     activatedDate :'',
     activatedTime : '',
-
+    agreementStatus : '',
   },
   getters: {  
     
@@ -29,6 +29,10 @@ export const store = new Vuex.Store({
     setActivatedTime(state, value){
       state.activatedTime = value
     },
+    setAgreementStatus(state, value){
+      state.agreementStatus = value
+    },
+
     alert_Warning(state, text) {
       Swal.fire(
           {icon: 'warning', title: '잠시만요!', text: text, confirmButtonColor: '#3085d6'}

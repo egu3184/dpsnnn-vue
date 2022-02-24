@@ -37,8 +37,8 @@
             <InputReservation />
         </div>    
         <div class="button-div">
-            <button class="prev" v-on:click="currentTap-=1" v-if="currentTap > 0">이전으로</button>
-            <button class="next" v-on:click="nextStep" v-if="currentTap < 3">다음으로</button>
+            <button class="prev" v-on:click="prevButton" v-if="currentTap > 0">이전으로</button>
+            <button class="next" v-on:click="nextButton" v-if="currentTap < 3">다음으로</button>
             <p>{{currentTap}}</p>
         </div>
     </div>
@@ -81,10 +81,11 @@
         methods: {
           ...mapMutations([
             "alert_Warning",
-            "alert_Error"
+            "alert_Error",
+            "setActivatedTime"
           ]),
 
-           nextStep() {
+           nextButton() {
               //선택값 4종 확인 !! 논리연산자로 빈문자열(""), false, NaN, udefined, null, 0을 잡아냄
               if (!!this.activatedTheme && !!this.activatedBranch && !!this.activatedDate && !!this.activatedTime) {
                   //해당 슬롯이 예약 가능한지 확인
@@ -95,6 +96,7 @@
                       //console.log(response); 예약 가능하면 currentTeb에 +1 해줌.
                       if (!response.data.data.reserved) {
                           this.currentTap += 1
+                           
                       } else {
                           //alert("이미 예약된 시간입니다 :(")
                           this.alert_Error("이미 예약된 시간입니다.")
@@ -111,6 +113,10 @@
                       this.alert_Warning("예약 시간을 선택하세요.");
                   }
             },
+           prevButton(){
+             this.currentTap-=1
+             this.$store.commit("setActivatedTime", '')
+           } 
         }
     }
 </script>
@@ -194,7 +200,7 @@
     }
     .step {
         width: 15rem;
-        background-color: rgb(165, 159, 159);
+        background-color: rgb(134, 129, 129);
         margin: 0 0 0.8rem 1.5rem;
         color: whitesmoke;
         font-size: 1rem;
@@ -213,18 +219,18 @@
     .triangle {
         width: 0;
         height: 0;
-        border-left: 12px solid rgb(165, 159, 159);
+        border-left: 12px solid rgb(134, 129, 129);
         border-top: 6px solid transparent;
         border-bottom: 12px solid transparent;
     }
     .step2,
     .step3,
     .step4 {
-        background-color: rgb(165, 159, 159);
+        background-color: rgb(134, 129, 129);
     }
     .triangle2,
     .triangle3 {
-        border-left: 12px solid rgb(165, 159, 159);
+        border-left: 12px solid rgb(134, 129, 129);
     }
 
     .on {
@@ -233,14 +239,14 @@
         border: 1px solid #287a75 !important;
     }
     .none {
-        background-color: rgb(165, 159, 159);
+        background-color: rgb(134, 129, 129);
         color: #fff !important;
-        border: 1px solid rgb(165, 159, 159) !important;
+        border: 1px solid rgb(134, 129, 129) !important;
     }
     .triangle_on {
         border-left: 12px solid #287a75;
     }
     .triangle_none {
-        border-left: 12px solid rgb(165, 159, 159);
+        border-left: 12px solid rgb(134, 129, 129);
     }
 </style>
