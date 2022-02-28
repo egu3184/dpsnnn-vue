@@ -4,7 +4,7 @@
             <dt>지점</dt>
             <dd>
                 <ul>
-                    <div :key="index" v-for="(branch, index) in branchName">
+                    <div :key="index" v-for="(branch, index) in branchList">
                         <li>
                             <a href="javascript:void(0);" :class="{on : activatedBranch == branch.id}" v-on:click="selectBranch(branch.id), getSlotTime(), getSlotMaxDateAndDisableDate()">{{branch.name}}</a>
                         </li>
@@ -16,12 +16,12 @@
             <dt>테마</dt>
             <dd>
                 <ul>
-                    <div :key="index" v-for="(theme, index) in themeName">
+                    <div :key="index" v-for="(theme, index) in themeList">
                         <li>
-                            <a
+                            <a  style="white-space: pre;" 
                                 href="javascript:void(0);"
                                 :class="{on : activatedTheme == theme.id}"
-                                v-on:click="selectTheme(theme.id) , getSlotTime(), getSlotMaxDateAndDisableDate()">{{theme.name}}</a>
+                                v-on:click="selectTheme(theme.id) , getSlotTime(), getSlotMaxDateAndDisableDate()">{{theme.alteredName}}</a>
                         </li>
                     </div>
                 </ul>
@@ -85,6 +85,7 @@
     import axios from 'axios'
     // CommonJS
     const Swal = require('sweetalert2')
+    import {mapState,mapMutations} from 'vuex'
 
     export default {
         name: '',
@@ -103,8 +104,8 @@
                 hideHeader: true,
                 defaultColor: '#287a75',
 
-                branchName: [],
-                themeName: [],
+                branchList: [],
+                themeList: [],
                 slotTimes: [],
                 alterdSlotTimes:[],
 
@@ -113,7 +114,6 @@
                 activatedDate: '',
                 activatedTime: '',
 
-                currentTap: 0,
                 isNotShowSlotDate: [],
                 availableSlotDate: [],
                 intervalTotalSlotDate: []
@@ -127,10 +127,8 @@
             this.getSlotMaxDateAndDisableDate();
         },
         computed:{
-            
-            // dropSeconds : function(){
-            //   return this.slotTimes[0].time
-            // },
+            ...mapState(['storeBranchList', 'storeThemeList']),
+            ...mapMutations(['setStoreBranch', 'setStoreTheme'])
         },
         unmounted() {},
         methods: {
@@ -168,21 +166,21 @@
                 axios(
                     {method: "get", url: "http://localhost:2030/themes", responseType: "json"}
                 ).then((response) => {
-                    console.log(response)
+                    console.log("테마 정보"+response)
                     for (var i in response.data.list) {
-                        this
-                            .themeName
-                            .push({
-                                id: response
-                                    .data
-                                    .list[i]
-                                    .themeId,
-                                name: response
-                                    .data
-                                    .list[i]
-                                    .themeName
-                            })
+                        let themeName = response.data.list[i].themeName
+                        let themeNameArray = themeName.split(" ");
+                        this.themeList.push(
+                            {
+                                id: response.data.list[i].themeId,
+                                name : themeName,
+                                alteredName: themeNameArray.length < 2 ?  
+                                   themeName : themeNameArray.slice(0,2).join(" ")+"\n"+ themeNameArray.slice(2).join(" ")   
+                                
+                           }
+                        )
                     }
+                    this.$store.commit("setStoreTheme", this.themeList)
                 });
                 //지점 정보 가지고 오기
                 axios(
@@ -191,7 +189,7 @@
                     console.log(response);
                     for (var j in response.data.list) {
                         this
-                            .branchName
+                            .branchList
                             .push({
                                 id: response
                                     .data
@@ -202,6 +200,7 @@
                                     .list[j]
                                     .branchName
                             });
+
                     }
                 });
             },
@@ -248,9 +247,9 @@
                                         .data
                                         .list[i]
                                         .opened,
+                                    slotTime : response.data.list[i].slotTime,     
                                     alterdSlotTime : this.dropSeconds(response.data.list[i].slotTime)     
                                 });
-                            
                         }
                     });
                 }
@@ -366,48 +365,7 @@
                 }
                 this.availableSlotDate = list.filter(x => !this.isNotShowSlotDate.includes(x));
             },
-            //예약 다음으로 버튼 누를 시
-            nextStep() {
-                //선택값 4종 확인 !! 논리연산자로 빈문자열(""), false, NaN, udefined, null, 0을 잡아냄
-                if (!!this.activatedTheme && !!this.activatedBranch && !!this.activatedDate && !!this.activatedTime) {
-                    //해당 슬롯이 예약 가능한지 확인
-                    axios({
-                        method: "get",
-                        url: "http://localhost:2030/slots/" + this.activatedTime
-                    }).then((response) => {
-                        //console.log(response); 예약 가능하면 currentTeb에 +1 해줌.
-                        if (!response.data.data.reserved) {
-                            this.currentTap += 1
-                        } else {
-                            //alert("이미 예약된 시간입니다 :(")
-                            this.alert_Error("이미 예약된 시간입니다.")
-
-                        }
-
-                    });
-
-                } else {
-                    if (!this.activatedTheme) 
-                        this.alert_Warning("예약 테마를 선택하세요.");
-                    else if (!this.activatedBranch) 
-                        this.alert_Warning("원하시는 지점을 선택하세요.");
-                    else if (!this.activatedDate) 
-                        this.alert_Warning("예약 날짜를 선택하세요.");
-                    else if (!this.activatedTime) //alert("예약 시간을 선택하세요")
-                        this.alert_Warning("예약 시간을 선택하세요.");
-                    }
-            },
-            alert_Warning(text) {
-                Swal.fire(
-                    {icon: 'warning', title: '잠시만요!', text: text, confirmButtonColor: '#3085d6'}
-                )
-            },
-            alert_Error(text) {
-                Swal.fire(
-                    {icon: 'error', title: '오.. 이런', text: text, confirmButtonColor: '#3085d6'}
-                )
-            },
-
+           
             //Axios 에러 처리
             errorMessage(error) {
                 if (error.response) {
