@@ -66,10 +66,7 @@
         },
         computed :{
            ...mapState([
-                // 'activatedTheme',
-                // 'activatedBranch',
-                // "activatedDate",
-                // "activatedTime",
+               'selectedSlotInfo'
               ])
         },
         setup() {},
@@ -86,40 +83,29 @@
           ]),
 
            nextButton() {
-                this.$refs.select_saveItems.ddd();
+                //지점, 테마, 날짜&시간 선택했는지 확인
+                if(!this.$refs.select_saveItems.isItemSelected()){ return }
+                this.$refs.select_saveItems.saveItemsToVuex();
 
-              // switch(this.currentTap){
-              //   case 0 :
-              //       //선택값 4종 확인 !! 논리연산자로 빈문자열(""), false, NaN, udefined, null, 0을 잡아냄
-              //       if (!!this.activatedTheme && !!this.activatedBranch && !!this.activatedDate && !!this.activatedTime) {
-              //           //해당 슬롯이 예약 가능한지 확인
-              //           axios({
-              //               method: "get",
-              //               url: "http://localhost:2030/slots/" + this.activatedTime
-              //           }).then((response) => {
-              //               //console.log(response); 예약 가능하면 currentTeb에 +1 해줌.
-              //               if (!response.data.data.reserved) {
-                                this.currentTap += 1
-                                
-              //               } else {
-              //                   //alert("이미 예약된 시간입니다 :(")
-              //                   this.alert_Error("이미 예약된 시간입니다.")
-              //               }
-              //           });
-              //       } else {
-              //           if (!this.activatedTheme) 
-              //               this.alert_Warning("예약 테마를 선택하세요.");
-              //           else if (!this.activatedBranch) 
-              //               this.alert_Warning("원하시는 지점을 선택하세요.");
-              //           else if (!this.activatedDate) 
-              //               this.alert_Warning("예약 날짜를 선택하세요.");
-              //           else if (!this.activatedTime) //alert("예약 시간을 선택하세요")
-              //               this.alert_Warning("예약 시간을 선택하세요.");
-              //           }
-              //   case 1:
+              switch(this.currentTap){
+                case 0 :
+                    //해당 슬롯이 예약 가능한지 확인
+                    axios({
+                        method: "get",
+                        url: "http://localhost:2030/slots/" + this.selectedSlotInfo.id
+                    }).then((response) => {
+                        //console.log(response); 예약 가능하면 currentTeb에 +1 해줌.
+                        if (!response.data.data.reserved) {
+                            this.currentTap += 1
+                        } else {
+                            this.alert_Error("이미 예약된 시간입니다.")
+                        }
+                    });
+                   
+                case 1:
 
 
-              //     }
+                  }
 
                  
               },

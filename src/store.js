@@ -5,35 +5,22 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {  //data
-
-    // activatedBranch: 1,  //초기값 
-    // activatedTheme: 1,   //초기값
-    // activatedDate :'',
-    // activatedTime : '',
-    agreementStatus : '',
-
-    selectedTheme : {fruit : 'apple',},
+    selectedThemeInfo : {},
     selectedBranchInfo : {},
     selectedSlotInfo : {},
     
-
+    agreementStatus : '',
     totalPrice :[],
-
-    //임시 테마 정보
-    selectedThemeInfo: {
-      minCapapcity: 2,
-      maxCapapcity: 5,
-      price: 27000,
-    }
 
   },
   getters: {  
    
     getThemeTotalPrice(state){
-      let min = state.selectedThemeInfo.minCapapcity
-      let max = state.selectedThemeInfo.maxCapapcity
-      let price = state.selectedThemeInfo.price 
+      let min = state.selectedThemeInfo.minimumCapacity
+      let max = state.selectedThemeInfo.maximumCapacity
+      let price = state.selectedThemeInfo.admissionFee
       let totalPrice = state.totalPrice
+      console.log(price)
       for(let i=min; i<=max; i++){
         totalPrice.push(
           {
@@ -52,28 +39,18 @@ export const store = new Vuex.Store({
     setSelectedTheme(state, theme){
       console.log("여기 vuex임")
       console.log(theme)
-      state.selectedTheme = theme
+      state.selectedThemeInfo = theme
     },
     setSelectedBranch(state, branch){
-      console.log("여기 vuex임")
-      console.log(branch)
       state.selectedBranchInfo = branch
     },
-    // setActivatedDate(state, value){
-    //   state.activatedDate = value
-    // },
     setSelectedSlot(state, slot){
-      console.log("여기 vuex임")
-      console.log(slot)
       state.selectedSlotInfo = slot
     },
     setAgreementStatus(state, status){
       state.agreementStatus = status
     },
 
-    sibal(text){
-      alert(text);
-    },
 
     //Swal2 
     alert_Warning(state,text) {

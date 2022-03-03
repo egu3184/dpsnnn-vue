@@ -161,8 +161,8 @@
                     <!-- <input type="text" v-model="name" placeholder="성함을 입력해주세요."/>   -->
                     <b-form-input id="input-none" :state="hasWrongName" v-on:blur="nameBlur" v-model="name" style="width: 20rem;" class="inline"></b-form-input>
                     <div>
-                        <p class="errorMessage" v-show="nameValueCheck">한글만 입력해주세요.</p>
-                        <p class="errorMessage" v-show="nameNullCheck">이름을 입력해주세요.</p> <br/>
+                        <p class="errorMessage">{{nameBlurErrorMessage}}</p>
+                        <br/>
                     </div>
                 </div>    
                 <div class="inputItem">
@@ -181,8 +181,8 @@
                     <!-- <b-form-input id="input-none" :state="numberState2" v-model="number2" v-on:blur="numberBlur2" style="width: 6.5rem; font-size: 1.2em;" class="inline"></b-form-input> -->
                     <!-- <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span> -->
                     <!-- <b-form-input id="input-none" :state="numberState3"  v-model="number3" v-on:blur="numberBlur3" style="width: 6.5rem; font-size: 1.2em;" class="inline"></b-form-input> -->
-                    <p class="errorMessage" v-show="numberValueCheck">숫자만 입력해주세요.</p>
-                    <p class="errorMessage" v-show="numberNullCheck">번호를 입력해주세요.</p>
+                    <p class="errorMessage" v-show="numberValueCheck">{{numberBlurErrorMessage}}</p>
+                    
                 </div>    
             </div>
             <div class="NoPBox box">
@@ -191,7 +191,7 @@
                 </dt>
                
                 <dd >
-                    <b-form-select style="width: 20rem; height: 4.2rem; font-size: 1.5rem; text-align:center;" v-model="selectedCapacity" :options="capapcityAndTotalPrice" value-field="price" text-field="capacity">
+                    <b-form-select style="width: 20rem; height: 4.2rem; font-size: 1.5rem; text-align:center;" v-model="totalPrice" :options="capacityAndTotalPrice" value-field="price" text-field="capacity">
                         <template #first>
                             <b-form-select-option value="" disabled> 이용 인원을 선택해주세요.</b-form-select-option>
                         </template>
@@ -200,7 +200,7 @@
                 <div class="inputBox" style="margin: 2rem">
                     <div class="inputItem">
                     <span>이용 금액 : </span>
-                    <span style="font-size: 2.0rem; font-weight: bold;">{{selectedCapacity}}원</span>
+                    <span style="font-size: 2.0rem; font-weight: bold;">{{totalPrice}}원</span>
                     </div>
                 </div>
             </div>
@@ -239,8 +239,11 @@ export default {
              //2. 최소인원수~최대인원수까지 반복문 돌려 select항목 보여주기.
              //3. 항목 클릭시 vuex getters에서 인원수를 인자로 넣고 인원수 * 가격 가져오기
              //4. total 요금 보여주기
-             selectedCapacity: '',
-             capapcityAndTotalPrice : [ ]
+             totalPrice: '',
+             capacityAndTotalPrice : [ ],
+
+             nameBlurErrorMessage: '',
+             numberBlurErrorMessage: '',
 
         };
     },
@@ -258,7 +261,7 @@ export default {
     },
     unmounted() {},
     methods: {
-        ...mapMutations(['alert_Error']),
+         ...mapMutations(['alert_Error', 'alert_Warning']),
 
         dd(){
             eventBus.$on('test', data =>{
@@ -288,31 +291,47 @@ export default {
             }
         },
        nameBlur(){
-            //null 체크
-            if(!this.name){
-                this.nameValueCheck = false
-                this.hasWrongName = false
-                this.nameNullCheck = true
-                return
-            }else if(!!this.name){
-                //값 체크
-                let check =  /^[가-힣]*$/.test(this.name);
-                if(!check){
-                    this.hasWrongName = false
-                    this.nameValueCheck = true
-                    this.nameNullCheck = false
-                }else if(!!check){
-                    this.hasWrongName = true
-                    this.nameValueCheck = false
-                    this.nameNullCheck = false
-                }
-            }
+           this.checkRegEx(this.name, /^[가-힣a-zA-Z]+$/, this.setNameBlurErrorMessage, "이름을 입력해주세요.");
+            // //null 체크
+            // if(!this.name){
+            //     this.nameValueCheck = false
+            //     this.hasWrongName = false
+            //     this.nameNullCheck = true
+            //     return
+            // }else if(!!this.name){
+            //     //값 체크
+            //     let check =  /^[가-힣]*$/.test(this.name);
+            //     if(!check){
+            //         this.hasWrongName = false
+            //         this.nameValueCheck = true
+            //         this.nameNullCheck = false
+            //     }else if(!!check){
+            //         this.hasWrongName = true
+            //         this.nameValueCheck = false
+            //         this.nameNullCheck = false
+            //     }
+            // }
        },
+       setNameBlurErrorMessage(message,status){
+           this.nameBlurErrorMessage = message
+           this.hasWrongName = status
+       },
+       checkRegEx(value, regex, setMessageMethod ,errorMessageText){
+            
+           let check = regex.test(value);
+           if(!check){//불합격
+               setMessageMethod(errorMessageText,false)
+           }else{//합격
+               setMessageMethod("",true)
+           }
+       }, 
+
+
        getTotalPirce(){
-           this.capapcityAndTotalPrice = this.$store.getters.getThemeTotalPrice;
+           this.capacityAndTotalPrice = this.$store.getters.getThemeTotalPrice;
         //    for(let i in this.getThemeTotalPrice)
         //    this.capapcityAndTotalPrice.push(this.getThemeTotalPrice[i])
-           console.log(this.capapcityAndTotalPrice)
+           console.log(this.capacityAndTotalPrice)
        }
 
     },
@@ -320,7 +339,11 @@ export default {
         agreeStatus(agreeStatus){
            this.$store.commit("agreementStatus", agreementStatus)
         },
-        
+        // nameBlurErrorMessage(message){
+        //     if(message != null){
+        //         this.hasWrongName
+        //     } 
+        // }
     },
    
     

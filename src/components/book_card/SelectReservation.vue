@@ -139,14 +139,13 @@
             // this.saveItemsToVuex();
         },
         methods: {
-            ...mapMutations(['alert_Error', 'alert_Warning']),
-
-            dropSeconds : function(time){
-              var strArray = time.split(':');
-              strArray.pop();
-              return strArray[0]+'시 '+strArray[1]+'분'
+            ddd(){
+                alert("ddd")
             },
-            //페이지가 닫힐 때 vuex에 저장하는 메서드
+            //vuex의 mapMutation
+            ...mapMutations(['alert_Error', 'alert_Warning']),
+           
+            //선택 항목들을 vuex에 저장하는 메서드(부모 컴포넌트에서 호출)
             saveItemsToVuex(){
                 this.setSelectedItem(this.themeList, this.activatedThemeId, "setSelectedTheme")
                 this.setSelectedItem(this.branchList, this.activatedBranchId, "setSelectedBranch")
@@ -154,40 +153,36 @@
             },
             setSelectedItem(list,id,mutationName){
                 let object ={}
-                for(let i in list){
-                    if(list[i].id == id){
+                for(let i in list)
+                    if(list[i].id == id)
                         object = list[i]
-                    }
-                }
                 this.$store.commit(mutationName, object);
             },
-
-            setSelectedTheme(){
-                //themeList에서 activatedThemeId에 맞는 객체를 찾아서 vuex에 commit해줘야함
-                let theme ={}
-                for(let i in this.themeList){
-                    if(this.themeList[i].id == this.activatedThemeId){
-                        theme = this.themeList[i]
-                    }
+            //위 메서드가 호출되기 전, 선택항목을 모두 선택했는지 확인하는 메서드(부모 컴포넌트에서 호출)
+            isItemSelected(){
+                let check = false
+                let message = ''
+                if(!this.activatedBranchId){ 
+                    return this.alert_Warning("지점을 선택해주세요.")
+                }else if(!this.activatedThemeId){
+                    return this.alert_Warning("테마를 선택해주세요.")
+                }else if(!this.activatedSlotId){
+                    return this.alert_Warning("예약 시간을 선택해주세요.")
+                }else if(!!this.activatedBranchId && !!this.activatedThemeId && !!this.activatedSlotId){
+                    check = true
                 }
-                this.$store.commit("setSelectedTheme", theme);
+                return check
             },
-
+            //달력 날짜를 선택했을 때 호출되는 메서드
             onContext(ctx) {
                 this.context = ctx
                 this.activatedDate = ctx.selectedYMD
                 this.getSlotTime()
-
             },
-            selectBranch(branchId) {
-                this.activatedBranchId = branchId;
-            },
-            selectTheme(themeId) {
-                this.activatedThemeId = themeId;
-            },
-            selectSlot(slotId) {
-                this.activatedSlotId = slotId;
-            },
+            //선택 항목을 클릭했을 때 activated~Id에 ~id값을 저장
+            selectBranch(branchId) { this.activatedBranchId = branchId; },
+            selectTheme(themeId) { this.activatedThemeId = themeId; },
+            selectSlot(slotId) { this.activatedSlotId = slotId; },
 
             getBranchAndTheme() {
                 //테마 정보 가지고 오기
@@ -211,7 +206,6 @@
                            }
                         )
                     }
-                    // this.$store.commit("setStoreTheme", this.themeList)
                 });
                 //지점 정보 가지고 오기
                 axios(
@@ -231,7 +225,6 @@
                                     .list[j]
                                     .branchName
                             });
-
                     }
                 });
             },
@@ -285,10 +278,12 @@
                     });
                 }
             },
-            ddd(){
-                alert("셀렉트의 메서드 호출")
+            //받아온 slotTime의 시간을 hh:mm:ss가 아닌 hh시 mm분으로 바꿔주는 메서드
+            dropSeconds : function(time){
+              var strArray = time.split(':');
+              strArray.pop();
+              return strArray[0]+'시 '+strArray[1]+'분'
             },
-
             async getSlotMaxDateAndDisableDate() {
                 this.max = ""; //초기화
                 this.isNotShowSlotDate = [];
