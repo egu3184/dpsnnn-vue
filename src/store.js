@@ -6,18 +6,16 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {  //data
 
-    storeBranchList: [],
-    storeThemeList: [],
-
-    activatedBranch: 1,  //초기값 
-    activatedTheme: 1,   //초기값
-    activatedDate :'',
-    activatedTime : '',
+    // activatedBranch: 1,  //초기값 
+    // activatedTheme: 1,   //초기값
+    // activatedDate :'',
+    // activatedTime : '',
     agreementStatus : '',
 
-    // selectedThemeInfo : '',
-    selectedBranchInfo : '',
-    selectedSlotInfo : '',
+    selectedTheme : {fruit : 'apple',},
+    selectedBranchInfo : {},
+    selectedSlotInfo : {},
+    
 
     totalPrice :[],
 
@@ -30,12 +28,7 @@ export const store = new Vuex.Store({
 
   },
   getters: {  
-    getThemeMaxCapacity(state){
-      return state.selectedThemeInfo.maxCapapcity
-    },
-    getThemeMinCapacity(state){
-      return state.selectedThemeInfo.minCapapcity
-    },
+   
     getThemeTotalPrice(state){
       let min = state.selectedThemeInfo.minCapapcity
       let max = state.selectedThemeInfo.maxCapapcity
@@ -55,44 +48,49 @@ export const store = new Vuex.Store({
 
   },
   mutations: {
-    setActivatedTheme(state, value){
-      state.activatedTheme = value
+    //SelectReservation에서 
+    setSelectedTheme(state, theme){
+      console.log("여기 vuex임")
+      console.log(theme)
+      state.selectedTheme = theme
     },
-    setActivatedBranch(state, value){
-      state.activatedBranch = value
+    setSelectedBranch(state, branch){
+      console.log("여기 vuex임")
+      console.log(branch)
+      state.selectedBranchInfo = branch
     },
-    setActivatedDate(state, value){
-      state.activatedDate = value
+    // setActivatedDate(state, value){
+    //   state.activatedDate = value
+    // },
+    setSelectedSlot(state, slot){
+      console.log("여기 vuex임")
+      console.log(slot)
+      state.selectedSlotInfo = slot
     },
-    setActivatedTime(state, value){
-      state.activatedTime = value
-    },
-    setAgreementStatus(state, value){
-      state.agreementStatus = value
-    },
-
-    setStoreTheme(state, List){
-      for(let i in List){
-        state.storeThemeList.push(List[i])
-      }
-    },
-    setStoreBranch(state, List){
-      for(let i in List){
-        state.storeBranchList.push(List[i])
-      }
+    setAgreementStatus(state, status){
+      state.agreementStatus = status
     },
 
-    alert_Warning(state, text) {
+    sibal(text){
+      alert(text);
+    },
+
+    //Swal2 
+    alert_Warning(state,text) {
       Swal.fire(
           {icon: 'warning', title: '잠시만요!', text: text, confirmButtonColor: '#3085d6'}
       )
     },
     alert_Error(state,text) {
+        console.log(text)
         Swal.fire(
             {icon: 'error', title: '오.. 이런', text: text, confirmButtonColor: '#3085d6'}
         )
     },
 
+
+
+    
   },
   actions:{
     

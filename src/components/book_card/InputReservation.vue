@@ -208,7 +208,9 @@
     </div>
 </template>
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import {eventBus} from '@/main.js'
+
 export default {
     name: '',
     components: {
@@ -244,17 +246,25 @@ export default {
     },
      computed:{
         ...mapState(['selectedThemeInfo']),
-        ...mapGetters(['getThemeTotalPrice'])
+        ...mapGetters(['getThemeTotalPrice']),
     },
     setup() {},
-    created() {},
+    created() {
+         this.dd()
+    },
     mounted() {
-        // alert("두번째 컴퍼넌트다!")
+        //vuex에 저장된 activated 
         this.getTotalPirce()
     },
     unmounted() {},
     methods: {
-      
+        ...mapMutations(['alert_Error']),
+
+        dd(){
+            eventBus.$on('test', data =>{
+                alert(data)
+            });
+        },
         numberBlur(){
             //null 체크
             if(!this.number2 || !this.number3){

@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 
 
+export const eventBus = new Vue();
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'

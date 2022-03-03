@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="book_container" v-if="currentTap == 0">
-            <SelectReservation/>
+            <SelectReservation ref="select_saveItems" ></SelectReservation>
         </div>
         <div id="book_container2" v-if="currentTap == 1">
             <InputReservation />
@@ -66,10 +66,10 @@
         },
         computed :{
            ...mapState([
-                'activatedTheme',
-                'activatedBranch',
-                "activatedDate",
-                "activatedTime",
+                // 'activatedTheme',
+                // 'activatedBranch',
+                // "activatedDate",
+                // "activatedTime",
               ])
         },
         setup() {},
@@ -82,49 +82,51 @@
           ...mapMutations([
             "alert_Warning",
             "alert_Error",
-            "setActivatedTime"
+            // "setActivatedTime"
           ]),
 
            nextButton() {
-              switch(this.currentTap){
-                case 0 :
-                    //선택값 4종 확인 !! 논리연산자로 빈문자열(""), false, NaN, udefined, null, 0을 잡아냄
-                    if (!!this.activatedTheme && !!this.activatedBranch && !!this.activatedDate && !!this.activatedTime) {
-                        //해당 슬롯이 예약 가능한지 확인
-                        axios({
-                            method: "get",
-                            url: "http://localhost:2030/slots/" + this.activatedTime
-                        }).then((response) => {
-                            //console.log(response); 예약 가능하면 currentTeb에 +1 해줌.
-                            if (!response.data.data.reserved) {
+                this.$refs.select_saveItems.ddd();
+
+              // switch(this.currentTap){
+              //   case 0 :
+              //       //선택값 4종 확인 !! 논리연산자로 빈문자열(""), false, NaN, udefined, null, 0을 잡아냄
+              //       if (!!this.activatedTheme && !!this.activatedBranch && !!this.activatedDate && !!this.activatedTime) {
+              //           //해당 슬롯이 예약 가능한지 확인
+              //           axios({
+              //               method: "get",
+              //               url: "http://localhost:2030/slots/" + this.activatedTime
+              //           }).then((response) => {
+              //               //console.log(response); 예약 가능하면 currentTeb에 +1 해줌.
+              //               if (!response.data.data.reserved) {
                                 this.currentTap += 1
                                 
-                            } else {
-                                //alert("이미 예약된 시간입니다 :(")
-                                this.alert_Error("이미 예약된 시간입니다.")
-                            }
-                        });
-                    } else {
-                        if (!this.activatedTheme) 
-                            this.alert_Warning("예약 테마를 선택하세요.");
-                        else if (!this.activatedBranch) 
-                            this.alert_Warning("원하시는 지점을 선택하세요.");
-                        else if (!this.activatedDate) 
-                            this.alert_Warning("예약 날짜를 선택하세요.");
-                        else if (!this.activatedTime) //alert("예약 시간을 선택하세요")
-                            this.alert_Warning("예약 시간을 선택하세요.");
-                        }
-                case 1:
+              //               } else {
+              //                   //alert("이미 예약된 시간입니다 :(")
+              //                   this.alert_Error("이미 예약된 시간입니다.")
+              //               }
+              //           });
+              //       } else {
+              //           if (!this.activatedTheme) 
+              //               this.alert_Warning("예약 테마를 선택하세요.");
+              //           else if (!this.activatedBranch) 
+              //               this.alert_Warning("원하시는 지점을 선택하세요.");
+              //           else if (!this.activatedDate) 
+              //               this.alert_Warning("예약 날짜를 선택하세요.");
+              //           else if (!this.activatedTime) //alert("예약 시간을 선택하세요")
+              //               this.alert_Warning("예약 시간을 선택하세요.");
+              //           }
+              //   case 1:
 
 
-                  }
+              //     }
 
                  
               },
               
            prevButton(){
              this.currentTap-=1
-             this.$store.commit("setActivatedTime", '')
+            //  this.$store.commit("setActivatedTime", '')
            } 
         }
     }

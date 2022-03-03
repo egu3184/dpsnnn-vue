@@ -6,7 +6,7 @@
                 <ul>
                     <div :key="index" v-for="(branch, index) in branchList">
                         <li>
-                            <a href="javascript:void(0);" :class="{on : activatedBranch == branch.id}" v-on:click="selectBranch(branch.id), getSlotTime(), getSlotMaxDateAndDisableDate()">{{branch.name}}</a>
+                            <a href="javascript:void(0);" :class="{on : activatedBranchId == branch.id}" v-on:click="selectBranch(branch.id), getSlotTime(), getSlotMaxDateAndDisableDate()">{{branch.name}}</a>
                         </li>
                     </div>
                 </ul>
@@ -20,7 +20,7 @@
                         <li>
                             <a  style="white-space: pre;" 
                                 href="javascript:void(0);"
-                                :class="{on : activatedTheme == theme.id}"
+                                :class="{on : activatedThemeId == theme.id}"
                                 v-on:click="selectTheme(theme.id) , getSlotTime(), getSlotMaxDateAndDisableDate()">{{theme.alteredName}}</a>
                         </li>
                     </div>
@@ -53,16 +53,16 @@
             <dt>시간</dt>
             <dd>
                 <ul>
-                    <div v-for="(time, index) in slotTimes" :key="index">
+                    <div v-for="(time, index) in slotList" :key="index">
                         <div
                             v-if="time.isShowed == true && time.isOpened == true && time.isReserved == false">
                             <li>
                                 <a
                                     href="javascript:void(0);"
-                                    :class="{on : activatedTime == time.id}"
-                                    v-on:click="selectTime(time.id)">
-                                    <b-icon v-if="activatedTime == time.id" icon="check-square"></b-icon>
-                                    <b-icon v-else-if="activatedTime != time.id" icon="square"></b-icon>&nbsp;
+                                    :class="{on : activatedSlotId == time.id}"
+                                    v-on:click="selectSlot(time.id)">
+                                    <b-icon v-if="activatedSlotId == time.id" icon="check-square"></b-icon>
+                                    <b-icon v-else-if="activatedSlotId != time.id" icon="square"></b-icon>&nbsp;
                                    {{time.alterdSlotTime}}</a>
                             </li>
                         </div>
@@ -85,7 +85,8 @@
     import axios from 'axios'
     // CommonJS
     const Swal = require('sweetalert2')
-    import {mapState,mapMutations} from 'vuex'
+    import {mapMutations, mapState} from 'vuex'
+    import {eventBus} from '../../main.js'
 
     export default {
         name: '',
@@ -106,13 +107,14 @@
 
                 branchList: [],
                 themeList: [],
-                slotTimes: [],
+                slotList: [],
                 alterdSlotTimes:[],
 
-                activatedBranch: 1, //초기값
-                activatedTheme: 1, //초기값
+                activatedBranchId: 1, //초기값
+                activatedThemeId: 1, //초기값
                 activatedDate: '',
-                activatedTime: '',
+                // activatedTime: '',
+                activatedSlotId: '',
 
                 isNotShowSlotDate: [],
                 availableSlotDate: [],
@@ -120,45 +122,71 @@
             }
         },
         setup() {},
-        created() {},
+        created() {
+           
+        },
         mounted() {
             //페이지 열리자마자 실행
             this.getBranchAndTheme();
             this.getSlotMaxDateAndDisableDate();
+            
         },
         computed:{
-            ...mapState(['storeBranchList', 'storeThemeList']),
-            ...mapMutations(['setStoreBranch', 'setStoreTheme'])
+            ...mapState(['selectedTheme'])
         },
         unmounted() {},
+        beforeDestroy(){
+            // this.saveItemsToVuex();
+        },
         methods: {
+            ...mapMutations(['alert_Error', 'alert_Warning']),
+
             dropSeconds : function(time){
               var strArray = time.split(':');
               strArray.pop();
               return strArray[0]+'시 '+strArray[1]+'분'
             },
+            //페이지가 닫힐 때 vuex에 저장하는 메서드
+            saveItemsToVuex(){
+                this.setSelectedItem(this.themeList, this.activatedThemeId, "setSelectedTheme")
+                this.setSelectedItem(this.branchList, this.activatedBranchId, "setSelectedBranch")
+                this.setSelectedItem(this.slotList, this.activatedSlotId, "setSelectedSlot")
+            },
+            setSelectedItem(list,id,mutationName){
+                let object ={}
+                for(let i in list){
+                    if(list[i].id == id){
+                        object = list[i]
+                    }
+                }
+                this.$store.commit(mutationName, object);
+            },
+
+            setSelectedTheme(){
+                //themeList에서 activatedThemeId에 맞는 객체를 찾아서 vuex에 commit해줘야함
+                let theme ={}
+                for(let i in this.themeList){
+                    if(this.themeList[i].id == this.activatedThemeId){
+                        theme = this.themeList[i]
+                    }
+                }
+                this.$store.commit("setSelectedTheme", theme);
+            },
 
             onContext(ctx) {
                 this.context = ctx
                 this.activatedDate = ctx.selectedYMD
-                this.$store.commit("setActivatedDate", ctx.selectedYMD)
                 this.getSlotTime()
 
             },
-            selectBranch(branch) {
-                this.activatedBranch = branch;
-                this.$store.commit("setActivatedBranch", branch)
+            selectBranch(branchId) {
+                this.activatedBranchId = branchId;
             },
-            selectTheme(theme) {
-                this.activatedTheme = theme;
-                this.$store.commit("setActivatedTheme", theme)
+            selectTheme(themeId) {
+                this.activatedThemeId = themeId;
             },
-            selectTime(time) {
-                this.activatedTime = time;
-                this.$store.commit("setActivatedTime", time)
-            },
-            dd() {
-                alert(this.max);
+            selectSlot(slotId) {
+                this.activatedSlotId = slotId;
             },
 
             getBranchAndTheme() {
@@ -166,7 +194,7 @@
                 axios(
                     {method: "get", url: "http://localhost:2030/themes", responseType: "json"}
                 ).then((response) => {
-                    console.log("테마 정보"+response)
+                    console.log(response)
                     for (var i in response.data.list) {
                         let themeName = response.data.list[i].themeName
                         let themeNameArray = themeName.split(" ");
@@ -175,18 +203,21 @@
                                 id: response.data.list[i].themeId,
                                 name : themeName,
                                 alteredName: themeNameArray.length < 2 ?  
-                                   themeName : themeNameArray.slice(0,2).join(" ")+"\n"+ themeNameArray.slice(2).join(" ")   
-                                
+                                   themeName : themeNameArray.slice(0,2).join(" ")+"\n"+ themeNameArray.slice(2).join(" "),   
+                                admissionFee: response.data.list[i].admissionFee,
+                                playTime: response.data.list[i].playTime,
+                                maximumCapacity: response.data.list[i].maximumCapacity,
+                                minimumCapacity: response.data.list[i].minimumCapacity,
                            }
                         )
                     }
-                    this.$store.commit("setStoreTheme", this.themeList)
+                    // this.$store.commit("setStoreTheme", this.themeList)
                 });
                 //지점 정보 가지고 오기
                 axios(
                     {method: "get", url: "http://localhost:2030/branches", responseType: "json"}
                 ).then((response) => {
-                    console.log(response);
+                    // console.log(response);
                     for (var j in response.data.list) {
                         this
                             .branchList
@@ -208,7 +239,7 @@
             //슬롯의 타임테이블을 가지고 오는 메서드
             async getSlotTime() {
                 //3개의 값이 모두 있을 때만 비동기 통신
-                if (!!this.activatedBranch && !!this.activatedTheme && !!this.activatedDate) {
+                if (!!this.activatedBranchId && !!this.activatedThemeId && !!this.activatedDate) {
 
                     await axios({
                         method: 'get',
@@ -216,22 +247,22 @@
                         responseType: 'json',
                         params: {
                             slotDate: this.activatedDate,
-                            themeId: this.activatedTheme,
-                            branchId: this.activatedBranch
+                            themeId: this.activatedThemeId,
+                            branchId: this.activatedBranchId
                         }
 
                     }).then((response) => { //화살표 함수로 써야 컴포넌트 데이터에 this로 접근 가능
-                        this.slotTimes = []; //재호출시 무한 추가 방지를 위한 초기화 작업
-                        console.log(response);
+                        this.slotList = []; //재호출시 무한 추가 방지를 위한 초기화 작업
+                        // console.log(response);
                         for (var i in response.data.list) {
                             this
-                                .slotTimes
+                                .slotList
                                 .push({
                                     id: response
                                         .data
                                         .list[i]
                                         .slotId,
-                                    time: response
+                                    slotTime: response
                                         .data
                                         .list[i]
                                         .slotTime,
@@ -247,12 +278,15 @@
                                         .data
                                         .list[i]
                                         .opened,
-                                    slotTime : response.data.list[i].slotTime,     
+                                    slotDate : response.data.list[i].slotDate,     
                                     alterdSlotTime : this.dropSeconds(response.data.list[i].slotTime)     
                                 });
                         }
                     });
                 }
+            },
+            ddd(){
+                alert("셀렉트의 메서드 호출")
             },
 
             async getSlotMaxDateAndDisableDate() {
@@ -265,8 +299,8 @@
                     method: "get",
                     url: "http://localhost:2030/slots/date",
                     params: {
-                        branchId: this.activatedBranch,
-                        themeId: this.activatedTheme
+                        branchId: this.activatedBranchId,
+                        themeId: this.activatedThemeId
                     }
                 }).then((response) => {
                     this.max = response.data.data; //max값 설정
@@ -284,14 +318,14 @@
                         }
                     })
                         .then((response) => {
-                            console.log(response);
+                            // console.log(response);
                             for (let i in response.data.list) {
                                 this
                                     .isNotShowSlotDate
                                     .push(response.data.list[i]);
                             }
                             this.getAvailableSlotDate();
-                            console.log(this.isNotShowSlotDate);
+                            // console.log(this.isNotShowSlotDate);
 
                         })
                         .catch((error) => {
