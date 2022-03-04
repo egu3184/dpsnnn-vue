@@ -71,7 +71,7 @@
                             <li>
                                 <a href="javascript:void(0);" class="none">
                                     <b-icon icon="x-square" scale="1" variant="light"></b-icon>
-                                   {{time.time}}</a>
+                                   {{time.alterdSlotTime}}</a>
                             </li>
                         </div>
                     </div>
