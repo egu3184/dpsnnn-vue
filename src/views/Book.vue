@@ -34,7 +34,7 @@
             <SelectReservation ref="select_saveItems" ></SelectReservation>
         </div>
         <div id="book_container2" v-if="currentTap == 1">
-            <InputReservation />
+            <InputReservation ref="input_saveItems" ></InputReservation>
         </div>    
         <div class="button-div">
             <button class="prev" v-on:click="prevButton" v-if="currentTap > 0">이전으로</button>
@@ -83,29 +83,33 @@
           ]),
 
            nextButton() {
-                //지점, 테마, 날짜&시간 선택했는지 확인
-                if(!this.$refs.select_saveItems.isItemSelected()){ return }
-                this.$refs.select_saveItems.saveItemsToVuex();
-
               switch(this.currentTap){
                 case 0 :
+                    //지점, 테마, 날짜&시간 선택했는지 확인
+                    if(!this.$refs.select_saveItems.isItemSelected()){ return }
+                    this.$refs.select_saveItems.saveItemsToVuex();
                     //해당 슬롯이 예약 가능한지 확인
                     axios({
                         method: "get",
                         url: "http://localhost:2030/slots/" + this.selectedSlotInfo.id
                     }).then((response) => {
-                        //console.log(response); 예약 가능하면 currentTeb에 +1 해줌.
+                        //예약 가능하면 currentTeb에 +1 해줌.
                         if (!response.data.data.reserved) {
                             this.currentTap += 1
                         } else {
                             this.alert_Error("이미 예약된 시간입니다.")
                         }
-                    });
-                   
-                case 1:
-
-
-                  }
+                    })
+                    break;
+                case 1 : 
+                   if(this.$refs.input_saveItems.isItemInput()){
+                     this.$refs.input_saveItems.saveItemsToVuex()
+                     this.currentTap += 1
+                   }
+                   break; 
+                case 2 :
+                  
+              }
 
                  
               },

@@ -161,7 +161,6 @@
             //위 메서드가 호출되기 전, 선택항목을 모두 선택했는지 확인하는 메서드(부모 컴포넌트에서 호출)
             isItemSelected(){
                 let check = false
-                let message = ''
                 if(!this.activatedBranchId){ 
                     return this.alert_Warning("지점을 선택해주세요.")
                 }else if(!this.activatedThemeId){

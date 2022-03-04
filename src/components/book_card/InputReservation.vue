@@ -142,7 +142,7 @@
             <div class="agreeCheckBox"> 
                 <b-form-checkbox
                     id="checkbox-1"
-                    v-model="agreementStatus"
+                    v-model="privacy_agree"
                     name="checkbox-1"
                     value=true
                     unchecked-value=false
@@ -173,21 +173,21 @@
                         </option> 
                     </select>     
                     <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span>
-                    <div class="inline" :class="{wrongNumberLine: hasWrongNumber == true}">
-                        <input type="text" class="form-control" v-model="number2" style="width: 6rem;" />
+                    <div class="inline" :class="{wrongNumberLine: hasWrongNumber == false}">
+                        <input type="text" class="form-control" v-model="number2" v-on:blur="numberBlur" style="width: 6rem;" />
                         <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span>
                         <input type="text" class="form-control" v-model="number3" v-on:blur="numberBlur" style="width: 6rem;" />
                     </div>
                     <!-- <b-form-input id="input-none" :state="numberState2" v-model="number2" v-on:blur="numberBlur2" style="width: 6.5rem; font-size: 1.2em;" class="inline"></b-form-input> -->
                     <!-- <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span> -->
                     <!-- <b-form-input id="input-none" :state="numberState3"  v-model="number3" v-on:blur="numberBlur3" style="width: 6.5rem; font-size: 1.2em;" class="inline"></b-form-input> -->
-                    <p class="errorMessage" v-show="numberValueCheck">{{numberBlurErrorMessage}}</p>
+                    <p class="errorMessage">{{numberBlurErrorMessage}}</p>
                     
                 </div>    
             </div>
             <div class="NoPBox box">
                 <dt style="margin-bottom:2.2rem">
-                    인원수 선택
+                    인원 선택
                 </dt>
                
                 <dd >
@@ -218,27 +218,18 @@ export default {
     },
     data() {
         return {
-             sampleData: '',
-             agreementStatus: false,
+             privacy_agree: false,
 
              number1: '010',
              id_number: ['010','011','016','017','018','019'],
              number2: '',
              number3: '',
-             numberValueCheck : '',
-             numberNullCheck : '',
-             hasWrongNumber : "",
+             hasWrongNumber : null,
              totalNumber :"",
 
              name: '',
-             nameValueCheck: '',
-             nameNullCheck: '',
              hasWrongName: null,
-             
-             //1. vuex getters에서 최소인원수와 최대인원수 정보 가져오기 
-             //2. 최소인원수~최대인원수까지 반복문 돌려 select항목 보여주기.
-             //3. 항목 클릭시 vuex getters에서 인원수를 인자로 넣고 인원수 * 가격 가져오기
-             //4. total 요금 보여주기
+
              totalPrice: '',
              capacityAndTotalPrice : [ ],
 
@@ -253,97 +244,88 @@ export default {
     },
     setup() {},
     created() {
-         this.dd()
+
     },
     mounted() {
-        //vuex에 저장된 activated 
+        //vuex에 저장된 {인수 : 가격} list 가져오기
         this.getTotalPirce()
     },
     unmounted() {},
     methods: {
-         ...mapMutations(['alert_Error', 'alert_Warning']),
-
-        dd(){
-            eventBus.$on('test', data =>{
-                alert(data)
-            });
-        },
+         ...mapMutations(['alert_Error', 'alert_Warning', 'isItemSelected']),
+        //전화번호 blur시
         numberBlur(){
-            //null 체크
-            if(!this.number2 || !this.number3){
-                this.numberValueCheck = false
-                this.hasWrongNumber = true
-                this.numberNullCheck = true
-                return
-            }else if(!!this.number2 && !!this.number3){
-                //값 체크
-                let check2 = /^[0-9]*$/.test(this.number2);
-                let check3 = /^[0-9]*$/.test(this.number3);
-                if(!check2 || !check3){
-                    this.hasWrongNumber = true
-                    this.numberValueCheck = true
-                    this.numberNullCheck = false
-                }else if(!!check2 && !!check3){
-                    this.hasWrongNumber = false
-                    this.numberValueCheck = false
-                    this.numberNullCheck = false
-                }
-            }
+            this.checkRegEx(this.number2,/^[0-9]{4}$/,this.setNumberBlurErrorMessage, "올바른 전화번호를 입력해주세요.")
+            this.checkRegEx(this.number3,/^[0-9]{4}$/,this.setNumberBlurErrorMessage, "올바른 전화번호를 입력해주세요.")
         },
-       nameBlur(){
-           this.checkRegEx(this.name, /^[가-힣a-zA-Z]+$/, this.setNameBlurErrorMessage, "이름을 입력해주세요.");
-            // //null 체크
-            // if(!this.name){
-            //     this.nameValueCheck = false
-            //     this.hasWrongName = false
-            //     this.nameNullCheck = true
-            //     return
-            // }else if(!!this.name){
-            //     //값 체크
-            //     let check =  /^[가-힣]*$/.test(this.name);
-            //     if(!check){
-            //         this.hasWrongName = false
-            //         this.nameValueCheck = true
-            //         this.nameNullCheck = false
-            //     }else if(!!check){
-            //         this.hasWrongName = true
-            //         this.nameValueCheck = false
-            //         this.nameNullCheck = false
-            //     }
-            // }
+        //전화번호 오류시 필요한 setter
+       setNumberBlurErrorMessage(message, status){
+           this.numberBlurErrorMessage = message
+           this.hasWrongNumber = status
        },
+       //이름 blur시  
+       nameBlur(){
+           this.checkRegEx(this.name, /^[가-힣a-zA-Z]+$/, this.setNameBlurErrorMessage, "올바른 이름을 입력해주세요.");
+       },
+       //이름 오류시 필요한 setter
        setNameBlurErrorMessage(message,status){
            this.nameBlurErrorMessage = message
            this.hasWrongName = status
        },
+        //blur시 오류 메시지를 보이게 하는 공통 메서드
        checkRegEx(value, regex, setMessageMethod ,errorMessageText){
-            
            let check = regex.test(value);
-           if(!check){//불합격
+           if(!check){  //불합격
                setMessageMethod(errorMessageText,false)
-           }else{//합격
+           }else{       //합격
                setMessageMethod("",true)
            }
        }, 
-
-
+       //인원 선택했는지 확인 메서드
+       isSelectCapacity(){
+           if(!this.totalPrice){
+               this.alert_Warning("인원을 선택하세요.")
+               return
+           }else{
+               return true
+           }
+       } ,
+       //vuex로부터 인원수 * 가격 list를 가져오는 메서드
        getTotalPirce(){
            this.capacityAndTotalPrice = this.$store.getters.getThemeTotalPrice;
-        //    for(let i in this.getThemeTotalPrice)
-        //    this.capapcityAndTotalPrice.push(this.getThemeTotalPrice[i])
-           console.log(this.capacityAndTotalPrice)
-       }
-
+       },
+       //다음 버튼 눌렀을 때 빈값이 없는지 확인하는 메서드
+       isItemInput(){
+          if(!!this.checkInputItem(this.privacy_agree, "", "개인정보 수집 및 이용에 동의하셔야합니다." )
+                && !!this.checkInputItem(this.hasWrongName, this.setNameBlurErrorMessage,"이름을 확인해주세요.")
+                && !!this.checkInputItem(this.hasWrongNumber, this.setNumberBlurErrorMessage, "번호를 확인해주세요.")
+                && !!this.checkInputItem(this.totalPrice, "" ,"인원을 선택하세요.")
+            ){
+                return true
+            }else{
+                return
+            } 
+       },       
+       checkInputItem(status, setter ,message){
+            if(!status){
+                if(!!setter) setter(message, false)
+                this.alert_Warning(message)
+                return false
+            }else{
+                if(!!setter) setter("", true)
+                return true
+            }
+        },
+        //입력 항목을 vuex에 저장하는 메서드
+        saveItemsToVuex(){
+            this.$store.commit("setPrivacyAgree", this.privacy_agree)
+            this.$store.commit("setBookerName", this.name)
+            this.$store.commit("setPhoneNumber", this.number1+'-'+this.number2+'-'+this.number3)
+            this.$store.commit("setTotalPrice", this.totalPrice)
+        }
     },
     watch:{
-        agreeStatus(agreeStatus){
-           this.$store.commit("agreementStatus", agreementStatus)
-        },
-        // nameBlurErrorMessage(message){
-        //     if(message != null){
-        //         this.hasWrongName
-        //     } 
-        // }
+        
     },
    
     
@@ -469,7 +451,7 @@ export default {
     }
     .errorMessage{
         margin-left: 18rem;
-        font-size: 0.9rem !important;
+        font-size: 0.75rem !important;
         color: rgb(216, 16, 16) !important;;
         margin-bottom: 0;
     }

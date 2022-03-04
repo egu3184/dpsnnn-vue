@@ -9,8 +9,12 @@ export const store = new Vuex.Store({
     selectedBranchInfo : {},
     selectedSlotInfo : {},
     
-    agreementStatus : '',
-    totalPrice :[],
+    privacy_agree : '',
+    booker_name : '',
+    phone_number : '',
+    totalPrice : '',
+
+    totalPriceList :[],
 
   },
   getters: {  
@@ -19,26 +23,23 @@ export const store = new Vuex.Store({
       let min = state.selectedThemeInfo.minimumCapacity
       let max = state.selectedThemeInfo.maximumCapacity
       let price = state.selectedThemeInfo.admissionFee
-      let totalPrice = state.totalPrice
-      console.log(price)
+      let totalPriceList = state.totalPriceList
       for(let i=min; i<=max; i++){
-        totalPrice.push(
+        totalPriceList.push(
           {
             capacity : i+"인",
-            price : (i * price)
+            price : (i * price).toLocaleString()
           }
         )
       }
       //console.log(totalPrice)
-      return totalPrice;
+      return totalPriceList;
     }
 
   },
   mutations: {
     //SelectReservation에서 
     setSelectedTheme(state, theme){
-      console.log("여기 vuex임")
-      console.log(theme)
       state.selectedThemeInfo = theme
     },
     setSelectedBranch(state, branch){
@@ -47,9 +48,19 @@ export const store = new Vuex.Store({
     setSelectedSlot(state, slot){
       state.selectedSlotInfo = slot
     },
-    setAgreementStatus(state, status){
-      state.agreementStatus = status
+    setPrivacyAgree(state, status){
+      state.privacy_agree = status
     },
+    setBookerName(state, name){
+      state.booker_name = name
+    },
+    setPhoneNumber(state, number){
+      state.phone_number = number
+    },
+    setTotalPrice(state, price){
+      state.totalPrice = price
+    },
+    
 
 
     //Swal2 
@@ -65,7 +76,19 @@ export const store = new Vuex.Store({
         )
     },
 
+    // //선택항목이 비었는지 체크 후 비었다면 받은 메시지대로 alert 띄우는 메서드
+    // isItemSelected(val, message){
+    //   let check = ""
+    //   console.log(val)
+    //   if(!val){
+    //     check = false
+    //   }else{
+    //     check = true
+    //   }
+    //   return check;
+    // },
 
+    
 
     
   },
