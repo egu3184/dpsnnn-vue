@@ -38,7 +38,7 @@ export default {
   methods: {}
 }
 </script>
-<style > 
+<style  > 
 .SimpleThemeCardSlot {
     border: rgb(177, 166, 166) 1px solid;
     width: 18rem;

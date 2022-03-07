@@ -103,7 +103,6 @@
                 //max: maxDate,
                 max: '',
                 hideHeader: true,
-                defaultColor: '#287a75',
 
                 branchList: [],
                 themeList: [],
@@ -425,14 +424,15 @@
         align-items: center;
         justify-content: center;
         flex-wrap: wrap;
-        margin-top: 3rem;
-        margin-bottom: 2rem;
+        
+        border-bottom-right-radius: 1.5rem;
+        border-bottom-left-radius: 1.5rem;
 
     }
 
     .branch {
         width: 20rem;
-        height: 35rem;
+        height: 38rem;
         background-color: rgb(255, 255, 255);
         border-radius: 4px;
         border: 2px solid rgb(207, 199, 199);
@@ -475,7 +475,7 @@
 
     .cal {
         width: 30rem;
-        height: 35rem;
+        height: 38rem;
         background-color: rgb(255, 255, 255);
         border-radius: 4px;
         border: 2px solid rgb(207, 199, 199);
@@ -499,7 +499,7 @@
 
     .theme {
         width: 20rem;
-        height: 35rem;
+        height: 38rem;
         background-color: rgb(255, 255, 255);
         border-radius: 4px;
         border: 2px solid rgb(207, 199, 199);
@@ -543,7 +543,7 @@
 
     .time {
         width: 25rem;
-        height: 35rem;
+        height: 38rem;
         background-color: rgb(255, 255, 255);
         border-radius: 4px;
         border: 2px solid rgb(207, 199, 199);
@@ -605,7 +605,7 @@
     }
 
     .book_item {
-        margin: 0.3rem 0.3rem !important;
+        margin: 0rem 0.3rem !important;
     }
 
     @media (max-width: 1280px) {

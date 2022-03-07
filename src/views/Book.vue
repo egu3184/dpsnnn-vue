@@ -7,39 +7,47 @@
         <div class="selectBar">
             <a href="#">예약하기</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">조회하기</a>
         </div>
-        <div class="progress2">
-            <div class="step step1" :class="{on : currentTap == 0}">
-                <p>Step1</p>
-                <p>지점/날짜/테마</p>
+            <div class="book_container">
+            <div class="progress2">
+                <div class="step step1" :class="{on : currentTap == 0}">
+                    <p>Step1</p>
+                    <p>지점/날짜/테마</p>
+                </div>
+                <div class="triangle triangle1" :class="{triangle_on : currentTap == 0}"></div>
+                <div class="step step2" :class="{on : currentTap == 1}">
+                    <p>Step2</p>
+                    <p>예약정보 입력</p>
+                </div>
+                <div
+                    class="triangle triangle2 triangle_On"
+                    :class="{triangle_on : currentTap == 1}"></div>
+                <div class="step step3" :class="{on : currentTap == 2}">
+                    <p>Step3</p>
+                    <p>결제하기</p>
+                </div>
+                <div class="triangle triangle3" :class="{triangle_on : currentTap == 2}"></div>
+                <div class="step step4" :class="{on : currentTap == 3}">
+                    <p>Step4</p>
+                    <p>예약완료</p>
+                </div>
             </div>
-            <div class="triangle triangle1" :class="{triangle_on : currentTap == 0}"></div>
-            <div class="step step2" :class="{on : currentTap == 1}">
-                <p>Step2</p>
-                <p>예약정보 입력</p>
-            </div>
-            <div
-                class="triangle triangle2 triangle_On"
-                :class="{triangle_on : currentTap == 1}"></div>
-            <div class="step step3" :class="{on : currentTap == 2}">
-                <p>Step3</p>
-                <p>결제하기</p>
-            </div>
-            <div class="triangle triangle3" :class="{triangle_on : currentTap == 2}"></div>
-            <div class="step step4" :class="{on : currentTap == 3}">
-                <p>Step4</p>
-                <p>예약완료</p>
-            </div>
+            <div style="margin-top: 1rem;">
+                <div v-if="currentTap == 0">
+                    <SelectReservation ref="select_saveItems" ></SelectReservation>
+                </div>
+                <div v-if="currentTap == 1">
+                    <InputReservation ref="input_saveItems" ></InputReservation>
+                </div>
+            </div>    
         </div>
-        <div class="book_container" v-if="currentTap == 0">
-            <SelectReservation ref="select_saveItems" ></SelectReservation>
-        </div>
-        <div id="book_container2" v-if="currentTap == 1">
-            <InputReservation ref="input_saveItems" ></InputReservation>
-        </div>    
-        <div class="button-div">
-            <button class="prev" v-on:click="prevButton" v-if="currentTap > 0">이전으로</button>
-            <button class="next" v-on:click="nextButton" v-if="currentTap < 3">다음으로</button>
-            <!-- <p>{{currentTap}}</p> -->
+        <div style="display:flex; align-items: center; justify-content: center; margin: 2rem 0rem;">
+            <div class="button-div">
+                <button class="prev" v-on:click="prevButton" v-if="currentTap > 0">이전으로</button>
+                <!-- <p>{{currentTap}}</p> -->
+            </div>
+            <div class="button-div">
+                <button class="next" v-on:click="nextButton" v-if="currentTap < 3">다음으로</button>
+            </div>    
         </div>
     </div>
 </template>
@@ -127,9 +135,12 @@
         background-color: cadetblue;
     }
     .button-div {
-        display: flex;
+        width: 12rem;
+
+        /* display: inline; */
         align-items: center;
         justify-content: center;
+        /* padding: 15rem 15rem */
     }
 
     .next {
@@ -138,7 +149,7 @@
         border: 1px solid #363636;
         font-size: 1.2rem;
         padding: 1.0rem 2.5rem;
-        margin: 5rem 0.8rem;
+        margin: 2rem 0.8rem;
     }
 
     .prev {
@@ -147,33 +158,46 @@
         border: 1px solid #363636;
         font-size: 1.2rem;
         padding: 1.0rem 2.5rem;
-        margin: 5rem 0.8rem;
+        margin: 2rem 0.8rem;
     }
 
     #book {
-        background-color: rgb(247, 247, 247);
+        /* background-color: rgb(247, 247, 247); */
+        /* background-color: #F8F5F1; */
         margin: 0 1rem;
     }
     /* 1 layer*/
     .blank {
         width: 100%;
-        padding: 5%;
-        background-color: rgb(247, 247, 247);
+        padding: 2.8%;
+        background-color: white;
+        /* background-color: rgb(247, 247, 247); */
     }
     /* 2 layer */
     .title {
         width: 100%;
+        background-color: white;
         padding: 3% 0.6% 0.6%;
         text-align: center;
         font-weight: bold;
         font-size: 1.1rem;
-        background-color: rgb(247, 247, 247);
+        /* background-color: rgb(247, 247, 247); */
     }
     /* 3 layer */
+    .book_container{
+         background-color: rgb(247, 247, 247);
+         border-radius: 1.2rem;
+         padding-bottom: 5rem;
+         margin: 0rem 3rem;
+    }
+
+
+
     .selectBar {
         width: 100%;
         padding: 2%;
-        background-color: rgb(247, 247, 247);
+         background-color: white;
+        /* background-color: rgb(247, 247, 247); */
         text-align: center;
         text-decoration-line: none;
         text-decoration: none;
@@ -192,16 +216,16 @@
     /* 4 layer */
     .progress2 {
         padding: 1% 5%;
+        padding-top: 2%;
         width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgb(247, 247, 247);
         flex-wrap: wrap;
     }
     .step {
         width: 15rem;
-        background-color: rgb(134, 129, 129);
+        background-color: rgb(165, 159, 159);
         margin: 0 0 0.8rem 1.5rem;
         color: whitesmoke;
         font-size: 1rem;
@@ -220,18 +244,18 @@
     .triangle {
         width: 0;
         height: 0;
-        border-left: 12px solid rgb(134, 129, 129);
+        border-left: 12px solid rgb(165, 159, 159);
         border-top: 6px solid transparent;
         border-bottom: 12px solid transparent;
     }
     .step2,
     .step3,
     .step4 {
-        background-color: rgb(134, 129, 129);
+        background-color: rgb(165, 159, 159);
     }
     .triangle2,
     .triangle3 {
-        border-left: 12px solid rgb(134, 129, 129);
+        border-left: 12px solid rgb(165, 159, 159);
     }
 
     .on {

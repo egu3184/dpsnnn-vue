@@ -35,7 +35,7 @@ export default {
   }
 }
 </script>
-<style>
+<style >
   
 
   @media (min-width: 769px){

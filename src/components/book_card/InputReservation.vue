@@ -340,14 +340,14 @@ export default {
         justify-content: center;
         flex-wrap: wrap;
         width: 100%;
-        margin-top: 3rem;
+        
     }
 
     .box{
         background-color: rgb(255, 255, 255);
         border-radius: 4px;
         border: 2px solid rgb(207, 199, 199);
-        margin: 1rem 1rem;
+        margin: 0rem 1rem;
     }
 
     .agreementForCollection{
@@ -368,6 +368,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
+         margin-bottom: 0.8rem;
     }
      .NoPBox{
         width: 33rem;
@@ -375,6 +376,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
+         margin-top: 0.8rem;
     }
     dt {
         padding: 1rem;

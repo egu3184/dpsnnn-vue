@@ -58,7 +58,7 @@ export default {
   methods: {}
 }
 </script>
-<style>
+<style scoped="scoped">
   .card1{
     display: flex;
    justify-content: center;

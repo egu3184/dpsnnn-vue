@@ -11,13 +11,13 @@ export default {};
 <style>
 
 </style>
-<style scoped>
+<style scoped="scoped">
   footer{
     width: 100%;
     text-align: center;
     height: auto;
     color: rgba(126, 122, 122, 0.959);
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    
+    margin-top: 7rem;
   }
 </style>
