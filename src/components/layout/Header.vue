@@ -1,14 +1,14 @@
 <template>
   <header class="header" :class="{headerActive: hideHeader == true}" >
     <!-- :class="{headerActive : scrollPosition > 100}"> -->
-        <div class="main" ><a href="#" :class="{headerActive_fontColor: ddd == true}">dpsnnn</a></div>
+        <div class="main" ><a href="#" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</a></div>
           <div>
           <ul class="menu">
-            <li><a href="#" :class="{headerActive_fontColor: ddd == true}">단편선</a></li>
-            <li><a href="#" :class="{headerActive_fontColor: ddd == true}">예약하기</a></li>
-            <li><a href="#" :class="{headerActive_fontColor: ddd == true}">첫번째 이야기</a></li>
-            <li><a href="#" :class="{headerActive_fontColor: ddd == true}">두번째 이야기</a></li>
-            <li><a href="#" :class="{headerActive_fontColor: ddd == true}">Plans & Pricing</a></li>  
+            <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">단편선</a></li>
+            <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">예약하기</a></li>
+            <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">첫번째 이야기</a></li>
+            <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</a></li>
+            <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">Plans & Pricing</a></li>  
           </ul> 
           </div>
       <!-- </div> -->
@@ -19,15 +19,11 @@
 export default {
   data(){
 
-    const header = document.querySelector(".header");
-
     return {
       scrollPosition : 0,
       hideHeader : false,
-      ddd: false,
-     
-
-    
+      headerStatus: false,
+  
     }
   },
   mounted(){
@@ -40,20 +36,18 @@ export default {
 
   methods:{
     
-
     scrollEvents(){
       let currentScrollPosition = window.scrollY;
       if(this.scrollPosition-currentScrollPosition > 0){ //양수면 마우스 휠업
-        console.log("휠 업")
+        // console.log("휠 업")
         this.hideHeader = false
-        this.ddd = false
+        this.headerStatus = false
       }else{  //음수면 마우스 휠다운
-        console.log("휠 다운")
+        // console.log("휠 다운")
         this.hideHeader = true
-        this.ddd = true
+        this.headerStatus = true
       }
       this.scrollPosition = currentScrollPosition;
-      
     }
     
   }
@@ -72,7 +66,7 @@ header{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 15px;
+  padding: 0.7rem 1rem;
   overflow: hidden;
   position: fixed;
   z-index: 1000;
@@ -83,7 +77,7 @@ header{
 
 
 .headerActive{
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.94);
   /* visibility: hidden; */
   /* background-color: rgb(247, 247, 247); */
   transition: all 0.8s;
@@ -105,7 +99,7 @@ header{
 .menu li a{
   color: white;
   text-align: center;
-  padding: 18px;
+  padding: 8px;
   text-decoration: none;
 }
 .menu li a:hover{

@@ -157,7 +157,17 @@
                         object = list[i]
                 this.$store.commit(mutationName, object);
             },
-            //위 메서드가 호출되기 전, 선택항목을 모두 선택했는지 확인하는 메서드(부모 컴포넌트에서 호출)
+            //이전 버튼 클릭시 선택 항목들이 저장된 vuex 비우기
+            deleteItemFromVuex(){
+                
+                this.$store.commit("setSelectedTheme", "")
+                console.log(this.$store.state.selectedThemeInfo)
+                this.$store.commit("setSelectedBranch", "")
+                console.log(this.$store.state.selectedBranchInfo)
+                this.$store.commit("setSelectedSlot", "")
+                console.log(this.$store.state.selectedSlotInfo)
+            },
+            //선택항목을 모두 선택했는지 확인하는 메서드(부모 컴포넌트에서 호출)
             isItemSelected(){
                 let check = false
                 if(!this.activatedBranchId){ 

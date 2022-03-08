@@ -60,7 +60,24 @@ export const store = new Vuex.Store({
     setTotalPrice(state, price){
       state.totalPrice = price
     },
-    
+    deleteSelectedItems(state){
+      state.selectedThemeInfo = ""
+      state.selectedBranchInfo = ""
+      state.selectedSlotInfo = ""
+      // console.log(state.selectedThemeInfo)
+      // console.log(state.selectedBranchInfo)
+      // console.log(state.selectedSlotInfo)
+    },
+    dleteteInputItems(state){
+      state.privacy_agree = ""
+      state.booker_name = ""
+      state.phone_number = ""
+      state.totalPrice = ""
+      console.log(state.privacy_agree)
+      console.log(state.booker_name)
+      console.log(state.phone_number)
+      console.log(state.totalPrice)
+    },
 
 
     //Swal2 

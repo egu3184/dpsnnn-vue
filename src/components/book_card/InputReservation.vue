@@ -322,7 +322,10 @@ export default {
             this.$store.commit("setBookerName", this.name)
             this.$store.commit("setPhoneNumber", this.number1+'-'+this.number2+'-'+this.number3)
             this.$store.commit("setTotalPrice", this.totalPrice)
-        }
+        },
+        ddd(){
+                alert("ddd")
+            },
     },
     watch:{
         

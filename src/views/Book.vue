@@ -42,6 +42,7 @@
         </div>
         <div style="display:flex; align-items: center; justify-content: center; margin: 2rem 0rem;">
             <div class="button-div">
+                <button class="prev b_disabled" disabled v-if="currentTap == 0">이전으로</button>
                 <button class="prev" v-on:click="prevButton" v-if="currentTap > 0">이전으로</button>
                 <!-- <p>{{currentTap}}</p> -->
             </div>
@@ -68,7 +69,7 @@
                 InputReservation
             return {
               currentTap: 0,
-
+            
             }
 
         },
@@ -110,6 +111,7 @@
                     })
                     break;
                 case 1 : 
+                   //InputReservation에서 모두 입력했는지 확인 후 vuex에 저장 메서드 호출 
                    if(this.$refs.input_saveItems.isItemInput()){
                      this.$refs.input_saveItems.saveItemsToVuex()
                      this.currentTap += 1
@@ -123,9 +125,31 @@
               },
               
            prevButton(){
+             switch(this.currentTap){
+                 case 1 :
+                    this.$store.commit("deleteSelectedItems")
+                    this.$store.commit("delteteInputItems")
+                    break;
+                 case 2 : 
+                    this.$store.commit("delteteInputItems")
+                    
+                             
+             }  
              this.currentTap-=1
-            //  this.$store.commit("setActivatedTime", '')
-           } 
+            
+           },
+        //    //선택 항목이 저장된 vuex 비우기
+        //     deleteItemFromVuex(setterName){
+        //         this.$store.commit(setterName, "")
+        //     },
+        //     deleteItemList(setterNamelist){
+        //         for(let i in setterNamelist){
+        //             deleteItemFromVuex(setterNamelist[i])
+        //         }
+        //     }
+           
+
+
         }
     }
 </script>
@@ -161,6 +185,11 @@
         margin: 2rem 0.8rem;
     }
 
+    .b_disabled{
+        background-color : rgb(165, 159, 159);
+        border-color: rgb(165, 159, 159);;
+    }
+
     #book {
         /* background-color: rgb(247, 247, 247); */
         /* background-color: #F8F5F1; */
@@ -177,7 +206,7 @@
     .title {
         width: 100%;
         background-color: white;
-        padding: 3% 0.6% 0.6%;
+        padding: 1.1rem 1rem;
         text-align: center;
         font-weight: bold;
         font-size: 1.1rem;
