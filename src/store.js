@@ -20,17 +20,18 @@ export const store = new Vuex.Store({
   getters: {  
    
     getThemeTotalPrice(state){
+     
       let min = state.selectedThemeInfo.minimumCapacity
       let max = state.selectedThemeInfo.maximumCapacity
       let price = state.selectedThemeInfo.admissionFee
       let totalPriceList = state.totalPriceList
       for(let i=min; i<=max; i++){
-        totalPriceList.push(
+        totalPriceList[i] = 
           {
             capacity : i+"인",
             price : (i * price).toLocaleString()
           }
-        )
+        
       }
       //console.log(totalPrice)
       return totalPriceList;
@@ -68,7 +69,7 @@ export const store = new Vuex.Store({
       // console.log(state.selectedBranchInfo)
       // console.log(state.selectedSlotInfo)
     },
-    dleteteInputItems(state){
+    deleteInputItems(state){
       state.privacy_agree = ""
       state.booker_name = ""
       state.phone_number = ""

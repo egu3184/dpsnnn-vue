@@ -200,7 +200,7 @@
                 <div class="inputBox" style="margin: 2rem">
                     <div class="inputItem">
                     <span>이용 금액 : </span>
-                    <span style="font-size: 2.0rem; font-weight: bold;">{{totalPrice}}원</span>
+                    <span style="font-size: 2.0rem; font-weight: bold;">{{totalPrice}}&nbsp;원</span>
                     </div>
                 </div>
             </div>
@@ -230,7 +230,7 @@ export default {
              name: '',
              hasWrongName: null,
 
-             totalPrice: '',
+             totalPrice: 0 ,
              capacityAndTotalPrice : [ ],
 
              nameBlurErrorMessage: '',
@@ -323,9 +323,7 @@ export default {
             this.$store.commit("setPhoneNumber", this.number1+'-'+this.number2+'-'+this.number3)
             this.$store.commit("setTotalPrice", this.totalPrice)
         },
-        ddd(){
-                alert("ddd")
-            },
+        
     },
     watch:{
         
@@ -467,6 +465,19 @@ export default {
         padding-top: 1.2rem;
 
     }
+
+    @media (max-width: 798px) {
+        .agreementForCollection{
+            margin: 0rem 0.2rem;
+            margin-bottom: 1rem
+        }
+        .NoPBox{
+            width: 90%;
+        }
+        .inputBox{
+            width: 90%;
+        }
+    }    
 
 
     

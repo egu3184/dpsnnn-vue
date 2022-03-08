@@ -668,11 +668,20 @@
 
         .theme {
             width: 100%;
-            height: 35vh;
+            height: 21rem;
         }
         .theme dt {
             font-size: 1.5rem;
-
+            margin-bottom: 0.55rem;
+        }
+        .book_item{
+            margin-bottom: 1rem !important;
+        }
+        .time{
+            height: 27rem;
+        }
+        .cal{
+            height: 27rem;
         }
     }
 </style>

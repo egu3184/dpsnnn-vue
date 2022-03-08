@@ -31,13 +31,16 @@
                     <p>예약완료</p>
                 </div>
             </div>
-            <div style="margin-top: 1rem;">
+            <div class="dd" style="margin-top: 1rem;">
                 <div v-if="currentTap == 0">
                     <SelectReservation ref="select_saveItems" ></SelectReservation>
                 </div>
                 <div v-if="currentTap == 1">
                     <InputReservation ref="input_saveItems" ></InputReservation>
                 </div>
+                <div v-if="currentTap == 2">
+                    <PayReservation ref="pay_saveItems"></PayReservation>
+                </div> 
             </div>    
         </div>
         <div style="display:flex; align-items: center; justify-content: center; margin: 2rem 0rem;">
@@ -57,13 +60,14 @@
     import axios from 'axios'
     import SelectReservation from "@/components/book_card/SelectReservation.vue"
     import InputReservation from "@/components/book_card/InputReservation.vue"
+    import PayReservation from "../components/book_card/PayReservation.vue"
     import {mapState, mapGetters, mapMutations} from 'vuex' 
     
 
     export default {
         name: '',
         components: {
-            SelectReservation, InputReservation,
+            SelectReservation, InputReservation, PayReservation
         },
         data() {
                 InputReservation
@@ -128,12 +132,11 @@
              switch(this.currentTap){
                  case 1 :
                     this.$store.commit("deleteSelectedItems")
-                    this.$store.commit("delteteInputItems")
+                    this.$store.commit("deleteInputItems")
                     break;
                  case 2 : 
-                    this.$store.commit("delteteInputItems")
-                    
-                             
+                    this.$store.commit("deleteInputItems")
+                           
              }  
              this.currentTap-=1
             
@@ -303,4 +306,12 @@
     .triangle_none {
         border-left: 12px solid rgb(134, 129, 129);
     }
+
+    @media (max-width: 798px) {
+        .book_container{
+            margin: 0 0;
+            
+        }
+    }    
+
 </style>
