@@ -12,14 +12,15 @@ export const store = new Vuex.Store({
     privacy_agree : '',
     booker_name : '',
     phone_number : '',
-    totalPrice : '',
-
+    // totalPrice : '',
+    // capacity : '',
+    capacityAndPrice: '',
     totalPriceList :[],
 
   },
   getters: {  
    
-    getThemeTotalPrice(state){
+    getThemeTotalPriceList(state){
      
       let min = state.selectedThemeInfo.minimumCapacity
       let max = state.selectedThemeInfo.maximumCapacity
@@ -58,8 +59,9 @@ export const store = new Vuex.Store({
     setPhoneNumber(state, number){
       state.phone_number = number
     },
-    setTotalPrice(state, price){
-      state.totalPrice = price
+    setCapacityAndPrice(state, ob){
+      state.capacityAndPrice = ob
+      
     },
     deleteSelectedItems(state){
       state.selectedThemeInfo = ""

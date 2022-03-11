@@ -1,6 +1,6 @@
 <template>
     <div class="input_container">
-        <div class="agreementForCollection box">
+        <div class="left_box box">
             <dt>
               개인정보 수집 및 이용 동의  
             </dt>
@@ -191,7 +191,7 @@
                 </dt>
                
                 <dd >
-                    <b-form-select style="width: 20rem; height: 4.2rem; font-size: 1.5rem; text-align:center;" v-model="totalPrice" :options="capacityAndTotalPrice" value-field="price" text-field="capacity">
+                    <b-form-select style="width: 20rem; height: 4.2rem; font-size: 1.5rem; text-align:center;" v-model="totalPrice" :options="capacityAndTotalPriceList" value-field="price" text-field="capacity">
                         <template #first>
                             <b-form-select-option value="" disabled> 이용 인원을 선택해주세요.</b-form-select-option>
                         </template>
@@ -231,7 +231,7 @@ export default {
              hasWrongName: null,
 
              totalPrice: 0 ,
-             capacityAndTotalPrice : [ ],
+             capacityAndTotalPriceList : [ ],
 
              nameBlurErrorMessage: '',
              numberBlurErrorMessage: '',
@@ -292,7 +292,7 @@ export default {
        } ,
        //vuex로부터 인원수 * 가격 list를 가져오는 메서드
        getTotalPirce(){
-           this.capacityAndTotalPrice = this.$store.getters.getThemeTotalPrice;
+           this.capacityAndTotalPriceList = this.$store.getters.getThemeTotalPriceList;
        },
        //다음 버튼 눌렀을 때 빈값이 없는지 확인하는 메서드
        isItemInput(){
@@ -321,9 +321,21 @@ export default {
             this.$store.commit("setPrivacyAgree", this.privacy_agree)
             this.$store.commit("setBookerName", this.name)
             this.$store.commit("setPhoneNumber", this.number1+'-'+this.number2+'-'+this.number3)
-            this.$store.commit("setTotalPrice", this.totalPrice)
+            // this.$store.commit("setTotalPrice", this.totalPrice)
+            let ob = this.findObjectInCAPList(this.totalPrice)
+            this.$store.commit("setCapacityAndPrice", ob)
+            console.log(this.$store.state.capacityAndPrice)
+
         },
-        
+        findObjectInCAPList(totalPrice){
+            let capacityAndPrice = {}
+            for(let i in this.capacityAndTotalPriceList){
+                if(this.capacityAndTotalPriceList[i].price == totalPrice){
+                    capacityAndPrice = this.capacityAndTotalPriceList[i]
+                }    
+            }
+            return capacityAndPrice
+        }
     },
     watch:{
         
@@ -351,17 +363,18 @@ export default {
         margin: 0rem 1rem;
     }
 
-    .agreementForCollection{
+    .left_box{
         width: 33rem;
         height: 38rem;
         display: flex;
         flex-direction: column;
         align-items: center;
-        
+        margin-bottom: 2rem;
     }
     .right_box{
         display: flex;
         flex-direction: column;
+        margin-bottom: 2rem;
     }
     .inputBox{
         width: 33rem;
