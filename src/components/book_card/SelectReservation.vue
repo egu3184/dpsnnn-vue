@@ -211,6 +211,7 @@
                                 playTime: response.data.list[i].playTime,
                                 maximumCapacity: response.data.list[i].maximumCapacity,
                                 minimumCapacity: response.data.list[i].minimumCapacity,
+                                themeImg : response.data.list[i].themeImg,
                            }
                         )
                     }
@@ -231,7 +232,8 @@
                                 name: response
                                     .data
                                     .list[j]
-                                    .branchName
+                                    .branchName,
+                                depositPrice : response.data.list[j].depositPrice    
                             });
                     }
                 });
@@ -433,8 +435,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        flex-wrap: wrap;
-        
+        padding-bottom: 2rem;
         border-bottom-right-radius: 1.5rem;
         border-bottom-left-radius: 1.5rem;
 
