@@ -33,8 +33,8 @@
                 </div>
             </div>  
         </div>
-        <div class="second_container">
-            <div class="reserv_term_of_use_container box">
+       <div class="second_container">
+          <div class="reserv_term_of_use_container box">
                 <dt class="dt">이용약관 / 환불규정 </dt>
                 <dd>
                      <div class="dd"> 
@@ -178,7 +178,7 @@
                    <div class="payment_Method_box">
                        <div>
                          <b-form-radio-group v-model="payment_Method" :options="method_radio_options"
-                            class="mb-3"  size="lg" checked="onSite" value-field="item" text-field="name" disabled-field="notEnabled"></b-form-radio-group>
+                            class="pay_method"  size="lg" checked="onSite" value-field="item" text-field="name" disabled-field="notEnabled"></b-form-radio-group>
                        </div>
                    </div>
                    <div class="payment_content">
@@ -186,10 +186,6 @@
                             <div style="">
                                 <span>※ 저희 단편선은 현장결제시 예약금제로 운영하고 있습니다.</span>
                             </div>
-                            <!-- <div style="margin: 1% 0%">
-                                <dt style="display:inline; margin-right: 3rem;">예약금</dt>
-                                <dd style="display:inline; font-weight: 600;">{{deposit_price}} 원</dd>
-                            </div>     -->
                             <div style="margin-top: 2rem;">
                                 <div style="margin: 0.5rem 0rem; display:flex; flex-direction:row;" >
                                     <div style="margin-right: 2rem;"><label style=" font-size: 1.5rem; dispaly: inline;">입금자명 </label></div>
@@ -198,8 +194,10 @@
                                 </div>
                                 <div>
                                     <label style="margin-right: 2rem; font-size: 1.5rem">입금계좌  </label>
-                                    <b-form-select style="width: 20rem; height: 2.5rem; font-size: 1.2rem; text-align:center;" v-model="deposit_account" :options="deposit_account_list">
-                                        
+                                    <b-form-select class="selectDepositBank" style="width: 20rem; height: 2.5rem; font-size: 1.2rem; text-align:center;" v-model="deposit_account" :options="deposit_account_list">
+                                        <template >
+                                            <b-form-select-option value="" disabled>-- 입금 은행을 선택하세요 --</b-form-select-option>
+                                         </template>
                                     </b-form-select>
                                 </div>
                             </div>
@@ -207,8 +205,8 @@
                         <div class="pay_card" v-if="payment_Method == method_radio_options[1].item">2</div>
                         <div class="pay_accountTransfer" v-if="payment_Method == method_radio_options[2].item">3</div>
                    </div>
-               </div>
-               <div class="total_Price_box box">
+                </div>
+                <div class="total_Price_box box">
                     <div class="total_Price">
                         <span style="margin-right: 2.2rem;">{{totalOrDeposit}} </span>
                         <span>{{totalOrDeposit_Price}}원</span>
@@ -216,7 +214,19 @@
                </div>
             </div>
         </div>     
-
+        <div class="agreeCheckBox box">
+               <div>  
+                <b-form-checkbox
+                    v-model="conditions_agree"
+                    name="checkbox-5"
+                     size="lg"
+                    value=true
+                    unchecked-value=false
+                >
+                예약 정보를 확인하고, 이용 약관 및 환불 규정에 동의합니다.
+                </b-form-checkbox>
+               </div>
+        </div>
         
     </div>
 </template>
@@ -251,6 +261,8 @@ export default {
              ],
             
              depositor_name: '',
+             conditions_agree : false,
+
        };
     },
     setup() {},
@@ -327,7 +339,8 @@ export default {
             // 국민은행 1111-1111-11-11 (예금주: ㅇㅇㅇ)
             let formatted = name+"\u00A0"+number+"\u00A0"+"("+holder+")";
             return formatted;
-       }
+       },
+
 
     }
 }
@@ -408,6 +421,9 @@ export default {
    .second_container{
        display: flex;
        flex-direction: row;
+       align-items: center;
+       justify-content: center;
+
 
    }
 
@@ -502,5 +518,83 @@ export default {
         align-items: center;
         justify-content: center;
     }
+    .agreeCheckBox{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 75rem;
+        height: 3.5rem;
+        font-size: 1.4rem;
+        margin-top: 1rem;
+    }
+
+
+
+     @media (max-width: 798px) {
+        .reserv_info_container{
+            width: 100%;
+            flex-direction: column;
+            height: 40rem;
+        }
+        dt{
+            font-size: 1.2rem;
+            width: 6rem;
+        }
+        dd{
+            font-size: 1.1rem;
+        }
+        .theme_info_item item{
+            margin: 1rem 2rem;
+        }
+        .theme_info_content{
+            width: 100%;
+        }
+        .input_info_content{
+            width: 100%;
+        }
+        .reserv_term_of_use_container{
+            width: 100%;
+            margin: 0rem 0rem;
+            margin-bottom: 1rem;
+        }
+        .dt{
+            width: 100%;
+            margin: 0rem 0rem;
+            font-size: 1.5rem;
+        }
+        .dd{
+           
+
+        }
+        .second_container{
+            flex-direction: column;
+            width:100%;
+        }
+        .right_container{
+            width:100%;
+        }
+
+        .agreeCheckBox{
+            width: 100%;
+            font-size: 1rem;
+        }
+        .total_Price_box{
+            width: 100%;
+        }
+        .selectDepositBank{
+            width: 10rem !important;
+        }
+        .pay_method{
+            font-size: 0.8rem;
+        }
+        .total_Price{
+            width: 100%;
+            font-size: 1.5rem;
+            margin-left: 1rem;
+        }
+        .total_Price_box{
+            height: 5rem;
+        }
+    }    
 
 </style>

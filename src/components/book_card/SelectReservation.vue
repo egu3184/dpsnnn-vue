@@ -631,6 +631,9 @@
     }
 
     @media (max-width: 798px) {
+        
+
+
         .blank {
             padding: 21%;
         }
@@ -639,10 +642,13 @@
             padding: 20%, 0;
         }
         .step {
-            width: 8.3rem;
+            width: 7rem;
             height: 70px;
             margin-left: 16px;
             margin-bottom: 5px;
+        }
+        .step p{
+            
         }
         .step :nth-child(1) {
             font-size: 0.8rem;
@@ -657,6 +663,10 @@
         }
         .step4 {
             margin-right: 0.8rem;
+        }
+
+        .select_container{
+            flex-direction: column;
         }
 
         .branch {
@@ -683,6 +693,7 @@
         }
         .cal{
             height: 27rem;
+            width: 100%;
         }
     }
 </style>

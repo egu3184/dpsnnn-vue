@@ -219,7 +219,7 @@
     .book_container{
          background-color: rgb(247, 247, 247);
          border-radius: 1.2rem;
-         padding-bottom: 5rem;
+         padding-bottom: 3rem;
          margin: 0rem 3rem;
     }
 
@@ -310,7 +310,7 @@
     @media (max-width: 798px) {
         .book_container{
             margin: 0 0;
-            
+
         }
     }    
 

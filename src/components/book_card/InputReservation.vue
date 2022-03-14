@@ -157,33 +157,36 @@
                 예약자 정보 입력  
                 </dt>
                 <div class="inputItem">
-                    <span>예약자명 : </span>
-                    <!-- <input type="text" v-model="name" placeholder="성함을 입력해주세요."/>   -->
-                    <b-form-input id="input-none" :state="hasWrongName" v-on:blur="nameBlur" v-model="name" style="width: 20rem;" class="inline"></b-form-input>
-                    <div>
-                        <p class="errorMessage">{{nameBlurErrorMessage}}</p>
-                        <br/>
+                    <div class="label">
+                        <span>예약자명 </span>
                     </div>
+                    <div>
+                        <b-form-input id="input-name" :state="hasWrongName" v-on:blur="nameBlur" v-model="name" style="width: 20rem;" class="inline"></b-form-input>
+                    </div>  
+                </div>
+                <div>
+                    <p class="errorMessage">{{nameBlurErrorMessage}}</p>
+                    <br/>
                 </div>    
                 <div class="inputItem">
-                    <span>전화번호 : </span>
-                    <select v-model="number1" class="form-control" style="width: 5.2rem; height: 3rem; font-size: 1.4rem;">
-                        <option :key="index" v-for="(num, index) in id_number">
-                            {{num}}
-                        </option> 
-                    </select>     
-                    <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span>
-                    <div class="inline" :class="{wrongNumberLine: hasWrongNumber == false}">
-                        <input type="text" class="form-control" v-model="number2" v-on:blur="numberBlur" style="width: 6rem;" />
-                        <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span>
-                        <input type="text" class="form-control" v-model="number3" v-on:blur="numberBlur" style="width: 6rem;" />
+                    <div class="label">
+                        <span>전화번호 </span>
                     </div>
-                    <!-- <b-form-input id="input-none" :state="numberState2" v-model="number2" v-on:blur="numberBlur2" style="width: 6.5rem; font-size: 1.2em;" class="inline"></b-form-input> -->
-                    <!-- <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span> -->
-                    <!-- <b-form-input id="input-none" :state="numberState3"  v-model="number3" v-on:blur="numberBlur3" style="width: 6.5rem; font-size: 1.2em;" class="inline"></b-form-input> -->
-                    <p class="errorMessage">{{numberBlurErrorMessage}}</p>
-                    
-                </div>    
+                    <div>
+                        <select v-model="number1" class="form-control input-num" style="width: 5.2rem; height: 3rem; font-size: 1.4rem;">
+                            <option :key="index "  class="input-num" v-for="(num, index) in id_number">
+                                {{num}}
+                            </option> 
+                        </select>    
+                        <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span>
+                        <div class="inline" :class="{wrongNumberLine: hasWrongNumber == false}">
+                            <input type="text" class="form-control" v-model="number2" v-on:blur="numberBlur" style="width: 6rem;" />
+                            <span style="font-size:1.5rem; margin:0rem 0.25rem">-</span>
+                            <input type="text" class="form-control" v-model="number3" v-on:blur="numberBlur" style="width: 6rem;" />
+                        </div>
+                    </div> 
+                </div>
+                 <p class="errorMessage">{{numberBlurErrorMessage}}</p>    
             </div>
             <div class="NoPBox box">
                 <dt style="margin-bottom:2.2rem">
@@ -443,6 +446,8 @@ export default {
     } 
     .inputItem{
         padding: 0rem 1.7rem;
+        display: flex;
+        flex-direction: row;
     }
     .inputItem span{
         font-size: 1.5rem;
@@ -466,7 +471,7 @@ export default {
        display: inline !important;
     }
     .errorMessage{
-        margin-left: 18rem;
+       
         font-size: 0.75rem !important;
         color: rgb(216, 16, 16) !important;;
         margin-bottom: 0;
@@ -481,15 +486,46 @@ export default {
 
     @media (max-width: 798px) {
         .agreementForCollection{
-            margin: 0rem 0.2rem;
-            margin-bottom: 1rem
+          
         }
+        .left_box{
+            margin: 0 0;
+            margin-bottom: 1rem;
+        }
+
         .NoPBox{
-            width: 90%;
+            width: 100%;
+            margin: 0 0;
+            margin-bottom: 1rem;
         }
         .inputBox{
-            width: 90%;
+            width: 100%;
+            margin: 0 0;
+            margin-bottom: 1rem;
+            height: 20rem;
         }
+        .inputItem{
+            padding: 0 0 ;
+        }
+        .inputItem span{
+            
+        }
+        #input-name{
+            width: 10rem;
+        }
+        #input-num{
+            width: 3rem;
+        }
+        .label{
+            width: 4rem;
+           
+        }
+        .label span{
+             font-size: 1rem;
+             width: 4rem;
+           
+        }
+
     }    
 
 
