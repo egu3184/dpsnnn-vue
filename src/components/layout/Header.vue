@@ -39,9 +39,10 @@ export default {
     scrollEvents(){
       let currentScrollPosition = window.scrollY;
       if(this.scrollPosition-currentScrollPosition > 0){ //양수면 마우스 휠업
-        // console.log("휠 업")
-        this.hideHeader = false
-        this.headerStatus = false
+        if(currentScrollPosition == 0){ //헤더의 위치가 top일 때
+          this.headerStatus = false     
+          this.hideHeader = false
+        }
       }else{  //음수면 마우스 휠다운
         // console.log("휠 다운")
         this.hideHeader = true
