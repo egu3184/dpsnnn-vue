@@ -227,7 +227,7 @@ export default {
     components: {},
     data() {
         return {
-             theme_img : "https://cdn.imweb.me/thumbnail/20211116/0ee5f8df51546.jpeg",
+             theme_img : "",
              branchName : "",  
              themeName : "",
              slotDate : "",
@@ -249,9 +249,7 @@ export default {
              deposit_account_list : [
 
              ],
-             altered_deposit_account_list: [
-                 '국민은행 110-1111-1111111'
-             ],
+            
              depositor_name: '',
        };
     },
@@ -280,6 +278,7 @@ export default {
         getThemeInfo(){
             let theme = this.$store.state.selectedThemeInfo;
             this.themeName = theme.name;
+            this.theme_img = theme.themeImg
         },
         getBranchInfo(){
             let branch = this.$store.state.selectedBranchInfo;
