@@ -29,8 +29,8 @@ export const store = new Vuex.Store({
       for(let i=min; i<=max; i++){
         totalPriceList[i] = 
           {
-            capacity : i+"인",
-            price : (i * price).toLocaleString()
+            capacity : i,
+            price : (i * price)
           }
         
       }
@@ -90,7 +90,7 @@ export const store = new Vuex.Store({
       )
     },
     alert_Error(state,text) {
-        console.log(text)
+        // console.log(text)
         Swal.fire(
             {icon: 'error', title: '오.. 이런', text: text, confirmButtonColor: '#3085d6'}
         )

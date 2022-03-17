@@ -185,20 +185,24 @@
                             <input type="text" class="form-control" v-model="number3" v-on:blur="numberBlur" style="width: 6rem;" />
                         </div>
                     </div> 
-                </div>
-                 <p class="errorMessage">{{numberBlurErrorMessage}}</p>    
+                </div>    
             </div>
             <div class="NoPBox box">
                 <dt style="margin-bottom:2.2rem">
                     인원 선택
                 </dt>
                
-                <dd >
-                    <b-form-select style="width: 20rem; height: 4.2rem; font-size: 1.5rem; text-align:center;" v-model="totalPrice" :options="capacityAndTotalPriceList" value-field="price" text-field="capacity">
+                <dd style="display:flex; align-items:center; justify-conten:center;"  >
+                    <div>
+                    <b-form-select style="width: 20rem; height: 3.2rem; font-size: 1.5rem; text-align:center;" v-model="totalPrice" :options="capacityAndTotalPriceList" value-field="price" text-field="capacity">
                         <template #first>
                             <b-form-select-option value="" disabled> 이용 인원을 선택해주세요.</b-form-select-option>
                         </template>
                     </b-form-select>
+                    </div>
+                    <div>
+                         <span style="font-size: 2rem; margin: 0.5rem;">명</span>
+                    </div>
                 </dd>    
                 <div class="inputBox" style="margin: 2rem">
                     <div class="inputItem">
