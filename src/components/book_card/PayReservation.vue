@@ -29,7 +29,7 @@
                 </div>
                 <div class="input_info_item">
                     <dt>인원수 </dt>&nbsp;&nbsp;
-                    <dd>{{capacity}}</dd>
+                    <dd>{{numUsers}}명</dd>
                 </div>
             </div>  
         </div>
@@ -232,6 +232,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { mapMutations } from 'vuex';
 export default {
     name: '',
     components: {},
@@ -243,7 +244,7 @@ export default {
              slotDate : "",
              booker_name: '',
              phone_number: '',
-             capacity : '',
+             numUsers : '',
 
              payment_Method: 'onSite',
              method_radio_options: [
@@ -251,17 +252,20 @@ export default {
                 { item : 'card' , name: '카드'},
                 { item : 'accountTransfer' , name: '계좌이체', notEnabled: true} 
              ],
-             deposit_price: '20,000',
+             deposit_price: 20000 ,
              totalOrDeposit : '예약금',
-             totalOrDeposit_Price : '20,000',
+             totalOrDeposit_Price : 20000,
 
              deposit_account: '',
-             deposit_account_list : [
-
-             ],
+             deposit_account_list : [ ],
             
              depositor_name: '',
              conditions_agree : false,
+
+             slotId : '',
+             themeId : '',
+             branchId : '',
+             paymentId : '',
 
        };
     },
@@ -287,25 +291,30 @@ export default {
     },
     unmounted() {},
     methods: {
+        ...mapMutations(['alert_Warning', 'alert_Error']),
+
         getThemeInfo(){
             let theme = this.$store.state.selectedThemeInfo;
             this.themeName = theme.name;
-            this.theme_img = theme.themeImg
+            this.theme_img = theme.themeImg;
+            this.themeId = theme.id;
         },
         getBranchInfo(){
             let branch = this.$store.state.selectedBranchInfo;
             this.branchName = branch.name;
+            this.branchId = branch.id;
         },
         getSlotInfo(){
             let slot = this.$store.state.selectedSlotInfo;
             let formatted_slotTime = slot.alterdSlotTime;
             let formatted_date =  this.dateFormatting(slot.slotDate);
             this.slotDate = formatted_date+"\u00A0"+formatted_slotTime
+            this.slotId = slot.id;
         },
         getBookerInfo(){
             this.booker_name = this.$store.state.booker_name;
             this.phone_number = this.$store.state.phone_number;
-            this.capacity = this.$store.state.capacityAndPrice.capacity
+            this.numUsers = this.$store.state.capacityAndPrice.capacity;
         },
         dateFormatting(slotDate){
             let date = slotDate.split('-')
@@ -339,11 +348,104 @@ export default {
             // 국민은행 1111-1111-11-11 (예금주: ㅇㅇㅇ)
             let formatted = name+"\u00A0"+number+"\u00A0"+"("+holder+")";
             return formatted;
-       },
+        },
+
+        //입력 혹은 선택 유무 체크 메서드
+        isItemInputAndSeleted(){
+            if(!this.checkItems(this.depositor_name, "입금하실 분의 이름을 입력해주세요.")
+                || !this.checkItems(this.deposit_account, "입금 은행을 선택해주세요.") 
+                ||!this.checkItems(this.conditions_agree, "예약 정보를 확인하시고 이용 약관 및 환불 규정에 동의해주세요.")){
+                return 
+            }else{
+                return true
+            }
+        },
+        checkItems(item, message){
+            if(!item){
+                this.alert_Warning(message)
+                return false
+            }else{
+                return true
+            }
+        },
+        //자동 입금 확인 요청 메서드
+        requestToPay(){
+            if(this.payment_Method == 'onSite') //현장결제일 경우
+                //입금 확인 요청
+                axios({
+                    url: '',
+                    method: 'post',
+                    data: {
+                        depositorName : this.depositor_name,
+                        depositAccount : this.deposit_account,
+                        depositPrice : this.totalOrDeposit_Price
+                    }
+                }).then((response)=>{
+                    //우선 임시 예약 완료 후
+                    //서버를 통해 대행업체에 확인 요청을 보냄. -> 클라이언트에서 보내기
+                    //서버에서 callback 응답 받으면 업데이트. -> 서버에서 받은 정보로 구분하는 방법 알아보기. 
+                });
+        },
+
+        //axios 결제 + 예약 요청 메서드
+        async saveReservation(){
+            if(this.payment_Method == 'card'){ //카드일 경우
+                //1.클라이언트에서 pg사로 결제 url 요청 + callback url(서버) 함께 보냄
+                //2.받은 url로 리다이렉트
+                //3.결제
+                //4.pg사에서 클라이언트로 결제 정보와 함께 callback url로 리다이렉트
+                //5.서버에서 결제 마무리 처리  
+                return this.alert_Warning("아직 카드 결제가 지원되지 않습니다.")
+
+
+             }else if(this.payment_Method == 'onSite') //현장결제일 경우
+                //결제 정보 넣기
+                await axios({
+                    url: 'http://localhost:2030/payment',
+                    method: 'post',
+                    data: {
+                        paymentMethod : this.payment_Method,
+                        totPrice : this.totalOrDeposit_Price,
+                        depositorName : this.depositor_name,
+                        depositPrice : this.deposit_price,
+                        depositAccount : this.deposit_account
+                    }
+                }).then((response)=>{
+                        // id
+                        console.log(response)
+                        this.paymentId = response.data.data.id
+                        console.log(this.paymentId)
+
+                });
+                //예약 넣기
+                await axios({
+                    url: 'http://localhost:2030/reservations',
+                    method: 'post',
+                    data: {
+                        bookName : this.booker_name,
+                        slotId : this.slotId,
+                        branchId : this.branchId,
+                        themeId : this.themeId,
+                        numUsers : this.numUsers,
+                        privacyAgree : this.$store.state.privacy_agree,
+                        conditionsAgree : this.conditions_agree,
+                        paymentId : this.paymentId,
+                        phoneNum : this.phone_number
+                    }
+
+                }).then((response)=>{
+                    console.log(response)
+                });
+
+            }
+
+
+        }
+        
 
 
     }
-}
+
 </script>
 <style scoped>
     #pay_constructor{
