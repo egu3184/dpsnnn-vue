@@ -65,7 +65,7 @@ export const store = new Vuex.Store({
       
     },
     setReservationId(state, id){
-      state.setReservationId = id
+      state.reservationId = id
     },
     deleteSelectedItems(state){
       state.selectedThemeInfo = ""
