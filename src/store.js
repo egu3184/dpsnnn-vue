@@ -16,6 +16,7 @@ export const store = new Vuex.Store({
     // capacity : '',
     capacityAndPrice: '',
     totalPriceList :[],
+    reservationId: '',
 
   },
   getters: {  
@@ -63,6 +64,9 @@ export const store = new Vuex.Store({
       state.capacityAndPrice = ob
       
     },
+    setReservationId(state, id){
+      state.setReservationId = id
+    },
     deleteSelectedItems(state){
       state.selectedThemeInfo = ""
       state.selectedBranchInfo = ""
@@ -93,7 +97,11 @@ export const store = new Vuex.Store({
         // console.log(text)
         Swal.fire(
             {icon: 'error', title: '오.. 이런', text: text, confirmButtonColor: '#3085d6'}
-        )
+        ).then((result) =>{ 
+          if(result.isConfirmed){ //확인 버튼 눌렀을시
+            window.location.reload()
+          }
+        })
     },
 
     // //선택항목이 비었는지 체크 후 비었다면 받은 메시지대로 alert 띄우는 메서드

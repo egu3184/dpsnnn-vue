@@ -263,6 +263,8 @@ export default {
              conditions_agree : false,
 
              slotId : '',
+             formatted_date : '',
+
              themeId : '',
              branchId : '',
              paymentId : '',
@@ -307,8 +309,8 @@ export default {
         getSlotInfo(){
             let slot = this.$store.state.selectedSlotInfo;
             let formatted_slotTime = slot.alterdSlotTime;
-            let formatted_date =  this.dateFormatting(slot.slotDate);
-            this.slotDate = formatted_date+"\u00A0"+formatted_slotTime
+            this.formatted_date =  this.dateFormatting(slot.slotDate);
+            this.slotDate = this.formatted_date+"\u00A0"+formatted_slotTime
             this.slotId = slot.id;
         },
         getBookerInfo(){
@@ -389,6 +391,9 @@ export default {
 
         //axios 결제 + 예약 요청 메서드
         async saveReservation(){
+
+            let endPoint = false
+
             if(this.payment_Method == 'card'){ //카드일 경우
                 //1.클라이언트에서 pg사로 결제 url 요청 + callback url(서버) 함께 보냄
                 //2.받은 url로 리다이렉트
@@ -414,8 +419,7 @@ export default {
                         // id
                         console.log(response)
                         this.paymentId = response.data.data.id
-                        console.log(this.paymentId)
-
+                        console.log("payId = "+this.paymentId)
                 });
                 //예약 넣기
                 await axios({
@@ -433,11 +437,29 @@ export default {
                         phoneNum : this.phone_number
                     }
 
-                }).then((response)=>{
+                })
+                .then((response)=>{
                     console.log(response)
-                });
+                    if(!!response.data.data){
+                        endPoint = true
+                        this.$store.commit("setReservationId",response.data.data)
+                        console.log("reservationId = "+this.$store.state.reservationId)
+                    }
+                    
+                })
+                .catch((error)=>{
+                    this.alert_Error(error.data.message)
+                })
+               console.log(endPoint)
+               return endPoint 
+            },
+            //예약번호 만들기 - 보류
+            // makeReservationNum(){
+            //     const first = this.formatted_date.split('-')
+            //     console.log()
+            //     return this.slot 
 
-            }
+            // },
 
 
         }

@@ -41,18 +41,26 @@
                 <div v-if="currentTap == 2">
                     <PayReservation ref="pay_saveItems"></PayReservation>
                 </div> 
+                <div v-if="currentTap == 3">
+                    <CompleteReservation ref="pay_saveItems"></CompleteReservation>
+                </div> 
             </div>    
         </div>
-        <div style="display:flex; align-items: center; justify-content: center; margin: 2rem 0rem;">
+        <div v-if="currentTap < 3" style="display:flex; align-items: center; justify-content: center; margin: 2rem 0rem;">
             <div class="button-div">
                 <button class="prev b_disabled" disabled v-if="currentTap == 0">이전으로</button>
-                <button class="prev" v-on:click="prevButton" v-if="currentTap > 0">이전으로</button>
+                <button class="prev" v-on:click="prevButton" v-if="currentTap > 0 && currentTap < 3">이전으로</button>
                 <!-- <p>{{currentTap}}</p> -->
             </div>
             <div class="button-div">
                 <button class="next" v-on:click="nextButton" v-if="currentTap < 3">다음으로</button>
-            </div>    
+            </div>   
         </div>
+        <div v-if="currentTap == 3" style="display:flex; align-items: center; justify-content: center; margin: 2rem 0rem;">
+            <div class="button-div">
+                <button class="next" v-on:click="nextButton" v-if="currentTap == 3">홈으로</button>
+            </div>
+        </div>    
     </div>
 </template>
 <script>
@@ -61,13 +69,14 @@
     import SelectReservation from "@/components/book_card/SelectReservation.vue"
     import InputReservation from "@/components/book_card/InputReservation.vue"
     import PayReservation from "../components/book_card/PayReservation.vue"
+    import CompleteReservation from "../components/book_card/CompleteReservation.vue"
     import {mapState, mapGetters, mapMutations} from 'vuex' 
     
 
     export default {
         name: '',
         components: {
-            SelectReservation, InputReservation, PayReservation
+            SelectReservation, InputReservation, PayReservation, CompleteReservation
         },
         data() {
                 InputReservation
@@ -98,21 +107,21 @@
            nextButton() {
               switch(this.currentTap){
                 case 0 :
-                    //지점, 테마, 날짜&시간 선택했는지 확인
-                    if(!this.$refs.select_saveItems.isItemSelected()){ return }
-                    this.$refs.select_saveItems.saveItemsToVuex();
-                    //해당 슬롯이 예약 가능한지 확인
-                    axios({
-                        method: "get",
-                        url: "http://localhost:2030/slots/" + this.selectedSlotInfo.id
-                    }).then((response) => {
-                        //예약 가능하면 currentTeb에 +1 해줌.
-                        if (!response.data.data.reserved) {
+                     const step0 = async () => {
+                        ///지점, 테마, 날짜&시간 선택했는지 확인
+                        if(! await this.$refs.select_saveItems.isItemSelected()){ return }
+                        //Vuex에 저장
+                        await this.$refs.select_saveItems.saveItemsToVuex();
+                        //해당 슬롯이 예약 가능한지 확인
+                        let result = await this.checkReservation();
+                        if(!!result.isPossible){
                             this.currentTap += 1
-                        } else {
-                            this.alert_Error("이미 예약된 시간입니다.")
-                        }
-                    })
+                        }else{
+                            this.alert_Error(result.message)
+                            window.location.reload(); 
+                        } 
+                    }
+                    step0();
                     break;
                 case 1 : 
                    //InputReservation에서 모두 입력했는지 확인 후 vuex에 저장 메서드 호출 
@@ -122,11 +131,58 @@
                    }
                    break; 
                 case 2 :
-                  
+                    const step2 = async() => {
+                        //해당 슬롯이 예약 가능한지 마지막으로 체크
+                        let result = await this.checkReservation();
+                        if(!result.isPossible){
+                            this.alert_Error(result.message)
+                            // window.location.reload(); 
+                        }
+                        // 입력&선택 확인
+                        if(await this.$refs.pay_saveItems.isItemInputAndSeleted()){
+                            //결제와 예약 처리
+                            if(await this.$refs.pay_saveItems.saveReservation()){
+                                this.currentTap += 1
+                            }
+                        }   
+                    }
+                    step2();
+                   break; 
               }
 
                  
-              },
+            },
+            //해당 슬롯이 예약 가능한지 확인
+            async checkReservation(){
+                let result = {
+                                isPossible : false,
+                                message : ""
+                        }
+                 await fetch( "http://localhost:2030/slots/" + this.selectedSlotInfo.id)
+                    .then((response)=>{
+                        // console.log(response)
+                        // 결과값은 Response 타입
+                        // 여기에는 서버와 통신 정보가 담겨있는데
+                        // 이걸 자바스크립트의 json화 하기 위해 .json() 메서드를 사용하면
+                        // 리턴값은 다시 Promise이다. 이 promise는 json화 하기 위한 promise.
+                        return response.json()
+                     })
+                     //리턴값은 promise이기 때문에 다시 then을 사용할 수 있다. (chaining)
+                    .then(data =>{
+                        //  console.log(data)
+                        if (!data.data.reserved) {
+                            result.isPossible = true
+                            result.message = "예약 가능"
+                        } else {
+                            result.isPossible = false
+                            result.message = "이미 예약된 슬롯입니다."
+                        }
+                        // return result
+                     })
+                     
+                return result;     
+            },
+
               
            prevButton(){
              switch(this.currentTap){
