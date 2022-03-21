@@ -515,7 +515,7 @@ export default {
        height: 3rem;
        margin: 0.5rem 2rem;
        display: flex;
-   }
+   } 
    dt{
        font-size: 1.8rem;
        width: 10rem;

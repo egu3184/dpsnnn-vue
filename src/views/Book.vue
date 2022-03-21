@@ -31,7 +31,7 @@
                     <p>예약완료</p>
                 </div>
             </div>
-            <div class="dd" style="margin-top: 1rem;">
+            <div class="dd" style="margin-top: 1rem; display: flex; justify-content: center; align-item: center;">
                 <div v-if="currentTap == 0">
                     <SelectReservation ref="select_saveItems" ></SelectReservation>
                 </div>
