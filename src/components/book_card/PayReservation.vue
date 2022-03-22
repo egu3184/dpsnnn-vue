@@ -194,7 +194,8 @@
                                 </div>
                                 <div>
                                     <label style="margin-right: 2rem; font-size: 1.5rem">입금계좌  </label>
-                                    <b-form-select class="selectDepositBank" style="width: 20rem; height: 2.5rem; font-size: 1.2rem; text-align:center;" v-model="deposit_account" :options="deposit_account_list">
+                                    <b-form-select class="selectDepositBank" style="width: 20rem; height: 2.5rem; font-size: 1.2rem; text-align:center;"
+                                        value-field="id" text-field="account" v-model="depositAccount_id" :options="deposit_account_list">
                                         <template >
                                             <b-form-select-option value="" disabled>-- 입금 은행을 선택하세요 --</b-form-select-option>
                                          </template>
@@ -208,8 +209,8 @@
                 </div>
                 <div class="total_Price_box box">
                     <div class="total_Price">
-                        <span style="margin-right: 2.2rem;">{{totalOrDeposit}} </span>
-                        <span>{{totalOrDeposit_Price}}원</span>
+                        <span style="margin-right: 2.2rem;">{{paymentObject.type}} </span>
+                        <span>{{paymentObject.price}}원</span>
                     </div> 
                </div>
             </div>
@@ -252,11 +253,12 @@ export default {
                 { item : 'card' , name: '카드'},
                 { item : 'accountTransfer' , name: '계좌이체', notEnabled: true} 
              ],
-             deposit_price: 20000 ,
-             totalOrDeposit : '예약금',
-             totalOrDeposit_Price : 20000,
+             deposit_price:  '',
+             totalPrice : '',
 
-             deposit_account: '',
+             paymentObject: { },
+
+             depositAccount_id: '',
              deposit_account_list : [ ],
             
              depositor_name: '',
@@ -275,11 +277,15 @@ export default {
     watch : {
         payment_Method(methodName){
             if(methodName == this.method_radio_options[0].item){
-                this.totalOrDeposit = '예약금'
-                this.totalOrDeposit_Price = this.deposit_price
+                this.paymentObject = {
+                    type: "예약금",
+                    price: this.deposit_price,
+                }
             }else{
-                this.totalOrDeposit = '결제금'
-                this.totalOrDeposit_Price = this.$store.state.capacityAndPrice.price
+                this.paymentObject = {
+                    type: "결제금",
+                    price: this.totalPrice
+                }
             }
         }
     },
@@ -290,6 +296,7 @@ export default {
         this.getSlotInfo();
         this.getBookerInfo();
         this.getBankAccountInfo();
+        this.paymentObject = { type: "예약금", price: this.deposit_price } 
     },
     unmounted() {},
     methods: {
@@ -305,6 +312,7 @@ export default {
             let branch = this.$store.state.selectedBranchInfo;
             this.branchName = branch.name;
             this.branchId = branch.id;
+            this.deposit_price = branch.depositPrice;
         },
         getSlotInfo(){
             let slot = this.$store.state.selectedSlotInfo;
@@ -317,6 +325,7 @@ export default {
             this.booker_name = this.$store.state.booker_name;
             this.phone_number = this.$store.state.phone_number;
             this.numUsers = this.$store.state.capacityAndPrice.capacity;
+            this.totalPrice = this.$store.state.capacityAndPrice.price
         },
         dateFormatting(slotDate){
             let date = slotDate.split('-')
@@ -336,13 +345,14 @@ export default {
             }).then((response)=>{
                 
                 for(let i in response.data.list){
-                    let account =
-                    this.banckAccountFormattion(
+                    let object ={
+                        id : response.data.list[i].id,
+                        account :  this.banckAccountFormattion(
                             response.data.list[i].bankName,
                             response.data.list[i].bankAccountNumber,
                             response.data.list[i].bankAccountHolder
-                    )
-                    this.deposit_account_list.push(new String(account))
+                    )}
+                    this.deposit_account_list.push(new Object(object))
                 }
             });
         },
@@ -355,7 +365,7 @@ export default {
         //입력 혹은 선택 유무 체크 메서드
         isItemInputAndSeleted(){
             if(!this.checkItems(this.depositor_name, "입금하실 분의 이름을 입력해주세요.")
-                || !this.checkItems(this.deposit_account, "입금 은행을 선택해주세요.") 
+                || !this.checkItems(this.depositAccount_id, "입금 은행을 선택해주세요.") 
                 ||!this.checkItems(this.conditions_agree, "예약 정보를 확인하시고 이용 약관 및 환불 규정에 동의해주세요.")){
                 return 
             }else{
@@ -380,7 +390,7 @@ export default {
                     data: {
                         depositorName : this.depositor_name,
                         depositAccount : this.deposit_account,
-                        depositPrice : this.totalOrDeposit_Price
+                        depositPrice : this.deposit_price
                     }
                 }).then((response)=>{
                     //우선 임시 예약 완료 후
@@ -410,10 +420,10 @@ export default {
                     method: 'post',
                     data: {
                         paymentMethod : this.payment_Method,
-                        totPrice : this.totalOrDeposit_Price,
+                        totPrice : this.totalPrice,
                         depositorName : this.depositor_name,
                         depositPrice : this.deposit_price,
-                        depositAccount : this.deposit_account
+                        bankAccountId : this.depositAccount_id
                     }
                 }).then((response)=>{
                         // id
