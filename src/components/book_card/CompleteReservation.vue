@@ -60,7 +60,7 @@ export default {
     data() {
         return {
             ReservationObject : {},
-            reservationNumber: '202203210184987',
+            reservationNumber: '',
             slotDateTime : ''
         };
     },
@@ -170,7 +170,26 @@ export default {
     dt{
        width: 7rem;
     }
-   
-    
+     @media (max-width: 798px) {
+         #complete_constructor{
+             width: 100%;
+         }
+         .payment{
+             width: 100%;
+         }
+         .content_box{
+             width: 100%;
+         }
+         dd{
+             font-size: 1rem;
+         }
+         .notice span{
+             font-size: 1.1rem;
+         }
+         .title_box{
+             font-size: 1.6rem;
+         }
+
+     }
 
 </style>
