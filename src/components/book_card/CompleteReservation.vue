@@ -2,26 +2,26 @@
     <div id="complete_constructor">
         <div class="complete_container box">
             <div class="title_box">
-                <span>{{bookerName}}님의 예약 등록이 완료되었습니다!</span>
+                <span>{{ReservationObject.bookerName}}님의 예약 등록이 완료되었습니다!</span>
             </div>
             <div class="payment">
-                <div v-if="paymentMethod=='onSite'">
+                <div v-if="ReservationObject.paymentMethod=='OnSite'">
                     <div class="reserv_item">
                         <dt>예약금</dt> 
-                        <dd>{{depositPrice}}원 (입금자 : {{depositorName}})</dd>
+                        <dd>{{ReservationObject.depositPrice}}원 (입금자 : {{ReservationObject.depositorName}})</dd>
                     </div> 
                     <div class="reserv_item">
                         <dt>계좌</dt> 
-                        <dd>{{account}} (예금주 : {{accountHolder}})</dd>
+                        <dd>{{ReservationObject.bankName}} {{ReservationObject.bankAccount}} (예금주 : {{ReservationObject.bankAccountHolder}})</dd>
                     </div>
                     <div class="notice">
                         <span> ※ 예약등록으로부터 30분내 미입금시 자동으로 예약등록이 취소됩니다. </span>
                     </div>  
                 </div>
-                <div v-else-if="paymentMethod=='card'">
+                <div v-else-if="ReservationObject.paymentMethod=='Card'">
                     <div class="reserv_item">
                         <dt>결제금액</dt> 
-                        <dd>{{totPrice}}원</dd>
+                        <dd>{{ReservationObject.totPrice}}원</dd>
                     </div> 
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 <div class="left_box">
                     <div class="reserv_item">
                         <dt>예약번호 </dt>&nbsp;&nbsp;
-                        <dd>{{reservationNum}}</dd>
+                        <dd>{{ReservationObject.reservationNumber}}</dd>
                     </div>
                     <div class="reserv_item">
                         <dt>예약날짜</dt>&nbsp;&nbsp;
@@ -39,11 +39,11 @@
                 <div class="right_box"> 
                      <div class="reserv_item">
                         <dt>지점/테마</dt>&nbsp;&nbsp;
-                        <dd>{{branchName}} / {{themeName}}</dd>
+                        <dd>{{ReservationObject.branchName}} / {{ReservationObject.themeName}}</dd>
                     </div>
                     <div class="reserv_item">
                         <dt>인원/금액</dt>&nbsp;&nbsp;
-                        <dd>{{usersNum}}인 / {{totalPrice}}원</dd>
+                        <dd>{{ReservationObject.numUsers}}인 / {{ReservationObject.totPrice}}원</dd>
                     </div>
                 </div>  
             </div>
@@ -52,31 +52,50 @@
     </div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
     name: '',
     components: {},
     data() {
         return {
-            bookerName: '에구구',
-            depositPrice: '20000',
-            depositorName: '힝구',
-            paymentMethod: 'onSite',
-            totPrice : '',
-            account: '111-1110-11111',
-            accountHolder : '에구',
-            branchName: '강남점',
-            themeName: '그림자없는 상자',
-            slotDateTime: '22년 3월 21일 16시 30분',
-            usersNum : '2',
-            totalPrice : '50000', 
-            reservationNum: '202203210184987'
+            ReservationObject : {},
+            reservationNumber: '202203210184987',
+            slotDateTime : ''
         };
     },
     setup() {},
     created() {},
-    mounted() {},
+    mounted() {
+        this.getReservationInfo();
+       
+    },
     unmounted() {},
-    methods: {}
+    methods: {
+        getReservationInfo(){
+            this.ReservationObject = this.$store.state.responseReservationInfo;   
+            this.slotDateTime = this.dateFormatting(this.ReservationObject.slotDate) + '\u00A0' 
+                                 + this.timeFormatting(this.ReservationObject.slotTime);
+            this.reservationNumber = this.ReservationObject.reservationNumber;
+
+        },
+         dateFormatting(slotDate){
+            let date = slotDate.split('-')
+            let year = date[0].substring(2)
+            let month = date[1].substring(1)
+            let day = date[2]
+            return year+"년"+'\u00A0'+month+"월"+'\u00A0'+day+'일'
+        },
+        timeFormatting(slotTime){
+            let time = slotTime.split(':');
+            let hour = time[0]
+            let minute = time[1]
+            return hour+"시"+"\u00A0"+minute+"분"
+        }
+
+
+
+    }
 }
 </script>
 <style scoped>

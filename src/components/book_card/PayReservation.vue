@@ -452,8 +452,8 @@ export default {
                     console.log(response)
                     if(!!response.data.data){
                         endPoint = true
-                        this.$store.commit("setReservationId",response.data.data)
-                        console.log("reservationId = "+this.$store.state.reservationId)
+                        this.$store.commit("setReservationInfo",response.data.data)
+                        console.log(this.$store.state.responseReservationInfo)
                     }
                     
                 })

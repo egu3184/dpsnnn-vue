@@ -8,15 +8,15 @@ export const store = new Vuex.Store({
     selectedThemeInfo : {},
     selectedBranchInfo : {},
     selectedSlotInfo : {},
+    responseReservationInfo: {},
     
     privacy_agree : '',
     booker_name : '',
     phone_number : '',
-    // totalPrice : '',
-    // capacity : '',
     capacityAndPrice: '',
     totalPriceList :[],
-    reservationId: '',
+    // reservationId: '',
+
 
   },
   getters: {  
@@ -64,16 +64,17 @@ export const store = new Vuex.Store({
       state.capacityAndPrice = ob
       
     },
-    setReservationId(state, id){
-      state.reservationId = id
+    // setReservationId(state, id){
+    //   state.reservationId = id
+    // },
+    setReservationInfo(state, object){
+      state.responseReservationInfo = object
     },
     deleteSelectedItems(state){
       state.selectedThemeInfo = ""
       state.selectedBranchInfo = ""
       state.selectedSlotInfo = ""
-      // console.log(state.selectedThemeInfo)
-      // console.log(state.selectedBranchInfo)
-      // console.log(state.selectedSlotInfo)
+     
     },
     deleteInputItems(state){
       state.privacy_agree = ""
