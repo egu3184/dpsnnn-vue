@@ -5,7 +5,7 @@
           <div>
           <ul class="menu">
             <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">단편선</a></li>
-            <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">예약하기</a></li>
+            <li><a href="/book" :class="{headerActive_fontColor: headerStatus == true}">예약하기</a></li>
             <li><a href="/box" :class="{headerActive_fontColor: headerStatus == true}">첫번째 이야기</a></li>
             <li><a href="/happy" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</a></li>
             <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">Plans & Pricing</a></li>  

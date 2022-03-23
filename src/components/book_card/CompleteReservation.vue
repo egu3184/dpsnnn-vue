@@ -12,7 +12,7 @@
                     </div> 
                     <div class="reserv_item">
                         <dt>계좌</dt> 
-                        <dd>{{ReservationObject.bankName}} {{ReservationObject.bankAccount}} (예금주 : {{ReservationObject.bankAccountHolder}})</dd>
+                        <dd>{{ReservationObject.bankName}} {{ReservationObject.bankAccountNumber}} (예금주 : {{ReservationObject.bankAccountHolder}})</dd>
                     </div>
                     <div class="notice">
                         <span> ※ 예약등록으로부터 30분내 미입금시 자동으로 예약등록이 취소됩니다. </span>
