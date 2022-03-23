@@ -2,21 +2,8 @@
   <div class="card1">
     <div class="card1-box">
       <div class="card1-textbox"> 
-       <span>공간으로의 이야기,</span><br/>
-       <span>{{$store.getters.allUserCount}}</span>
-       <span>{{$store.getters.countOfSeoul}}</span>
-       <span>{{$store.getters.percentOfSeoul}}</span>
-       <span>단편선</span>
-       <!-- <span>{{allUserCount}}</span>
-       <span>{{countOfSeoul}}</span>
-       <span>{{percentOfSeoul}}</span> -->
-       <span>{{count}}</span>
-       <span>{{souls}}</span>
-       <span>{{percent}}</span>
-       <div :key="i" v-for="(user, i) in users">
-         <span>{{user.name}}</span>
-         <span>{{user.adress}}</span>
-       </div>   
+        <span>공간으로의 이야기,</span><br/>
+        <span>단편선</span>
       </div>
       <div class="card1-button">  
         <ReservationButton :button=button>

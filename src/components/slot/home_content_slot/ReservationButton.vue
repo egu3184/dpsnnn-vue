@@ -1,8 +1,8 @@
 <template>
     <div class="reservationButton">
       <slot name="button">
-        <button v-if="button.buttonFontColor == ''" :style=defaultStyle>예약하기</button>
-        <button v-else :style=buttonStyle>예약하기</button>
+        <button onClick="location.href='/book'" v-if="button.buttonFontColor == ''" :style=defaultStyle>예약하기</button>
+        <button onClick="location.href='/book'"  v-else :style=buttonStyle>예약하기</button>
       </slot>
     </div>
 </template>

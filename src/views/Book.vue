@@ -58,7 +58,7 @@
         </div>
         <div v-if="currentTap == 3" style="display:flex; align-items: center; justify-content: center; margin: 2rem 0rem;">
             <div class="button-div">
-                <button class="next" v-on:click="nextButton" v-if="currentTap == 3">홈으로</button>
+                <button class="next" onClick="location.href='/'" v-if="currentTap == 3">홈으로</button>
             </div>
         </div>    
     </div>

@@ -1,13 +1,13 @@
 <template>
-  <header class="header" :class="{headerActive: hideHeader == true}" >
+  <header class="header" :style="headerColor" :class="{headerActive: hideHeader == true}" >
     <!-- :class="{headerActive : scrollPosition > 100}"> -->
-        <div class="main" ><a href="#" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</a></div>
+        <div class="main" ><a href="/" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</a></div>
           <div>
           <ul class="menu">
             <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">단편선</a></li>
             <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">예약하기</a></li>
-            <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">첫번째 이야기</a></li>
-            <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</a></li>
+            <li><a href="/box" :class="{headerActive_fontColor: headerStatus == true}">첫번째 이야기</a></li>
+            <li><a href="/happy" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</a></li>
             <li><a href="#" :class="{headerActive_fontColor: headerStatus == true}">Plans & Pricing</a></li>  
           </ul> 
           </div>
@@ -23,10 +23,17 @@ export default {
       scrollPosition : 0,
       hideHeader : false,
       headerStatus: false,
+      headerColor:{
+        backgroundColor: ''
+      }
   
     }
   },
   mounted(){
+    // console.log("이거 새로 고침 되는 거임?"+window.location.pathname)
+    if(window.location.pathname == '/book'){
+      this.headerColor.backgroundColor = '#45526C';
+    }
     window.scrollTo(0,0);
     document.addEventListener('scroll', this.scrollEvents);
   },
@@ -62,8 +69,8 @@ export default {
 
 header{
   width: 100%;
-  /* background-color: transparent; */
-  background-color: #45526C;
+  background-color: transparent;
+  /* background-color: #45526C; */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -78,7 +85,7 @@ header{
 
 
 .headerActive{
-  background-color: rgba(255, 255, 255, 0.94);
+  background-color: rgba(255, 255, 255, 0.94) !important;
   /* visibility: hidden; */
   /* background-color: rgb(247, 247, 247); */
   transition: all 0.8s;

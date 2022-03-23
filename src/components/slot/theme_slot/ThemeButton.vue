@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    <button>예약하기(준비중)</button>
+    <button onClick="location.href='/book'">예약하기</button>
   </div>
 </template>
 <script>

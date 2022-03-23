@@ -13,7 +13,7 @@
     <div class="simple-theme-playtime">
       <slot name="playtime"></slot>
     </div>
-    <div class="simple-theme-button"><button>예약하기</button></div>
+    <div class="simple-theme-button"><button onClick="location.href='/home'">예약하기</button></div>
   </div>
 </template>
 <script>
