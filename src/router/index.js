@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Theme_box from '@/views/Theme_box.vue'
 import Theme_happy from '@/views/Theme_happy.vue'
 import Book from "@/views/Book.vue"
+import Login from "@/views/Login.vue"
 
 Vue.use(VueRouter)
 
@@ -32,7 +33,14 @@ const routes = [
     name: 'book',
     component: Book
 
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+
   }
+
  
 ]
 
