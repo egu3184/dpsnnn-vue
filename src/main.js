@@ -17,6 +17,7 @@ import '@/assets/scss/custom.scss'
 
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
+Vue.use(store);
    
 Vue.config.productionTip = false
  

@@ -104,7 +104,7 @@ export default {
     window.scrollTo(0,0);
     document.addEventListener('scroll', this.scrollEvents);
 
-    this.test();
+    
   },
   unmounted() {
     document.removeEventListener('scroll', this.scrollEvents);
@@ -113,13 +113,13 @@ export default {
 
 
   methods:{
-    test(){
-      instance({
+    async test(){
+      await instance({
         url: "http://localhost:2030/user/user/",
         method: 'get'
 
       }).then((response)=>{
-        console.log(response)
+       console.log(response)
       }).catch((error)=>{
         console.log(error)
       });
@@ -149,13 +149,13 @@ export default {
       this.scrollPosition = currentScrollPosition;
     },
 
-    login(){
+    async login(){
       if(!!this.checkEmptyValueAndVerifyRegex(this.id
               ,/^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/
               ,"아이디를 입력하지 않았거나 이메일 형식이 아닙니다.")
         &&!!this.checkEmptyValue(this.pw, "비밀번호를 입력해주세요.")){
 
-        instance({
+        await instance({
           url: "http://localhost:2030/login",
           method: "post",
           data:{
@@ -164,8 +164,16 @@ export default {
           }
         }).then((response)=>{
           console.log(response);
+          const {success} = response.data;
+          if(success === true){
+            sessionStorage.setItem("AccessToken", response.data.data.accessToken);
+            sessionStorage.setItem("RefreshToken", response.data.data.refreshToken);
+            // window.location.reload()
+          }else{
+            this.$store.commit("alert_Warning", "계정이 존재하지 않거나"+"\u00A0" +"이메일 또는 비밀번호가 정확하지 않습니다.");
+          }
         }).catch((error)=>{
-          console.log(error);
+          this.$store.commit("alert_Error", "로그인이 실패하였습니다.");
         });
       }
     },
