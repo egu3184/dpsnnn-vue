@@ -3,7 +3,21 @@ import Vuex from 'vuex'
 const Swal = require('sweetalert2')
 Vue.use(Vuex)
 
+import createPersistedState from 'vuex-persistedstate';
+// import header from '@/components/layout/Header.vue';
+
+
 export const store = new Vuex.Store({
+  // modules:{
+  //   Header: Header,
+
+  // },
+  plugins: [
+    createPersistedState ({
+      storage: window.sessionStorage,
+      
+    })
+  ],
   state: {  //data
     selectedThemeInfo : {},
     selectedBranchInfo : {},
@@ -16,6 +30,8 @@ export const store = new Vuex.Store({
     capacityAndPrice: '',
     totalPriceList :[],
     // reservationId: '',
+
+    isLogin : '',
 
 
   },
@@ -87,6 +103,10 @@ export const store = new Vuex.Store({
       console.log(state.totalPrice)
     },
 
+    setIsLogin(state, status){
+      state.isLogin = status
+    },
+
 
     //Swal2 
     alert_Warning(state,text) {
@@ -104,19 +124,6 @@ export const store = new Vuex.Store({
           }
         })
     },
-
-    // //선택항목이 비었는지 체크 후 비었다면 받은 메시지대로 alert 띄우는 메서드
-    // isItemSelected(val, message){
-    //   let check = ""
-    //   console.log(val)
-    //   if(!val){
-    //     check = false
-    //   }else{
-    //     check = true
-    //   }
-    //   return check;
-    // },
-
     
 
     
