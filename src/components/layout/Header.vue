@@ -1,5 +1,5 @@
 <template>
-  <header class="header" :style="headerColor" :class="{headerActive: hideHeader == true}" >
+  <header class="header" :style="headerColor" :class="{headerActive: hideHeader == true}"  style="z-index: 1" >
     <!-- :class="{headerActive : scrollPosition > 100}"> -->
         <div class="main" ><a href="/" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</a></div>
           <div>
@@ -10,8 +10,21 @@
             <li><a href="/happy" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</a></li>
             <li>
               <a >
-                <img @click="getLoginModal" v-if="headerStatus == false" src="@/assets/Icon_login_white.png" style="height:2rem; width:2rem;"/>
-                <img @click="getLoginModal" v-if="headerStatus == true" src="@/assets/Icon_login_black.png" style="height:2rem; width:2rem;"/>
+                <img @click="getLoginModal" v-if="headerStatus == false && isLogin == false" src="@/assets/Icon_login_white.png" style="height:1.5rem; width:1.5rem;"/>
+                <img @click="getLoginModal" v-if="headerStatus == true && isLogin == false" src="@/assets/Icon_login_black.png" style="height:1.5rem; width:1.5rem;"/>
+                <!-- <img @click="logout"  v-if="headerStatus == false && isLogin == true" src="@/assets/Icon_logout_white.png" style="height:1.5rem; width:1.5rem;"/> -->
+                <!-- <img @click="logout"  v-if="headerStatus == true && isLogin == true" src="@/assets/Icon_logout_black.png" style="height:1.5rem; width:1.5rem;"/> -->
+                <!-- <div v-if="headerStatus == true && isLogin == true" style="position:fixed"> -->
+                  
+                  <b-dropdown v-if="isLogin == true" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret dropup>
+                    <template #button-content>
+                       <img v-if="headerStatus == false && isLogin == true" src="@/assets/Icon_online_white.png" style="height:1.5rem; width:1.5rem;"/>
+                      <img v-if="headerStatus == true && isLogin == true" src="@/assets/Icon_online_black.png" style="height:1.5rem; width:1.5rem;"/>
+                    </template>
+                    <b-dropdown-item @click="logout">로그아웃</b-dropdown-item>
+                    <b-dropdown-item href="#">내 정보</b-dropdown-item>
+                  </b-dropdown>
+                <!-- </div> -->
               </a>
             </li>  
               
@@ -93,17 +106,20 @@ export default {
       token: '',
       loginObj: '',
       modalShow: false,
+
+      isLogin : '',
   
     }
   },
   mounted(){
-    // console.log("이거 새로 고침 되는 거임?"+window.location.pathname)
+    
     if(window.location.pathname == '/book'){
       this.headerColor.backgroundColor = '#45526C';
     }
     window.scrollTo(0,0);
     document.addEventListener('scroll', this.scrollEvents);
 
+    this.getLoginStatus();
     
   },
   unmounted() {
@@ -113,6 +129,19 @@ export default {
 
 
   methods:{
+    logout(){
+      //로그인 상태 false & SessionStrage 비우기 
+      this.$store.commit("setIsLogin", false);
+      this.isLogin = false;
+      sessionStorage.clear("AccessToken");
+      sessionStorage.clear("RefreshToken");
+    },
+    getLoginStatus(){
+      console.log(this.$store.state.isLogin)
+      this.isLogin = this.$store.state.isLogin
+      console.log(this.isLogin)
+    },
+
     async test(){
       await instance({
         url: "http://localhost:2030/user/user/",
@@ -163,11 +192,17 @@ export default {
             password: this.pw
           }
         }).then((response)=>{
-          console.log(response);
           const {success} = response.data;
           if(success === true){
+            //토큰 저장
             sessionStorage.setItem("AccessToken", response.data.data.accessToken);
             sessionStorage.setItem("RefreshToken", response.data.data.refreshToken);
+            //로그인 상태값 true
+            this.$store.commit("setIsLogin", true);
+            this.isLogin = true;
+            //data(id,pw) 초기화, 모달 닫기   
+            this.modalShow = false;
+            this.hidden();
             // window.location.reload()
           }else{
             this.$store.commit("alert_Warning", "계정이 존재하지 않거나"+"\u00A0" +"이메일 또는 비밀번호가 정확하지 않습니다.");
@@ -212,7 +247,6 @@ header{
   flex-direction: row;
   justify-content: space-between;
   padding: 0.7rem 1rem;
-  overflow: hidden;
   position: fixed;
   z-index: 1000;
   transition: all 0.8s;
@@ -220,6 +254,11 @@ header{
   font-family: GowunDodum-Regular;
 }
 
+button{
+  padding: 0px !important;
+  margin: 0px !important;
+  border: 0px !important;
+}
 
 .headerActive{
   background-color: rgba(255, 255, 255, 0.94) !important;
