@@ -72,19 +72,22 @@
                 <a href="#"><img src="@/assets/Icon_naver.png"  style="height: 3rem; width: 3rem;"  /></a>
             </div>
             <div class="socialIcon"> 
-                <a href="#"><img src="@/assets/Icon_kakao.jpg"  style="height: 3.3rem; width: 3.3rem;"  /></a>
+                <a @click="kakaoLogin"><img src="@/assets/Icon_kakao.jpg"  style="height: 3.3rem; width: 3.3rem;"  /></a>
             </div>
         </div>   
           <!-- <b-button class="mt-3" variant="outline-secondary" block @click="hideModal">Close Me</b-button> -->
   </b-modal>
   </header>  
 </template>
-
 <script>
+
 import Login from "@/views/Login.vue"
 import axios from 'axios'
 import instance from '@/axiosInterceptor.js'
 
+  // //카카오 초기화
+  // window.Kakao.init('e32167f2d82055442aa0c2ae73c4a2ac');
+  // window.Kakao.isInitialized();
 
 export default {
   components:{
@@ -112,14 +115,18 @@ export default {
     }
   },
   mounted(){
-    
-    if(window.location.pathname == '/book'){
+    //예약하기 페이지에서만 다른 색 주기
+    if(window.location.pathname == '/book' || window.location.pathname == '/login'){
       this.headerColor.backgroundColor = '#45526C';
     }
+    //스크롤 이벤트
     window.scrollTo(0,0);
     document.addEventListener('scroll', this.scrollEvents);
-
+    //로그인 상태 가져오기
     this.getLoginStatus();
+
+
+    
     
   },
   unmounted() {
@@ -129,6 +136,27 @@ export default {
 
 
   methods:{
+    async kakaoLogin(){
+      axios({
+        url: "http://localhost:2030/login/"+"kakao"+"/url",
+        method: "get",
+
+      }).then((response)=>{
+        console.log(response)
+        // window.open(response.data, 'windowPop', 'width=400, height=600, left=400, top=400, resizable = yes')
+        this.popSocialLogin(response.data)
+
+      }).catch((error)=>{
+
+      });
+      
+    },
+    popSocialLogin : function(loginUrl){
+      window.open(loginUrl, 'windowPop', 'width=400, height=600, left=400, top=400, resizable = yes')
+      opener.close();
+    },
+     
+
     logout(){
       //로그인 상태 false & SessionStrage 비우기 
       this.$store.commit("setIsLogin", false);
@@ -325,38 +353,7 @@ button{
 }
 
 
-/* login */
- .socialIconLine{
-        display: flex;
-        flex-direction: row;
-        height: 4rem;
-        align-items: center;
-        justify-content: center;
-    }
-    .socialIcon{
-        margin: 0rem 0.8rem;
-        width: 3.5rem;
-    }
 
-    .orElse {
-        display: flex;
-        flex-basis: 100%;
-        align-items: center;
-        color: rgba(107, 102, 102, 0.767);
-        font-size: 12px;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-    }
-    .orElse::before,
-    .orElse::after {
-        content: "";
-        flex-grow: 1;
-        background: rgba(163, 161, 161, 0.719);
-        height: 1px;
-        font-size: 0px;
-        line-height: 0px;
-        margin: 0px 16px;
-    }
 
 
 
