@@ -197,7 +197,6 @@
                 axios(
                     {method: "get", url: "http://localhost:2030/themes", responseType: "json"}
                 ).then((response) => {
-                    console.log(response)
                     for (var i in response.data.list) {
                         let themeName = response.data.list[i].themeName
                         let themeNameArray = themeName.split(" ");

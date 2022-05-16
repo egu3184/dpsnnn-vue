@@ -32,6 +32,7 @@ export const store = new Vuex.Store({
     // reservationId: '',
 
     isLogin : '',
+    CompleteSignup : '',
 
 
   },
@@ -106,6 +107,9 @@ export const store = new Vuex.Store({
     setIsLogin(state, status){
       state.isLogin = status
     },
+    setCompleteSignup(state, status){
+      state.CompleteSignup = status
+    },
 
 
     //Swal2 
@@ -124,6 +128,11 @@ export const store = new Vuex.Store({
           }
         })
     },
+    alert_Success(state, title, text){
+      Swal.fire({
+        title: title, text: text, icon: 'success', confirmButtonColor: '#3085d6'
+      })
+    }
     
 
     
