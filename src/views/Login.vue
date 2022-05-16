@@ -2,6 +2,7 @@
     <div class="login_constructor">
         <div class="login_container">
             <div style="flex-direction: column; display:flex; align-items: center; justify-content: center;">
+                <form>
                 <div>
                     <b-form-group label="아이디"  style="font-size: 1.8rem; width: 39rem; font-weight:bold;" label-for="name-input">
                         <b-input-group class="mb-2">
@@ -18,14 +19,15 @@
                             <b-input-group-prepend is-text>
                                 <b-icon icon="lock-fill"></b-icon>
                             </b-input-group-prepend>
-                            <b-form-input type="password"  v-model="pw" style="height: 4.5rem; font-size: 2rem;" placeholder="Enter your password"></b-form-input>
+                            <b-form-input type="password" v-model="pw" style="height: 4.5rem; font-size: 2rem;" placeholder="Enter your password"></b-form-input>
                         </b-input-group>
                     </b-form-group>
                 </div>
+                </form>
             </div>
             <div>      
                 <div style="display:flex; justify-content: center; ">
-                <b-button class="mt-3" variant="primary" block @click="login" style="height: 4.8rem; font-size:1.8rem; font-weight:bold; width: 39rem; margin:2rem 0rem !important;" >Login</b-button>
+                    <b-button class="mt-3" variant="primary" block @click="login" style="height: 4.8rem; font-size:1.8rem; font-weight:bold; width: 39rem; margin:2rem 0rem !important;" >Login</b-button>
                 </div>
                 <div style="display:flex; justify-content: center; margin:2rem 0rem; width:100%; font-size: 1.3rem;"> 
                     <div>
@@ -36,38 +38,49 @@
                     다른 서비스로 로그인
                 </div>
                 <div class="socialIconLine" style="width:100%">
-                    <div class="socialIcon" style="margin: 0rem 2rem;">
+                    <GoogleLogin class="google-login-button socialIcon" :params="googleParams" 
+                             b :onSuccess="googleLoginSuccess" :onFailure="googleLoginFailure" style="border:0; padding: 0; margin: 0rem 2rem;">
                         <a ><img src="@/assets/Icon_google.jpg" style="height: 4.5rem; width: 4.5rem;"  /></a>
-                    </div>
-                    <div class="socialIcon"  style="margin: 0rem 2rem;">
+                    </GoogleLogin>
+                    <div @click="getNaverAuthorizeUrl" class="socialIcon"  style="margin: 0rem 2rem;">
                         <a href="#"><img src="@/assets/Icon_naver.png"  style="height: 4.25rem; width: 4.25rem;"  /></a>
                     </div>
                     <div @click="kakaoLogin" class="socialIcon"  style="margin: 0rem 2rem;"> 
                         <a href="#"><img src="@/assets/Icon_kakao.jpg"  style="height: 4.5rem; width: 4.5rem;"  /></a>
                     </div>
-                </div>   
-                <!-- <b-button class="mt-3" variant="outline-secondary" block @click="hideModal">Close Me</b-button> -->
-        
+                    <div id="buttonDiv"></div> 
+                </div>
             </div>
         </div>
 </div>    
+
 </template>
+
 <script>
-import Login from "@/views/Login.vue"
 import axios from 'axios'
 import instance from '@/axiosInterceptor.js'
+import {GoogleLogin} from 'vue-google-login'
 
   //카카오 초기화
   window.Kakao.init('e32167f2d82055442aa0c2ae73c4a2ac');
   window.Kakao.isInitialized();
 
+  //네이버 초기화
+  var naverLogin = new naver.LoginWithNaverId({
+      clientId: "9xuPd3w4pIMmt7B0I3nM",
+      callbackUrl: "http://localhost:8081/login",
+      isPopup: true,
+    //   loginButton: {color:"green", type: 3, height: 60}
+  });
+  naverLogin.init();
+
 export default {
   components:{
-    Login
+    GoogleLogin
   },
   data(){
-
     return {
+      //스크롤 관련
       scrollPosition : 0,
       hideHeader : false,
       headerStatus: false,
@@ -75,35 +88,94 @@ export default {
         backgroundColor: ''
       },
       ChangeloginIconSrc: false,
-
+      //로그인 관련
       id: '',
       pw: '',
-      token: '',
-      loginObj: '',
-      modalShow: false,
-
       isLogin : '',
-  
+      googleParams:{
+          client_id: "829453067412-qi7uk2f6rd408agq4dtrl92v0qqamkic.apps.googleusercontent.com"
+      },
     }
   },
   mounted(){
-    this.getLoginStatus();
+    //네이버 로그인시 현재 url 체크
+    this.searchUrlParams();
+    //회원가입 직후 가입 완료 메시지 보이기
+    if(this.$store.state.CompleteSignup == true){
+
+    }    
   },
   unmounted() {
+    //스크롤 이벤트 리스너 제거
     document.removeEventListener('scroll', this.scrollEvents);
   },
-
-
   methods:{
+    //구글 로그인 성공 메서드
+    googleLoginSuccess(googleUser){
+        console.log(googleUser)
+        axios({
+            url:"http://localhost:2030/social/login/"+"google",
+            method:"post",
+            data:{
+                accessToken : googleUser.xc.id_token
+            }
+        }).then((response)=>{
+            if(!!response.data.data.accessToken){
+                this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
+                // this.$router.push('/') 새로고침이 필요함
+                location.href = "/";
+            }
+        }).catch((error)=>{
+            console.log(error)
+        });
+    },
+    //구글 로그인 실패 메서드
+    googleLoginFailure(){
+        this.$store.commit("alert_Error", "로그인이 실패하였습니다.");
+    },
+    //네이버 인가 코드 요청 url  
+    getNaverAuthorizeUrl(){
+        // window.open(url, "windowPopup","width=400, height=600,left=400, top=400, resizable = yes");
+        location.href = naverLogin.generateAuthorizeUrl();
+    },
+    //현재 페이지 url의 엑세스 토큰 가져오기
+    searchUrlParams(){
+         // 1. 현재 주소 불러오기.
+        const currentUrl = window.location;
+         // 2. 해시가 있는지 확인.
+        if(!!currentUrl.hash){
+             // 3. 있으면 #을 ?로 바꿔주고 URLSearchParam 객체화 후 엑세스 토큰 찾기.
+             // #access_token="" & token_type=bearer & expires_in=3600
+            const currentUrlParams = "?"+currentUrl.hash.substring(1);
+            const params = new URLSearchParams(currentUrlParams);
+            // 4. 네이버 로그인 메서도 호출
+            this.naverLogin(params.get('access_token'));
+        }
+          // 4. 없으면 그냥 메소드 지나가기.
+    },
+    //네이버 로그인 후 Jwt 토큰 받아오기
+    async naverLogin(accessToken){
+        axios({
+            url: "http://localhost:2030/social/login/"+"naver",
+            method: "post",
+            data: {
+                "accessToken": accessToken
+            }
+        }).then((response)=>{
+            console.log(response)
+            if(!!response.data.data.accessToken){
+                this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
+                // this.$router.push('/') 새로고침이 필요함
+                location.href = "/";
+            }
+        }).catch((error)=>{
+             this.$store.commit("alert_Error", "로그인이 실패하였습니다.");
+        });
+    },
+    //카카오 로그인 후 Jwt 토큰 받아오기
     async kakaoLogin(){
-        // Kakao.Auth.authorize({
-        //     redirectUri: 'http://localhost:2030/social/login/kakao'
-        // }).then((response)=>{
-        //     console.log(response);
-        // });
         Kakao.Auth.login({
             success:(response)=> {
-                console.log(response.access_token) //access_token
                 axios({
                     url: "http://localhost:2030/social/login/"+"kakao",
                     method: "post",
@@ -111,70 +183,28 @@ export default {
                         "accessToken": response.access_token
                     }
                 }).then((resp)=>{
-                    this.saveTokenAndSetLoginStatus(resp.data.data.accessToken,resp.data.data.refreshToken)
-                    window.location.reload()
-
+                   if(!!resp.data.data.accessToken){
+                        this.saveTokenAndSetLoginStatus(resp.data.data.accessToken,resp.data.data.refreshToken)
+                        //this.$router.push('/') 새로고침이 필요함
+                        location.href = "/";
+                  }
                 }).catch((err)=>{
-                    console.log(err)
+                     this.$store.commit("alert_Error", "로그인이 실패하였습니다.");
                 });
             },
             fail:(error)=>{
-                console.log(error)
+                 this.$store.commit("alert_Error", "로그인이 실패하였습니다.");
             }
-
         })
-
-    //   await axios({
-    //     url: "http://localhost:2030/login/"+"kakao"+"/url",
-    //     method: "get",
-
-    //   }).then((response)=>{
-    //     console.log(response)
-    //     // window.open(response.data, 'windowPop', 'width=400, height=600, left=400, top=400, resizable = yes')
-    //     // this.popSocialLogin(response.data)
-    //     // window.location.href = response.data;
-
-    //     //https://kauth.kakao.com/oauth/authorize?client_id=4db77100f45f0101700b0c73cfa462ae&response_type=code&redirect_uri=http://localhost:2030/social/login/kakao
-    //     console.log(response.data)
-    //     axios({
-    //         url: "https://kauth.kakao.com/oauth/authorize",
-    //         method: "get",
-    //         params:{
-    //             "client_id": "4db77100f45f0101700b0c73cfa462ae",
-    //             "response_type": "code",
-    //             "redirect_uri":"http://localhost:2030/social/login/kakao"
-    //         }
-    //     }).then((response)=>{
-    //         console.log(response)
-    //     });
-    //   }).catch((error)=>{
-
-    //   });
-      
     },
-    popSocialLogin : function(loginUrl){
-      window.open(loginUrl, 'windowPop', 'width=400, height=600, left=400, top=400, resizable = yes')
-      window.close();
-    },
-     
-
+    //로그아웃 : 로그인 상태 false & SessionStrage 비우기 
     logout(){
-      //로그인 상태 false & SessionStrage 비우기 
       this.$store.commit("setIsLogin", false);
       this.isLogin = false;
       sessionStorage.clear("AccessToken");
       sessionStorage.clear("RefreshToken");
     },
-    getLoginStatus(){
-      console.log(this.$store.state.isLogin)
-      if(this.$store.state.isLogin){
-          this.$store.commit("alert_Warning", "이미 로그인하셨습니다!")
-        //   window.location.href="/"
-      }
-      this.isLogin = this.$store.state.isLogin
-      console.log(this.isLogin)
-    },
-    
+    //일반 로그인
     async login(){
       if(!!this.checkEmptyValueAndVerifyRegex(this.id
               ,/^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/
@@ -189,10 +219,9 @@ export default {
             password: this.pw
           }
         }).then((response)=>{
-          console.log(response)
           const {success} = response.data;
           if(success === true){
-            //토큰 저장 && 로그인 상태값 true
+            //토큰 저장 && 로그인 상태 on
             this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
             window.location.reload()
           }else{
@@ -203,14 +232,14 @@ export default {
         });
       }
     },
+    //AccessToken, RefreshToken sessionStorage에 저장 && 로그인 상태값 true
     saveTokenAndSetLoginStatus(accessToken, refreshToken){
-        //토큰 저장
         sessionStorage.setItem("AccessToken", accessToken);
         sessionStorage.setItem("RefreshToken", refreshToken);
-        //로그인 상태값 true
         this.$store.commit("setIsLogin", true);
         this.isLogin = true;
     },
+    //일반 로그인시 빈값 체크
     checkEmptyValue(item, message){
       if(!item){
         return this.$store.commit("alert_Warning", message)
@@ -218,6 +247,7 @@ export default {
         return true
       }
     },
+    //일바 로그인시 정규표현식 체크
     checkEmptyValueAndVerifyRegex(item, regex ,message){
       this.checkEmptyValue(item, message);
       if(!regex.test(item)){
@@ -225,12 +255,12 @@ export default {
       }else{
         return true
       }
-
     },
-    
-  }
-  
 
+
+
+
+  }
 };
 </script>
 </script>
