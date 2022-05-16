@@ -5,8 +5,11 @@ import Theme_box from '@/views/Theme_box.vue'
 import Theme_happy from '@/views/Theme_happy.vue'
 import Book from "@/views/Book.vue"
 import Login from "@/views/Login.vue"
+import SignUp from "@/views/SignUp.vue"
 
 Vue.use(VueRouter)
+import {store} from '../store'
+
 
 const routes = [
   {
@@ -37,9 +40,26 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    beforeEnter: function(to,from,next){
+        if(store.state.isLogin){
+            store.commit("alert_Warning", "이미 로그인하셨습니다!")
+            // console.log(from)
+            next(from)
+        }else{
+            next()
+        }      
+    }
 
-  }
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: SignUp
+
+  },
+
+
 
  
 ]
