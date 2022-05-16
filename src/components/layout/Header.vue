@@ -1,10 +1,12 @@
 <template>
-  <header class="header" :style="headerColor" :class="{headerActive: hideHeader == true}"  style="z-index: 1" >
+  <header class="header" :style="headerColor" :class="{headerActive: hideHeader == true}" >
     <!-- :class="{headerActive : scrollPosition > 100}"> -->
         <div class="main" ><a href="/" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</a></div>
           <div>
           <ul class="menu">
             <li><a @click="test()" :class="{headerActive_fontColor: headerStatus == true}">단편선</a></li>
+            <li><router-link to="/login">로그인</router-link></li>
+            <li><router-link to="/book">예약</router-link></li>
             <li><a href="/book" :class="{headerActive_fontColor: headerStatus == true}">예약하기</a></li>
             <li><a href="/box" :class="{headerActive_fontColor: headerStatus == true}">첫번째 이야기</a></li>
             <li><a href="/happy" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</a></li>
@@ -116,7 +118,7 @@ export default {
   },
   mounted(){
     //예약하기 페이지에서만 다른 색 주기
-    if(window.location.pathname == '/book' || window.location.pathname == '/login'){
+    if(window.location.pathname == '/book' || window.location.pathname == '/login' || window.location.pathname == '/signup'){
       this.headerColor.backgroundColor = '#45526C';
     }
     //스크롤 이벤트
@@ -165,9 +167,9 @@ export default {
       sessionStorage.clear("RefreshToken");
     },
     getLoginStatus(){
-      console.log(this.$store.state.isLogin)
+      
       this.isLogin = this.$store.state.isLogin
-      console.log(this.isLogin)
+
     },
 
     async test(){
