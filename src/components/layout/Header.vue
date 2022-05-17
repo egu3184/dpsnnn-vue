@@ -118,7 +118,7 @@ export default {
   },
   mounted(){
     //예약하기 페이지에서만 다른 색 주기
-    if(window.location.pathname == '/book' || window.location.pathname == '/login' || window.location.pathname == '/signup'){
+    if(window.location.pathname == '/book' || window.location.pathname == '/login' || window.location.pathname == '/sigh'){
       this.headerColor.backgroundColor = '#45526C';
     }
     //스크롤 이벤트
@@ -131,7 +131,7 @@ export default {
     
     
   },
-  unmounted() {
+  destroyed() {
     document.removeEventListener('scroll', this.scrollEvents);
   
   },
