@@ -51,8 +51,8 @@
                                 </b-input-group-prepend>
                                 <b-form-input max=13 type="tel" maxlength="13" :disabled="phoneNum.isValid == true" v-model="phoneNum.value" class="input" :state="phoneNum.isValid">
                                 </b-form-input>
-                                <div style="right:0; text-align: right; position: absolute; margin: 0.7rem; z-index: 10;">
-                                    <button class="btn_auth" v-if="phoneNum.isValid != true" @click="phoneNumB_auth" type="button" style="height:3rem; font-size:1.2rem;">본인인증</button>
+                                <div class="btn_auth_div">
+                                    <button class="btn_auth" v-if="phoneNum.isValid != true" @click="phoneNumB_auth" type="button">본인인증</button>
                                  </div>
                             </b-input-group>
                             
@@ -62,22 +62,22 @@
                     </div>
                     <div>
                         <button type="button" @click="privacy_agree" class="agree_button">
-                            <div style="width:4rem; height: 4rem; margin: 0 0.65rem; display:flex; align-items: center; justify-content: center;">
+                            <div style="width:4rem; height: 4rem; display:flex; align-items: center; justify-content: center;">
                                 <b-icon icon="check-circle" v-if="privacy_agreement_status == false" style="width: 2.5rem; height: 2.5rem;"></b-icon>
                                 <b-icon icon="check-circle-fill" :class="{agree_activated : privacy_agreement_status == true}" v-if="privacy_agreement_status == true" style="width: 2.5rem; height: 2.5rem;"></b-icon>
                             </div>
-                            <div :class="{agree_activated : privacy_agreement_status == true}" style="width:33rem; text-align:left; ">
+                            <div :class="{agree_activated : privacy_agreement_status == true}">
                             &nbsp;개인정보 수집 및 활용에 대한 동의 (필수)
                             </div>
                         </button>
                     </div>
                     <div>
                         <button type="button" @click="pr_agree" class="agree_button">
-                            <div style="width:4rem; height: 4rem; margin: 0 0.65rem; display:flex; align-items: center; justify-content: center;">
+                            <div style="width:4rem; height: 4rem; display:flex; align-items: center; justify-content: center;">
                                 <b-icon icon="check-circle" v-if="pr_agreement_status == false" style="width: 2.5rem; height: 2.5rem;"></b-icon>
                                 <b-icon icon="check-circle-fill" :class="{agree_activated : pr_agreement_status == true}" v-if="pr_agreement_status == true" style="width: 2.5rem; height: 2.5rem;"></b-icon>
                             </div>
-                            <div style="width:33rem; text-align:left;" :class="{agree_activated : pr_agreement_status == true}">
+                            <div :class="{agree_activated : pr_agreement_status == true}">
                             &nbsp; 광고 · 뉴스레터에 대한 수신 동의 (선택)
                             </div>
                         </button>
@@ -364,7 +364,7 @@ export default {
         flex-direction: column; 
     }
      .signup_container{
-        width: 80%;
+        width: 65%;
         border: 0.13rem solid rgb(182, 175, 175);
         background-color: white;
         padding: 6.5rem 4.5rem;
@@ -425,6 +425,71 @@ export default {
         border: 1px solid rgba(0,0,0,0.2);
         border-radius: 32px;
         padding: 0 1rem;
+        height:3rem; 
+        font-size:1.2rem;
+    }
+    .btn_auth_div{
+       right:0; 
+       text-align: right; 
+       position: absolute; 
+       margin: 0.7rem; 
+       z-index: 10;
+    }
+
+    @media (max-width: 798px) {
+        .signup_container{
+            width: 95%;
+            padding: 3rem 1rem;
+        }
+        .label{
+            width: 19rem;
+            font-size: 1rem;
+        }
+        .pop_box{
+            font-size: 1rem;
+            width: 95%;
+            height: 5rem;
+        }
+        .input{
+            font-size: 1rem;
+            height: 3rem;
+        }
+        .b_icon{
+            width: 1.5rem;
+        }
+        .input-group-text{
+             width: 3rem;
+             padding: 0;
+        }
+        .agree_button{
+            height: 3rem; 
+            font-size:1rem; 
+            width: 100%;
+        }
+        .sign{
+            font-size: 1rem;
+        }
+        
+        .signup_button{
+            width: 100%;
+            margin: 0;
+
+        }
+        form{
+            width: 100%;
+        }
+        .input-group-prepend{
+            width: 15%;
+        }
+        .errorMessage{
+            font-size: 0.8rem;
+        }
+        .btn_auth{
+            height: 2rem;
+            font-size: 0.75rem;
+            width: 5rem;
+        }
+        
     }
     
 </style>
