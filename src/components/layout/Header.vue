@@ -1,24 +1,22 @@
 <template>
   <header class="header" :style="headerColor" :class="{headerActive: hideHeader == true}" >
     <!-- :class="{headerActive : scrollPosition > 100}"> -->
-        <div class="main" ><a href="/" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</a></div>
-          <div>
+        <div class="main" >
+          <!-- <a href="/" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</a> -->
+          <router-link to="/" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</router-link>
+        </div>
+        <div>
           <ul class="menu">
             <li><a @click="test()" :class="{headerActive_fontColor: headerStatus == true}">단편선</a></li>
-            <li><router-link to="/login">로그인</router-link></li>
-            <li><router-link to="/book">예약</router-link></li>
-            <li><a href="/book" :class="{headerActive_fontColor: headerStatus == true}">예약하기</a></li>
-            <li><a href="/box" :class="{headerActive_fontColor: headerStatus == true}">첫번째 이야기</a></li>
-            <li><a href="/happy" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</a></li>
+            <li><router-link to="/login" :class="{headerActive_fontColor: headerStatus == true}">로그인</router-link></li>
+            <li><router-link to="/book" :class="{headerActive_fontColor: headerStatus == true}">예약하기</router-link></li>
+            <li><router-link to="/box" :class="{headerActive_fontColor: headerStatus == true}">첫번째 이야기</router-link></li>
+             <li><router-link to="/happy" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</router-link></li>
             <li>
               <a >
                 <img @click="getLoginModal" v-if="headerStatus == false && isLogin == false" src="@/assets/Icon_login_white.png" style="height:1.5rem; width:1.5rem;"/>
                 <img @click="getLoginModal" v-if="headerStatus == true && isLogin == false" src="@/assets/Icon_login_black.png" style="height:1.5rem; width:1.5rem;"/>
-                <!-- <img @click="logout"  v-if="headerStatus == false && isLogin == true" src="@/assets/Icon_logout_white.png" style="height:1.5rem; width:1.5rem;"/> -->
-                <!-- <img @click="logout"  v-if="headerStatus == true && isLogin == true" src="@/assets/Icon_logout_black.png" style="height:1.5rem; width:1.5rem;"/> -->
-                <!-- <div v-if="headerStatus == true && isLogin == true" style="position:fixed"> -->
-                  
-                  <b-dropdown v-if="isLogin == true" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret dropup>
+                 <b-dropdown v-if="isLogin == true" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret dropup>
                     <template #button-content>
                        <img v-if="headerStatus == false && isLogin == true" src="@/assets/Icon_online_white.png" style="height:1.5rem; width:1.5rem;"/>
                       <img v-if="headerStatus == true && isLogin == true" src="@/assets/Icon_online_black.png" style="height:1.5rem; width:1.5rem;"/>
@@ -29,7 +27,7 @@
                 <!-- </div> -->
               </a>
             </li>  
-              
+     
           </ul> 
         </div>
       <!-- </div> -->
@@ -102,7 +100,7 @@ export default {
       hideHeader : false,
       headerStatus: false,
       headerColor:{
-        backgroundColor: ''
+        backgroundColor: this.$store.state.headerColor,
       },
       ChangeloginIconSrc: false,
 
@@ -112,31 +110,41 @@ export default {
       loginObj: '',
       modalShow: false,
 
+
       isLogin : '',
-  
     }
   },
   mounted(){
     //예약하기 페이지에서만 다른 색 주기
-    if(window.location.pathname == '/book' || window.location.pathname == '/login' || window.location.pathname == '/sigh'){
-      this.headerColor.backgroundColor = '#45526C';
-    }
+    // if(window.location.pathname == '/book' || window.location.pathname == '/login' || window.location.pathname == '/sigh'){
+    //   this.headerColor.backgroundColor = '#45526C';
+    // }
+    console.log("헤더 새로고침 안되지?")
+
     //스크롤 이벤트
     window.scrollTo(0,0);
     document.addEventListener('scroll', this.scrollEvents);
     //로그인 상태 가져오기
     this.getLoginStatus();
 
-
-    
-    
   },
   destroyed() {
+    //스크롤 이벤트 제거
     document.removeEventListener('scroll', this.scrollEvents);
   
   },
-
-
+  computed:{
+    //(router 이동에 따라) vuex의 headerColor 변경을 감지
+    check_backgroundColor:function(){
+      return this.$store.state.headerColor;
+    }
+  },
+   watch:{
+    //"vuex의 header 색상변경을 감지"를 감지
+    check_backgroundColor(value){
+      this.headerColor.backgroundColor = value
+    }
+  },
   methods:{
     async kakaoLogin(){
       axios({
@@ -267,91 +275,92 @@ export default {
 
 <style scoped>
 
+    header{
+      width: 100%;
+      background-color: transparent;
+      /* background-color: #45526C; */
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 0.7rem 1rem;
+      position: fixed;
+      z-index: 1000;
+      transition: all 0.8s;
+      visibility: visible;
+      font-family: GowunDodum-Regular;
+      /* offset-x offset-y blur-radius spread-radius (color) */
+      box-shadow: 1px 8px 6px 0 rgb(0 0 0 / 8%);
+      border-bottom: 1px solid rgba(0,0,0,.08);
+    }
 
+    button{
+      padding: 0px !important;
+      margin: 0px !important;
+      border: 0px !important;
+    }
 
-header{
-  width: 100%;
-  background-color: transparent;
-  /* background-color: #45526C; */
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 0.7rem 1rem;
-  position: fixed;
-  z-index: 1000;
-  transition: all 0.8s;
-  visibility: visible;
-  font-family: GowunDodum-Regular;
-}
+    .headerActive{
+      background-color: rgba(255, 255, 255, 0.94) !important;
+      /* visibility: hidden; */
+      /* background-color: rgb(247, 247, 247); */
+      transition: all 0.8s;
+      border-bottom: 1px solid #d3cfcf;
+    }
 
-button{
-  padding: 0px !important;
-  margin: 0px !important;
-  border: 0px !important;
-}
+    .headerActive_fontColor{
+      /* color: rgba(104, 103, 103); */
+      color: #45526C !important;
+      font-weight: 500;
+    }
 
-.headerActive{
-  background-color: rgba(255, 255, 255, 0.94) !important;
-  /* visibility: hidden; */
-  /* background-color: rgb(247, 247, 247); */
-  transition: all 0.8s;
-  border-bottom: 1px solid #d3cfcf;
-}
+    .menu ul{
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+    }
 
-.headerActive_fontColor{
-  /* color: rgba(104, 103, 103); */
-  color: #45526C !important;
-  font-weight: 500;
-}
+    .menu li a{
+      color: white;
+      text-align: center;
+      padding: 8px;
+      text-decoration: none;
+    }
+    .menu li a:hover{
+      text-decoration: none;
+      /* color:cadetblue; */
+    }
+    .main{
+      float: left;
+      font-size: 30px;
+      margin-left: 3rem;
+    }
 
-.menu ul{
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-}
+    .ChangeloginIconSrc{
+      src: "@/assets/Icon_login_black";
+    }
 
-.menu li a{
-  color: white;
-  text-align: center;
-  padding: 8px;
-  text-decoration: none;
-}
-.menu li a:hover{
-  text-decoration: none;
-  /* color:cadetblue; */
-}
-.main{
-  float: left;
-  font-size: 30px;
-  margin-left: 3rem;
-}
+    .main a{
 
-.ChangeloginIconSrc{
-  src: "@/assets/Icon_login_black";
-}
+      color: white;
+    }
 
-.main a{
-
-  color: white;
-}
-
-.main a:hover{
-  text-decoration: none;
-  color:rgb(240, 216, 187);
-}
-.menu{
-  font-size: 1.05rem;
-  font-weight: 500;
-  padding-top: 0.8rem;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  
-}
-@media (max-width: 768px) {
-  .menu{
-    display: none;
-  }
+    .main a:hover{
+      text-decoration: none;
+      color:rgb(240, 216, 187);
+    }
+    .menu{
+      font-size: 1.05rem;
+      font-weight: 500;
+      padding-top: 0.8rem;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      
+    }
+    @media (max-width: 768px) {
+      .menu{
+        display: none;
+      }
 }
 
 

@@ -34,6 +34,7 @@ export const store = new Vuex.Store({
     isLogin : '',
     CompleteSignup : '',
 
+    headerColor: '',
 
   },
   getters: {  
@@ -109,6 +110,10 @@ export const store = new Vuex.Store({
     },
     setCompleteSignup(state, status){
       state.CompleteSignup = status
+    },
+
+    setHeaderColor(state, color){
+      state.headerColor = color
     },
 
 
