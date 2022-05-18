@@ -364,11 +364,13 @@ export default {
         flex-direction: column; 
     }
      .signup_container{
-        width: 65%;
+        width: 45%;
         border: 0.13rem solid rgb(182, 175, 175);
         background-color: white;
         padding: 6.5rem 4.5rem;
         padding-bottom: 2.5rem;
+        border-radius: 1rem;
+        box-shadow:  10px 10px 20px rgba(0, 0, 0, 0.1);
     }
     .input-group-text{
         background-color: #ffffff;

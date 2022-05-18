@@ -1,7 +1,7 @@
 <template>
     <div class="login_constructor">
         <transition name="slide-fade" mode="out-in" v-if="showHeaderBox">
-        <div class="pop_box" :style="pop_box" style="font-size: 1.85rem; text-align:center;">
+        <div class="pop_box" :style="pop_box">
                 <b-icon  :icon=pop_box.icon></b-icon>&nbsp;&nbsp;
                 <span>{{pop_box.message}}</span>
         </div>
@@ -12,7 +12,7 @@
                 <div>
                     <b-form-group class="label" label="이메일" label-for="name-input">
                         <b-input-group class="mb-2">
-                            <b-input-group-prepend is-text style="width:3rem;">
+                            <b-input-group-prepend is-text>
                                 <b-icon icon="envelope-fill" class="b_icon"></b-icon>
                             </b-input-group-prepend>
                             <b-form-input maxlength="35" type="text" v-model="email_id" @blur="idBlur" class="input" placeholder="me@exaple.com"></b-form-input>
@@ -244,15 +244,19 @@ export default {
             password: this.pw
           }
         }).then((response)=>{
-          const {success} = response.data;
-          if(success === true){
-            //토큰 저장 && 로그인 상태 on
-            this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
-            window.location.reload()
+            console.log(response)
+          const {success, code, message} = response.data;
+          if(success == true){
+              //로그인 성공
+               this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
+               window.location.reload()
           }else{
-            this.setPopbox_error("계정이 존재하지 않거나 이메일 또는 비밀번호가 정확하지 않습니다.") 
+              //로그인 실패
+              this.setPopbox_error(message);
           }
+
         }).catch((error)=>{
+            console.log(error)
             this.setPopbox_error("로그인에 실패하였습니다.")
         });
       
@@ -319,7 +323,7 @@ export default {
 <style scoped>
     .pop_box{
         width: 60%;
-        height: 8rem;
+        height: 6rem;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -327,6 +331,8 @@ export default {
         margin-bottom: 0.9rem;
         color:  white;
         box-shadow:  10px 10px 20px rgba(0, 0, 0, 0.1);
+        font-size: 1.55rem; 
+        text-align: center;
     }
   
     .login_constructor{
@@ -346,6 +352,7 @@ export default {
         background-color: white;
         padding: 6.5rem 4.5rem;
         padding-bottom: 2.5rem;
+        border-radius: 1rem;
     }
     .sign{
        display:flex; 
