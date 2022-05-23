@@ -22,7 +22,7 @@
                       <img v-if="headerStatus == true && isLogin == true" src="@/assets/Icon_online_black.png" style="height:1.5rem; width:1.5rem;"/>
                     </template>
                     <b-dropdown-item @click="logout">로그아웃</b-dropdown-item>
-                    <b-dropdown-item href="#">내 정보</b-dropdown-item>
+                    <b-dropdown-item><router-link to="/userinfo" style="color:black;">회원정보</router-link></b-dropdown-item>
                   </b-dropdown>
                 <!-- </div> -->
               </a>
@@ -32,6 +32,7 @@
         </div>
       <!-- </div> -->
       <b-modal id="login" v-model="modalShow" hide-footer @hidden="hidden" title="Login">
+        <!-- <Login /> -->
         <form autocomplete="off">
           <b-form-group label="Email" label-for="name-input" invalid-feedback="Id is required">
               <b-input-group class="mb-2">
@@ -119,7 +120,6 @@ export default {
     // if(window.location.pathname == '/book' || window.location.pathname == '/login' || window.location.pathname == '/sigh'){
     //   this.headerColor.backgroundColor = '#45526C';
     // }
-    console.log("헤더 새로고침 안되지?")
 
     //스크롤 이벤트
     window.scrollTo(0,0);
@@ -182,7 +182,7 @@ export default {
 
     async test(){
       await instance({
-        url: "http://localhost:2030/user/user/",
+        url: "http://localhost:2030/user/test/",
         method: 'get'
 
       }).then((response)=>{
@@ -326,7 +326,7 @@ export default {
       text-decoration: none;
     }
     .menu li a:hover{
-      text-decoration: none;
+      /* text-decoration: none; */
       /* color:cadetblue; */
     }
     .main{

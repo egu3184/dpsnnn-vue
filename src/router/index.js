@@ -6,6 +6,7 @@ import Theme_happy from '@/views/Theme_happy.vue'
 import Book from "@/views/Book.vue"
 import Login from "@/views/Login.vue"
 import SignUp from "@/views/SignUp.vue"
+import UserInfo from "@/views/UserInfo.vue"
 
 Vue.use(VueRouter)
 import {store} from '../store'
@@ -58,6 +59,11 @@ const routes = [
     component: SignUp
 
   },
+  {
+    path: '/userinfo',
+    name: 'userinfo',
+    component: UserInfo
+  }
 
 
 
@@ -74,10 +80,12 @@ router.beforeEach((to, from, next)=>{
   //다른 페이지를 위해 일단 헤더 색상 초기화
   store.commit("setHeaderColor", '')
   //해당 페이지로 이동시 vuex에 헤더 색상 저장
-  if(to.name === "login"|| to.name === "book"){
+  if(to.name === "login"|| to.name === "book" || to.name === "signup" 
+        || to.name === "userinfo"){
     store.commit("setHeaderColor", '#45526C')
   }
   next()
 });
+
 
 export default router

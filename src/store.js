@@ -1,7 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 const Swal = require('sweetalert2')
+import router from './router/index'
+
 Vue.use(Vuex)
+
+
 
 import createPersistedState from 'vuex-persistedstate';
 // import header from '@/components/layout/Header.vue';
@@ -129,7 +133,7 @@ export const store = new Vuex.Store({
             {icon: 'error', title: '오.. 이런', text: text, confirmButtonColor: '#3085d6'}
         ).then((result) =>{ 
           if(result.isConfirmed){ //확인 버튼 눌렀을시
-            window.location.reload()
+            // this.$router.push({path: '/'}).catch(()=>{})
           }
         })
     },
