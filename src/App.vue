@@ -39,5 +39,10 @@ import Footer from "./components/layout/Footer.vue"
     font-weight: normal;
     font-style: normal;
 }
-
+#app{
+  height: 100%;
+}
+#content{
+  height: 100%;
+}
 </style>

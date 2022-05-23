@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {store} from './store'
+import router from './router/index'
 
 const instance = axios.create({
 
@@ -33,6 +34,7 @@ instance.interceptors.response.use(
       console.log("토큰이 없거나 잘못된 토큰일 때")
       store.commit('setIsLogin', false)
       store.commit('alert_Error', "로그인 하셔야합니다.")
+      router.push({path: '/'}).catch(()=>{})
       
 
     //AccessToken이 만료되었을 때  
@@ -56,7 +58,9 @@ instance.interceptors.response.use(
           //"RefreshToken이 만료되었을 때"
           sessionStorage.clear("AceessToken");
           sessionStorage.clear("RefreshStorage");
-          store.commit('alert_Error', "로그인이 해제되었습니다.");
+          store.commit('setIsLogin', false)
+          store.commit('alert_Error', "로그인 세션이 만료되었습니다.");
+          router.push({path: '/'}).catch(()=>{})
         }
       });
       //기존 요청을 다시 보낸 후, 토큰 에러 응답을 기존 요청에 대한 응답으로 교체
@@ -69,8 +73,8 @@ instance.interceptors.response.use(
       sessionStorage.clear("AceessToken");
       sessionStorage.clear("RefreshStorage");
       store.commit('setIsLogin', false)
-      store.commit('alert_Error', "로그인이 해제되었습니다.");
-      window.location.reload();
+      store.commit('alert_Error', "로그인 세션이 만료되었습니다.");
+      router.push({path: '/'}).catch(()=>{})
     } 
 
     return resp;

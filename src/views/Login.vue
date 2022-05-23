@@ -66,7 +66,6 @@
 
 <script>
 import axios from 'axios'
-import instance from '@/axiosInterceptor.js'
 import {GoogleLogin} from 'vue-google-login'
 
   //카카오 초기화
@@ -236,7 +235,7 @@ export default {
             return;
         }    
 
-        await instance({
+        await axios({
           url: "http://localhost:2030/login",
           method: "post",
           data:{
@@ -249,7 +248,7 @@ export default {
           if(success == true){
               //로그인 성공
                this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
-               window.location.reload()
+               this.$router.push({path: "/"}).catch(()=>{})
           }else{
               //로그인 실패
               this.setPopbox_error(message);

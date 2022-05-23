@@ -426,7 +426,7 @@
 
     }
 </script>
-<style scoped="scoped">
+<style scoped>
     /* 5 layer */
     .select_container {
         background-color: rgb(247, 247, 247);

@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from './router/index'
 import {store} from './store'
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
-
+import instance from './axiosInterceptor.js'
 
 import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 
@@ -25,5 +25,6 @@ new Vue({
   router,
   Swal,
   store,
+  instance,
   render: h => h(App)
 }).$mount('#app')
