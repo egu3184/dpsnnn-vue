@@ -137,12 +137,20 @@ export default {
     //(router 이동에 따라) vuex의 headerColor 변경을 감지
     check_backgroundColor:function(){
       return this.$store.state.headerColor;
+    },
+    //(로그인 후 router 이동에 따라) vuex의 isLogin 변경을 감지
+    check_isLogin:function(){
+      return this.$store.state.isLogin;
     }
   },
    watch:{
     //"vuex의 header 색상변경을 감지"를 감지
     check_backgroundColor(value){
       this.headerColor.backgroundColor = value
+    },
+    //"vuex의 isLogin 변경을 감지"를 감지
+    check_isLogin(value){
+      this.isLogin = value
     }
   },
   methods:{
