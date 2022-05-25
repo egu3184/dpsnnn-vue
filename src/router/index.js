@@ -62,7 +62,15 @@ const routes = [
   {
     path: '/userinfo',
     name: 'userinfo',
-    component: UserInfo
+    component: UserInfo,
+    beforeEnter: function(to,from,next){
+      if(!store.state.isLogin){
+          store.commit("alert_Warning", "로그인이 필요합니다.")
+          next('/login')
+      }else{
+          next()
+      }      
+   }
   }
 
 
