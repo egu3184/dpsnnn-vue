@@ -10,7 +10,6 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   async function(config){ //요청 바로 직전 설정
-   
     config.headers = {
       "AccessToken" : sessionStorage.getItem("AccessToken")
     }
@@ -25,7 +24,6 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   //응답이 http status가 200일 때 
   async function(resp){ 
-
     const originalRequest = resp.config
     const { code } = resp.data;
 
@@ -40,35 +38,50 @@ instance.interceptors.response.use(
     //AccessToken이 만료되었을 때  
     }else if(code === -1000){ 
       console.log("AccessToken이 만료되었을 때")
-      axios.defaults.headers.common["AccessToken"] = null;  //초기화 하지 않으면 다시 AccessToken 만료 응답이 옴.
-      axios.defaults.headers.common["RefreshToken"] = sessionStorage.getItem("RefreshToken");
       //RefreshToken 갱신 요청 
-      await axios({
-        method:"Post",
+       await axios({
+        method:"post",
         url: "http://localhost:2030/reissue",
-
-      }).then((response)=>{
-        //"AccessToken & RefreshToekn 재발급 받음"
-        if(response.data.code != -999 && response.data.code != -1002){ 
-          //토큰 갱신
+        data:{
+          refreshToken : sessionStorage.getItem("RefreshToken")
+        }
+      }).then(async(response)=>{
+        if(response.data.success == true){ 
+          console.log("AccessToken & RefreshToekn 재발급")
+          // AccessToken & RefreshToekn 재발급 받음 -> sessionStorage의 토큰 갱신
           sessionStorage.setItem("AccessToken", response.data.data.accessToken);
           sessionStorage.setItem("RefreshToken", response.data.data.refreshToken);
+           //기존 요청을 다시 보낸 후, 토큰 에러 응답을 기존 요청에 대한 응답으로 교체
+           let instanceConfig = {
+              url: originalRequest.url,
+              method: originalRequest.method,
+           }
+           if(!!originalRequest.data){
+               instanceConfig.data = JSON.parse(originalRequest.data)
+           }else if(!!originalRequest.params){
+                instanceConfig.params = JSON.parse(originalRequest.params)
+           }
+           console.log(instanceConfig)
           
+          await instance( instanceConfig ).then((response)=>{ 
+            resp = response 
+          });
+            
+          return resp;  
+
         }else{
           //"RefreshToken이 만료되었을 때"
+          console.log("RefreshToekn 만료로 재발급 실패")
           sessionStorage.clear("AceessToken");
           sessionStorage.clear("RefreshStorage");
           store.commit('setIsLogin', false)
           store.commit('alert_Error', "로그인 세션이 만료되었습니다.");
-          router.push({path: '/'}).catch(()=>{})
-        }
+          return router.push({path: '/'}).catch(()=>{})
+        } 
       });
-      //기존 요청을 다시 보낸 후, 토큰 에러 응답을 기존 요청에 대한 응답으로 교체
-      originalRequest.headers.AccessToken = sessionStorage.getItem("AccessToken")
-      console.log(originalRequest)
-      await axios(originalRequest).then((response)=>{ resp = response });  
 
     }else if(code === -1003){ 
+      console.log("RefreshToekn 만료")
       //RefreshToken이 만료되었을 때 -> localStorage 비우고 로그인 유도
       sessionStorage.clear("AceessToken");
       sessionStorage.clear("RefreshStorage");
