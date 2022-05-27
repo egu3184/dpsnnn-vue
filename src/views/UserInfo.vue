@@ -40,7 +40,10 @@ export default {
     methods: {
         chooseMenu(menu){
             this.currentMenu = menu
-        }
+        },
+        resetModal(){
+
+        },
     }
 }
 </script>
@@ -81,7 +84,7 @@ export default {
         align-items: center;
     }
     .menu_header img{
-        width: 60%;
+        /* width: 60%; */
         height: 70%;
         border-radius: 50%;
         margin: 1rem;

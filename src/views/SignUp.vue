@@ -102,7 +102,6 @@ export default {
         return {
             pr_agreement_status: false,
             privacy_agreement_status: false,
-
             email_id:{
                 value: '',
                 hasError: false,

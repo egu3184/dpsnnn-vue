@@ -85,6 +85,7 @@
 import Login from "@/views/Login.vue"
 import axios from 'axios'
 import instance from '@/axiosInterceptor.js'
+import router from '@/router/index'
 
   // //카카오 초기화
   // window.Kakao.init('e32167f2d82055442aa0c2ae73c4a2ac');
@@ -116,22 +117,15 @@ export default {
     }
   },
   mounted(){
-    //예약하기 페이지에서만 다른 색 주기
-    // if(window.location.pathname == '/book' || window.location.pathname == '/login' || window.location.pathname == '/sigh'){
-    //   this.headerColor.backgroundColor = '#45526C';
-    // }
-
     //스크롤 이벤트
     window.scrollTo(0,0);
     document.addEventListener('scroll', this.scrollEvents);
     //로그인 상태 가져오기
     this.getLoginStatus();
-
   },
   destroyed() {
     //스크롤 이벤트 제거
     document.removeEventListener('scroll', this.scrollEvents);
-  
   },
   computed:{
     //(router 이동에 따라) vuex의 headerColor 변경을 감지
@@ -154,6 +148,7 @@ export default {
     }
   },
   methods:{
+    
     async kakaoLogin(){
       axios({
         url: "http://localhost:2030/login/"+"kakao"+"/url",
@@ -163,24 +158,22 @@ export default {
         console.log(response)
         // window.open(response.data, 'windowPop', 'width=400, height=600, left=400, top=400, resizable = yes')
         this.popSocialLogin(response.data)
-
       }).catch((error)=>{
 
       });
-      
     },
     popSocialLogin : function(loginUrl){
       window.open(loginUrl, 'windowPop', 'width=400, height=600, left=400, top=400, resizable = yes')
       opener.close();
-    },
-     
-
+    }, 
     logout(){
       //로그인 상태 false & SessionStrage 비우기 
       this.$store.commit("setIsLogin", false);
       this.isLogin = false;
       sessionStorage.clear("AccessToken");
       sessionStorage.clear("RefreshToken");
+      router.push({path: '/'}).catch(()=>{})
+      
     },
     getLoginStatus(){
       

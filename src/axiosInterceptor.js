@@ -61,8 +61,6 @@ instance.interceptors.response.use(
            }else if(!!originalRequest.params){
                 instanceConfig.params = JSON.parse(originalRequest.params)
            }
-           console.log(instanceConfig)
-          
           await instance( instanceConfig ).then((response)=>{ 
             resp = response 
           });
