@@ -60,8 +60,9 @@
         <b-modal id="modal_phone" hide-header ref="modal" @show="resetModal_phone" @hidden="resetModal_phone" @ok="handleOk_phone">
             <form style="position: relative" ref="form" @submit.stop.prevent="handleSubmit_phone">
                 <b-form-group label="변경할 전화번호" label-for="name-input">
-                    <b-form-input v-model="modifyObject_phone.value" type="tel" maxlength="13" :disabled="phone_auth.timeout == false" required></b-form-input>                  
-                    <div style="display:flex; flex-direction:row; margin : 0.5rem 0;">
+                    <b-form-input v-model="modifyObject_phone.value" type="tel" maxlength="13" required></b-form-input>
+                    <!-- <b-form-input v-model="modifyObject_phone.value" type="tel" maxlength="13" :disabled="phone_auth.timeout == false" required></b-form-input>                   -->
+                    <!-- <div style="display:flex; flex-direction:row; margin : 0.5rem 0;">
                         <div style="width: 85%; height: 100%;">
                             <b-form-input v-model="phone_auth.inputCode" placeholder="인증번호를 입력해주세요. (임시 코드123)" v-if="phone_auth.flag"></b-form-input>
                         </div>
@@ -71,7 +72,7 @@
                         <div v-if="phone_auth.flag" style="position: absolute; top:85px; right:0; margin-right:0rem; text-align: right;">
                             <span style="color:red;">{{phone_auth.minute}}분 {{phone_auth.seconds}}초</span>
                         </div>
-                    </div>
+                    </div> -->
                 </b-form-group>
                 <p class="errorMessage" v-if="modifyObject_phone.hasError">{{modifyObject_phone.errorMessage}}</p>
                 <p class="errorMessage" v-if="!modifyObject_phone.hasError">&nbsp;</p>
@@ -127,16 +128,16 @@ export default {
                 hasError: false,
                 errorMessage : '',
             },
-            phone_auth:{
-                authCode: '',
-                inputCode: '',
-                flag: false,
-                totalCountDown : 0,
-                minute: 0,
-                seconds: 0,
-                timeout: null,
-                isSuccess: null,
-            }
+            // phone_auth:{
+            //     authCode: '',
+            //     inputCode: '',
+            //     flag: false,
+            //     totalCountDown : 0,
+            //     minute: 0,
+            //     seconds: 0,
+            //     timeout: null,
+            //     isSuccess: null,
+            // }
 
 
              
@@ -155,21 +156,23 @@ export default {
         phoneNum(value){
             this.modifyObject_phone.value = value
         },
-        "phone_auth.totalCountDown" : {
-            handler(totalSeconds){
-                this.phone_auth.minute = parseInt(this.phone_auth.totalCountDown / 60);
-                this.phone_auth.seconds = this.phone_auth.totalCountDown%60
-                this.phone_auth.timeout = false
-                if(totalSeconds > 0 ){
-                    setTimeout(()=>{
-                        this.phone_auth.totalCountDown -= 1;
-                    },1000)
-                }else if(totalSeconds == 0){
-                    this.phone_auth.timeout = true
-                }
-            },
-            imediate: true
-        },
+        //전화번호 인증 카운트다운
+        // "phone_auth.totalCountDown" : {
+        //     handler(totalSeconds){
+        //         this.phone_auth.minute = parseInt(this.phone_auth.totalCountDown / 60);
+        //         this.phone_auth.seconds = this.phone_auth.totalCountDown%60
+        //         this.phone_auth.timeout = false
+        //         if(totalSeconds > 0 ){
+        //             setTimeout(()=>{
+        //                 this.phone_auth.totalCountDown -= 1;
+        //             },1000)
+        //         }else if(totalSeconds == 0){
+        //             this.phone_auth.timeout = true
+        //         }
+        //     },
+        //     imediate: true
+        // },
+        
         // 전화번호 입력시 자동으로 하이픈 넣어주기 + 정규표현식 검사
         'modifyObject_phone.value': function(value){
             //console.log(value)
@@ -237,14 +240,14 @@ export default {
                 hasError: false,
                 errorMessage : '',
             }
-            this.phone_auth = {
-                code: '',
-                flag: false,
-                totalCountDown : 0,
-                minute: 0,
-                seconds: 0,
-                timeout: null,
-            }
+            // this.phone_auth = {
+            //     code: '',
+            //     flag: false,
+            //     totalCountDown : 0,
+            //     minute: 0,
+            //     seconds: 0,
+            //     timeout: null,
+            // }
 
         },
         handleOk_nickanme(bvModalEvent){
@@ -366,7 +369,32 @@ export default {
             })
         },
         //전화번호 - 인증확인 버튼 클릭시
-        phoneNumB_auth(){
+        // phoneNumB_auth(){
+        //     // (1) 전화번호 정규표현식 체크
+        //     const regex = /01[016789]-[^0][0-9]{2,3}-[0-9]{3,4}/
+        //     if(!this.checkRegEx(this.modifyObject_phone.value, regex)){
+        //         this.setInvalidStatusAndMessage(this.modifyObject_phone, '올바른 휴대전화 번호가 아닙니다.')
+        //         return;
+        //     }else{
+        //         this.setValidStatusAndMessage(this.modifyObject_phone);
+        //         this.phone_auth.flag = true
+        //         this.phone_auth.totalCountDown = 180;
+        //     }
+        // },
+        //전화번호 변경
+        async handleSubmit_phone(){
+            // (2) 인증번호 체크 (기능 삭제)
+            // this.phone_auth.authCode = '123'
+            // if(!this.phone_auth.inputCode){                                     //입력하지 않은 경우
+            //     this.setInvalidStatusAndMessage(this.modifyObject_phone, '인증번호를 입력해주세요.')
+            //     return  
+            // }else if( this.phone_auth.inputCode != this.phone_auth.authCode){   //인증번호가 일치하지 않은 경우
+            //     this.setInvalidStatusAndMessage(this.modifyObject_phone, '인증번호가 일치하지 않습니다.')
+            //     return
+            // }else{
+            //      this.setValidStatusAndMessage(this.modifyObject_phone);
+            // }
+
             // (1) 전화번호 정규표현식 체크
             const regex = /01[016789]-[^0][0-9]{2,3}-[0-9]{3,4}/
             if(!this.checkRegEx(this.modifyObject_phone.value, regex)){
@@ -374,28 +402,13 @@ export default {
                 return;
             }else{
                 this.setValidStatusAndMessage(this.modifyObject_phone);
-                this.phone_auth.flag = true
-                this.phone_auth.totalCountDown = 180;
-            }
-        },
-        //전화번호 변경
-        async handleSubmit_phone(){
-            // (2) 인증번호 체크 (실제 인증 추후 구현, 임시 코드 "123" )
-            this.phone_auth.authCode = '123'
-            if(!this.phone_auth.inputCode){                                     //입력하지 않은 경우
-                this.setInvalidStatusAndMessage(this.modifyObject_phone, '인증번호를 입력해주세요.')
-                return
-            }else if( this.phone_auth.inputCode != this.phone_auth.authCode){   //인증번호가 일치하지 않은 경우
-                this.setInvalidStatusAndMessage(this.modifyObject_phone, '인증번호가 일치하지 않습니다.')
-                return
-            }else{
-                 this.setValidStatusAndMessage(this.modifyObject_phone);
             }
             // (3) 변경 요청전 최종 확인 - 타임아웃, isValid
-            if(this.phoneNumB_auth.timeout <= 0 ){                              //인증시간 만료
-                this.setInvalidStatusAndMessage(this.modifyObject_phone, '인증 시간이 만료되었습니다.')
-                return
-            }else if(!this.modifyObject_phone.isValid){
+            // if(this.phoneNumB_auth.timeout <= 0 ){                              //인증시간 만료
+            //     this.setInvalidStatusAndMessage(this.modifyObject_phone, '인증 시간이 만료되었습니다.')
+            //     return
+            // }else if(!this.modifyObject_phone.isValid){
+            if(!this.modifyObject_phone.isValid){    
                 this.setInvalidStatusAndMessage(this.modifyObject_phone, '본인인증에 실패하였습니다.')
                 return
             }
