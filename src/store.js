@@ -50,12 +50,12 @@ export const store = new Vuex.Store({
       let price = state.selectedThemeInfo.admissionFee
       let totalPriceList = state.totalPriceList
       for(let i=min; i<=max; i++){
-        totalPriceList[i] = 
+        totalPriceList.push( 
           {
             capacity : i,
             price : (i * price)
           }
-        
+        )
       }
       //console.log(totalPrice)
       return totalPriceList;
@@ -103,10 +103,8 @@ export const store = new Vuex.Store({
       state.booker_name = ""
       state.phone_number = ""
       state.totalPrice = ""
-      console.log(state.privacy_agree)
-      console.log(state.booker_name)
-      console.log(state.phone_number)
-      console.log(state.totalPrice)
+      state.capacityAndPrice = ""
+      state.totalPriceList = []
     },
 
     setIsLogin(state, status){

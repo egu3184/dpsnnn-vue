@@ -71,6 +71,11 @@ export default {
        
     },
     unmounted() {},
+    destroyed(){
+        this.$store.commit("deleteSelectedItems")
+        this.$store.commit("deleteInputItems")
+        this.$store.commit("setReservationInfo", {});    
+    },
     methods: {
         getReservationInfo(){
             this.ReservationObject = this.$store.state.responseReservationInfo;   

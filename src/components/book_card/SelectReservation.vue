@@ -122,7 +122,9 @@
         },
         setup() {},
         created() {
-           
+            this.$store.commit("deleteInputItems")
+            this.$store.commit("deleteSelectedItems")
+            this.$store.commit("setReservationInfo",{})
         },
         mounted() {
             //페이지 열리자마자 실행
