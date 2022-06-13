@@ -53,7 +53,7 @@
                                 </b-form-input>
                                 <div class="btn_auth_div">
                                     <button class="btn_auth" v-if="phoneNum.isValid != true" @click="phoneNumB_auth" type="button">본인인증</button>
-                                 </div>
+                                </div>
                             </b-input-group>
                             
                         </b-form-group>

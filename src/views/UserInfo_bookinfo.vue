@@ -1,24 +1,30 @@
 <template>
     <div class="bookContainer">
         <!-- 반복문 -->
-        <div class="book" :key="index" v-for="(reserv, index) in bookItems">
-            <div class="bookHeader">
-                <img :src="reserv.themeImg" class="themeImg" />
-            </div>
-            <div class="bookContent">
-                <div class="bookContent_bookNum">No.{{reserv.reservationNumber}}</div>
-                <div class="bookContent_date">{{reserv.slotDate}} ({{reserv.slotTime}})</div>
-                <div class="bookContent_content">
-                    <div>{{reserv.branchName}}</div> 
-                    <div>{{reserv.themeName}} {{reserv.numUsers}}인</div>
+        <div class="top" :key="index" v-for="(reserv, index) in bookItems">
+            <div class="book">
+                <div class="bookHeader">
+                    <img :src="reserv.themeImg" class="themeImg" />
+                </div>
+                <div class="bookContent">
+                    <div class="bookContent_bookNum">No.{{reserv.reservationNumber}}</div>
+                    <div class="bookContent_date">{{dateFormatting_yymmdd(reserv.slotDate)}} 
+                                                    ({{timeFormatiing(reserv.slotTime)}})
+                                                    - {{reserv.numUsers}}인
+                    </div>
+                    <div class="bookContent_content">
+                        <div>{{reserv.branchName}}</div> 
+                        <div>{{reserv.themeName}}</div>
+                    </div>
+                </div>
+                <div class="bookFooter">
+                    <button class="button_cancle"  @click="showDetail(index)">결제정보</button>  
+                    <button v-if="reserv.paymentStatus == 'DepositWaiting'" @click="cancleReservation(index)" type="button" class="button_cancle">예약취소</button>  
                 </div>
             </div>
-            <div class="bookFooter">
-                <!-- <div> -->
-                  <button class="button_cancle">예약취소</button>  
-                <!-- </div> -->
-            </div>
+            
         </div>
+        
         <div class="pagination">
             <ul>
                 <li @click="getReservation((currentPage-pageCount) > 0? currentPage-pageCount : 1)">
@@ -53,7 +59,7 @@ export default {
             totalPages: 0,
             currentPage: 1,
             pageCount: 3,
-           
+            
         };
     },
     setup() {},
@@ -80,6 +86,10 @@ export default {
             }
             return buttons;
         },
+       
+       
+        
+      
         
     },
     unmounted() {},
@@ -97,10 +107,36 @@ export default {
                 console.log(response);
                 this.bookItems = response.data.data.list;
                 this.totalPages = response.data.data.totalPages;
+                
            })
         },
+        //날짜 포맷 - yymmdd
+        dateFormatting_yymmdd(slotDate){
+            let date = slotDate.split('-')
+            let year = date[0].substring(2)
+            let month = date[1]
+            let day = date[2]
+            return year+'/'+month+'/'+day
+        },
+        //날짜 포맷 - mmdd
+        dateFormatting_mmdd(slotDate){
+            let date = slotDate.split('-')
+            let month = date[1]
+            let day = date[2]
+            return month+'/'+day
+        },
+        //시간 포맷 - hh:mm
+        timeFormatiing(slotTime){
+            let time = slotTime.split(':')
+            time.pop()
+            return time.join(':')
+        },
+       
+        //금액에 콤마 찍기
+        numberWithCommas(price){
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
         
-      
     }
 }
 </script>
@@ -109,7 +145,10 @@ export default {
         background-color: rgb(255, 255, 255);
         border: 0.05rem solid rgb(202, 202, 202);
         border-radius: 0.25rem;
-        height: 25%;
+        height: 20%;
+        width: 70%;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
         
     }
     ul li{
@@ -123,14 +162,21 @@ export default {
          border: 0;
     }
     .currentPage{
-         background-color: rgb(48, 197, 172);
+         background-color: #3f98a3;
          color: white;
     }
     .bookContainer{
         width: 100%;
-        height: 100%;
+        /* height: 100%; */
         /* background-color: grey; */
     }
+    .top{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
     .book{
         background-color: rgb(255, 255, 255);
         width: 100%;
@@ -138,7 +184,7 @@ export default {
         display: flex;
         flex-direction: row;
         border: 0.05rem solid rgb(202, 202, 202);
-        margin-bottom: 1rem;
+        margin-top: 1rem;
         border-radius: 0.5rem;
     }
     .bookHeader{
@@ -147,7 +193,7 @@ export default {
         /* background-color: rgb(211, 60, 60); */
     }
     .themeImg{
-        /* width: 100%; */
+        width: 9rem;
         height: auto;
         align-items: center;
         justify-content: center;
@@ -181,16 +227,76 @@ export default {
         height: 50%;
         /* background-color: rgb(208, 211, 60); */
         margin-bottom: 3%;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     .bookFooter{
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
     }
     .pagination{
         display:flex; align-items: center;
         justify-content: center;
         margin-top: 1rem;
     }
+    .payment_detail{
+        /* margin-top: 0.2rem; */
+        min-height: 10rem;
+        /* padding: 1rem; */
+    }
+    .payment_detail{
+        flex-direction: column;
+        /* align-items: center; */
+        justify-content: center;
+    }
+    .booker_info_content{
+        display: flex;
+        flex-direction: row;
+        /* margin: 2rem 0; */
+    }
+
+    .payment_info_content{
+        display: flex;
+        flex-direction: row;
+        /* margin: 2rem 0; */
+        padding: 0;
+    }
+    .title{
+        text-align:left;  
+        font-size:1.5rem;
+        width: 100%;
+        /* border-top: 2px solid rgb(177, 170, 170); */
+        border-bottom: 2px solid rgb(177, 170, 170);
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+    .right{
+        width: 85%;
+        padding: 2rem 1rem;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+    }
+    .left{
+        padding: 2rem 1rem;
+        width: 115%;
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+    }
+    dt{
+        width: 35%;
+        padding: 1rem;
+    }
+    dd{
+        width: 65%;
+        padding-top: 1rem;
+        padding-left: 1rem;
+    }
+    dt div{
+        margin-bottom: 0.5rem;
+    }
+    dd div{
+         margin-bottom: 0.5rem;
+    }
+
 </style>
