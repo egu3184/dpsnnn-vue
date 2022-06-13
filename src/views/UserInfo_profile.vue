@@ -156,22 +156,9 @@ export default {
         phoneNum(value){
             this.modifyObject_phone.value = value
         },
-        //전화번호 인증 카운트다운
-        // "phone_auth.totalCountDown" : {
-        //     handler(totalSeconds){
-        //         this.phone_auth.minute = parseInt(this.phone_auth.totalCountDown / 60);
-        //         this.phone_auth.seconds = this.phone_auth.totalCountDown%60
-        //         this.phone_auth.timeout = false
-        //         if(totalSeconds > 0 ){
-        //             setTimeout(()=>{
-        //                 this.phone_auth.totalCountDown -= 1;
-        //             },1000)
-        //         }else if(totalSeconds == 0){
-        //             this.phone_auth.timeout = true
-        //         }
-        //     },
-        //     imediate: true
-        // },
+        nickname(value){
+            this.$emit('changeNickname', this.nickname)
+        },
         
         // 전화번호 입력시 자동으로 하이픈 넣어주기 + 정규표현식 검사
         'modifyObject_phone.value': function(value){
@@ -186,7 +173,7 @@ export default {
         //페이지 mount시 로그인 유저 정보 가져오기
         getUserProfile(){
             instance({
-                url: 'http://localhost:2030/user',
+                url: 'http://localhost:2030/users',
                 method: 'get'
             }).then((response)=>{
                 console.log(response)

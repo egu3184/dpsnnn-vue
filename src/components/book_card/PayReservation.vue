@@ -436,7 +436,7 @@ export default {
                     url: 'http://localhost:2030/reservations',
                     method: 'post',
                     data: {
-                        bookName : this.booker_name,
+                        bookerName : this.booker_name,
                         slotId : this.slotId,
                         branchId : this.branchId,
                         themeId : this.themeId,

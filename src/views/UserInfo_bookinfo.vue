@@ -45,10 +45,7 @@ import instance from '@/axiosInterceptor.js'
 import axios from 'axios'
 export default {
     name: '',
-    components: {},
-    props: [
-        'userInfo'
-    ],    
+    components: {},  
     data() {
         return {
             themeImg: '',
