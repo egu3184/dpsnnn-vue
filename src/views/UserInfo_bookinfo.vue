@@ -22,7 +22,80 @@
                     <button v-if="reserv.paymentStatus == 'DepositWaiting'" @click="cancleReservation(index)" type="button" class="button_cancle">예약취소</button>  
                 </div>
             </div>
-            
+            <div v-if="show[index]" :ref="'detail-'+index" name="slide-fade">
+               
+                <div class="book payment_detail">
+                    <div class="title">
+                        예약자 정보
+                    </div>
+                    <div class="booker_info_content" style="width: 100%; display:flex; justify-content:space-evenly;">
+                        <div class="left" style="display:flex; justify-content:space-evenly;">
+                            <dt>
+                                <div>예약자명</div>
+                                <div>전화번호</div>
+                            </dt>
+                            <dd>
+                                <div>{{reserv.bookerName}}</div>
+                                <div>010-1111-2222</div>
+                            </dd>     
+                        </div>
+                        <div class="right" style="display:flex; justify-content:space-evenly;" >
+                            <dt>
+                                <div>&nbsp;</div>
+                                <div>&nbsp;</div>
+                            </dt>
+                            <dd>
+                                <div>&nbsp;</div>
+                                <div>&nbsp;</div>
+                            </dd>    
+                        </div>       
+                    </div>
+                    <div class="title">
+                        결제 정보
+                    </div>    
+                    <div class="payment_info_content" style="width: 100%; display:flex; justify-content:space-evenly;" >
+                        <div class="left" style="display:flex; justify-content:space-evenly;">
+                            <dt>{{setPaymentStatus(reserv.paymentStatus)}}
+                                <div>결제상태</div>
+                                <div>결제수단</div>
+                                <div>예약금</div>
+                                <div>계좌번호</div>
+                                <div>&nbsp;</div> 
+                                <div v-if="paymentStatusOb.showDepositDeadline">입금기한</div>
+                            </dt>
+                            <dd>
+                                <div style="font-weight:600;" :style="{color:paymentStatusOb.color}">{{paymentStatusOb.value}}</div>
+                                <div>{{setPaymentMethod(reserv.paymentMethod)}}</div>
+                                <div>{{numberWithCommas(reserv.depositPrice)}}원 (입금자: {{reserv.depositorName}}) </div>
+                                <div>{{reserv.bankName}} (예금주: {{reserv.bankAccountHolder}})</div>
+                                <div>{{reserv.bankAccountNumber}}</div>
+                                <div class="depositDeadline" v-if="paymentStatusOb.showDepositDeadline">
+                                    <div style="color:red; font-weight:600;">{{dateFormatting_mmdd(reserv.slotDate)}} ({{timeFormatiing(reserv.slotTime)}})까지</div>
+                                    <div style="font-size:0.7rem;">(입금기한 내에 입금하지 않으면 예약 자동 취소 됩니다.)</div>                                   
+                                </div>
+                            </dd>     
+                        </div>
+                        <div class="right" style="background-color: rgb(245, 245, 245); display:flex; justify-content:space-evenly;" >
+                            <dt style="width:70%">
+                                <div>총 예약 가격</div>
+                                <div>예약금</div>
+                                <div>&nbsp;</div>
+                                 <div>&nbsp;</div>
+                                <div>현장에서 결제할 금액</div>
+                            </dt>
+                            <dd>
+                                <div>{{numberWithCommas(reserv.totPrice)}}원</div>
+                                <div>-{{numberWithCommas(reserv.depositPrice)}}원</div>
+                                <div>&nbsp;</div>
+                                <div>&nbsp;</div>
+                                <div>{{numberWithCommas(setFinalPaymentPriceAtOnsite(reserv.totPrice, reserv.depositPrice))}}원</div>
+                            </dd>    
+                        </div>       
+                    </div>
+                
+                </div>
+                
+            </div>
         </div>
         
         <div class="pagination">
@@ -59,7 +132,13 @@ export default {
             totalPages: 0,
             currentPage: 1,
             pageCount: 3,
-            
+            show: [false,false,false],
+            paymentStatusOb:{
+                value: '',
+                color: '',
+                showDepositDeadline: false,
+            }
+           
         };
     },
     setup() {},
@@ -107,7 +186,8 @@ export default {
                 console.log(response);
                 this.bookItems = response.data.data.list;
                 this.totalPages = response.data.data.totalPages;
-                
+                //결제정보 상세보기 초기화
+                this.show = [false, false, false]
            })
         },
         //날짜 포맷 - yymmdd
@@ -131,12 +211,64 @@ export default {
             time.pop()
             return time.join(':')
         },
-       
+        //결제정보 상세보기  
+        showDetail(index){
+            this.show[index] = !this.show[index]
+            this.show = [...this.show]  
+            //vue2의 경우 array의 하나의 item만 변경되었을 경우 재랜더링이 발생하지 않는다.
+            //그래서 스프레드 구문을 이용해 쉽게 깊은 복사를 하여 재할당해주었다.
+            
+        },
+        // 결제 방식 셋팅
+        setPaymentMethod(value){
+            if(value == 'OnSite'){
+                return '현장결제'
+            }
+        },
         //금액에 콤마 찍기
         numberWithCommas(price){
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
+        //최종 결제 가격 계산
+        setFinalPaymentPriceAtOnsite(totPrice, depositPrice){
+            return totPrice-depositPrice;
+        },
+        setPaymentStatus(status){
+            if(status == 'DepositWaiting'){
+                this.paymentStatusOb.value = '입금 대기 중'
+                this.paymentStatusOb.color = 'red'
+                this.paymentStatusOb.showDepositDeadline = true
+            }else if(status == 'DepositCompleted'){
+                this.paymentStatusOb.value = '입금 확인'
+                this.paymentStatusOb.color = 'green'
+                this.paymentStatusOb.showDepositDeadline = false
+            }else if(status == 'RefundWaiting'){
+                this.paymentStatusOb.value = '환불 대기 중'
+                this.paymentStatusOb.color = 'black'
+                this.paymentStatusOb.showDepositDeadline = false
+            }
+            else if(status == 'RefundCompleted'){
+                this.paymentStatusOb.value = '환불 완료'
+                this.paymentStatusOb.color = 'black'
+                this.paymentStatusOb.showDepositDeadline = false
+            }
+        },
+        cancleReservation(index){
+            const reservId = this.bookItems[index].id;
+            console.log(reservId)
+            instance({
+                url: 'http://localhost:2030/reservation/cancle',
+                method: 'get',
+                params:{
+                    id: reservId,
+                }
+            }).then((response)=>{
+
+            })
+        }
+
         
+      
     }
 }
 </script>

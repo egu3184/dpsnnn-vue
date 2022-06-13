@@ -3,7 +3,7 @@
         <div class="menu">
             <div class="menu_header">
                 <img src="@/assets/default_profile.jpg" />
-                <p>에구</p>
+                <p>{{nickname}}</p>
             </div>
             <div class="menu_list">
                 <ul>
@@ -14,35 +14,37 @@
             <div></div> 
         </div>
         <div class="content">
-            <component v-bind:is="currentMenu"></component>
+            <component v-bind:is="currentMenu" @changeNickname="changeNick"></component>
         </div>
     </div>
 </template>
 <script>
 import profile from "./UserInfo_profile.vue"
+import bookinfo from "./UserInfo_bookinfo.vue"
+import instance from '@/axiosInterceptor.js'
+import axios from 'axios'
+
 export default {
     name: '',
-    components: { profile },
+    components: { profile, bookinfo },
     data() {
         return {
-             sampleData: '',
-             currentMenu: 'profile',
-             nickname : '',
-             email : '',
-             phoneNum : '',
-             
+            nickname:'',
+            currentMenu: 'profile',
         };
     },
     setup() {},
     created() {},
-    mounted() {},
+    mounted() {
+
+    },
     unmounted() {},
     methods: {
+        changeNick(value){
+            this.nickname = value
+        },
         chooseMenu(menu){
             this.currentMenu = menu
-        },
-        resetModal(){
-
         },
     }
 }
@@ -53,14 +55,14 @@ export default {
         padding-bottom: 0.5rem;
         background-color: #f8f9fa;
         display: flex;
-        align-items: center;
+        /* align-items: center; */
         justify-content: center;
         flex-direction: row;
-        height: 100%;
+        min-height: 50rem;
     }
     .menu{
         box-shadow: 0 10px 20px rgb(0 0 0 / 10%);
-        width: 28%;
+        width: 20rem;
         height: 100%;
         /* border: 0.13rem solid rgb(182, 175, 175); */
         background-color: white;
@@ -76,7 +78,7 @@ export default {
     .menu_header{
         width: 100%;
         /* background-color: red; */
-        height: 40%;
+        height: 20rem;
         margin-bottom: 1rem;
         display: flex;
         flex-direction: column;
@@ -84,8 +86,8 @@ export default {
         align-items: center;
     }
     .menu_header img{
-        /* width: 60%; */
-        height: 70%;
+        width: 15rem;
+        height: 15rem;
         border-radius: 50%;
         margin: 1rem;
         box-shadow: 0 10px 10px 0 rgb(29 34 53 / 8%);
@@ -99,7 +101,7 @@ export default {
     .menu_list{
         width: 100%;
         /* background-color: rgb(0, 255, 221); */
-        height: 50%;
+        height: 30rem;
         border-top: 1px solid rgba(140,140,140,.3);
         border-bottom: 1px solid rgba(140,140,140,.3);
     }
@@ -131,12 +133,12 @@ export default {
 
     .content{
         box-shadow: 0 10px 20px rgb(0 0 0 / 10%);
-        width: 50%;
-        height: 100%;
+        width: 66%;
+        /* height: 100%; */
         /* border: 0.13rem solid rgb(182, 175, 175); */
         background-color: white;
-        padding: 6.5rem 4.5rem;
-        padding-bottom: 2.5rem;
+        padding: 4.5rem 4.5rem;
+        /* padding-bottom: 4.5rem; */
         border-radius: 1rem;
         margin: 2rem;
     }
