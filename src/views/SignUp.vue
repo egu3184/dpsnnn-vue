@@ -4,6 +4,9 @@
              <div style="flex-direction: column; display:flex; align-items: center; justify-content: center;">
                   <form>
                     <div>
+                        <div class="signup_title">
+                            회원 가입
+                        </div>
                         <b-form-group class="label" label="이메일" label-for="name-input">
                             <b-input-group class="mb-2">
                                 <b-input-group-prepend is-text>
@@ -366,7 +369,7 @@ export default {
         width: 45%;
         border: 0.13rem solid rgb(182, 175, 175);
         background-color: white;
-        padding: 6.5rem 4.5rem;
+        padding: 4.5rem 4.5rem;
         padding-bottom: 2.5rem;
         border-radius: 1rem;
         box-shadow:  10px 10px 20px rgba(0, 0, 0, 0.1);
@@ -435,6 +438,12 @@ export default {
        position: absolute; 
        margin: 0.7rem; 
        z-index: 10;
+    }
+    .signup_title{
+        width: 100%;
+        height: 7rem;
+        font-size: 2.5rem;
+        font-weight: 700;
     }
 
     @media (max-width: 798px) {

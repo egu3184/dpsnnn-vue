@@ -7,6 +7,9 @@
         </div>
         </transition>       
         <div class="login_container">
+            <div class="login_title">
+                로그인
+            </div>
             <div style="flex-direction: column; display:flex; align-items: center; justify-content: center;">
                 <form>
                 <div>
@@ -102,6 +105,7 @@ export default {
       googleParams:{
           client_id: "829453067412-qi7uk2f6rd408agq4dtrl92v0qqamkic.apps.googleusercontent.com"
       },
+      //팝업 박스 관련
       showHeaderBox: false,
       pop_box:{
         "icon": "",
@@ -337,7 +341,7 @@ export default {
     .login_constructor{
          padding-top: 6.5rem; 
          padding-bottom: 2.5rem;
-         background-color: #f8f9fa; 
+         /* background-color: #f8f9fa;  */
          display:flex; 
          align-items: center; 
          justify-content: center; 
@@ -347,7 +351,7 @@ export default {
     .login_container{
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         width: 60%;
-        border: 0.13rem solid rgb(182, 175, 175);
+        /* border: 0.13rem solid rgb(182, 175, 175); */
         background-color: white;
         padding: 6.5rem 4.5rem;
         padding-bottom: 2.5rem;
@@ -422,6 +426,13 @@ export default {
     /* .slide-fade-leave-active below version 2.1.8 */ {
         transform: translateY(10px);
     opacity: 0;
+    }
+    .login_title{
+        width: 100%;
+        height: 7rem;
+        font-size: 2.5rem;
+        font-weight: bold;
+        padding: 0 7rem;
     }
 
 

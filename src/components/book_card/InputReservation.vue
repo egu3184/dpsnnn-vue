@@ -353,7 +353,7 @@ export default {
 </script>
 <style scoped>
     .input_container{
-        background-color: rgb(247, 247, 247);
+        /* background-color: rgb(247, 247, 247); */
         display: flex;
         flex-direction: row;
         align-items: center;

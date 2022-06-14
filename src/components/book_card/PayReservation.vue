@@ -481,7 +481,7 @@ export default {
 </script>
 <style scoped>
     #pay_constructor{
-        background-color: rgb(247, 247, 247);
+        /* background-color: rgb(247, 247, 247); */
         display: flex;
         flex-direction: column;
         align-items: center;

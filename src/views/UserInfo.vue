@@ -53,7 +53,7 @@ export default {
     .profile_constructor{
         padding-top: 4.5rem;
         padding-bottom: 0.5rem;
-        background-color: #f8f9fa;
+        /* background-color: #f8f9fa; */
         display: flex;
         /* align-items: center; */
         justify-content: center;
@@ -133,7 +133,7 @@ export default {
 
     .content{
         box-shadow: 0 10px 20px rgb(0 0 0 / 10%);
-        width: 66%;
+        width: 50%;
         /* height: 100%; */
         /* border: 0.13rem solid rgb(182, 175, 175); */
         background-color: white;

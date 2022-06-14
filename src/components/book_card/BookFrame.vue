@@ -252,11 +252,12 @@
         text-align: center;
         font-weight: bold;
         font-size: 1.1rem;
+        padding-top: 5rem;
         /* background-color: rgb(247, 247, 247); */
     }
     /* 3 layer */
     .book_container{
-         background-color: rgb(247, 247, 247);
+         /* background-color: rgb(247, 247, 247); */
          border-radius: 1.2rem;
          padding-bottom: 3rem;
          margin: 0rem 3rem;

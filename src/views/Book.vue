@@ -106,12 +106,12 @@
         padding: 1.1rem 1rem;
         text-align: center;
         font-weight: bold;
-        font-size: 1.1rem;
+        font-size: 4rem;
         /* background-color: rgb(247, 247, 247); */
     }
     /* 3 layer */
     .book_container{
-         background-color: rgb(247, 247, 247);
+         /* background-color: rgb(247, 247, 247); */
          border-radius: 1.2rem;
          padding-bottom: 3rem;
          margin: 0rem 3rem;
@@ -151,7 +151,7 @@
     }
     .step {
         width: 15rem;
-        background-color: rgb(165, 159, 159);
+        /* background-color: rgb(165, 159, 159); */
         margin: 0 0 0.8rem 1.5rem;
         color: whitesmoke;
         font-size: 1rem;

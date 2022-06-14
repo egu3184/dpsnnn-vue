@@ -21,7 +21,7 @@
                        <img v-if="headerStatus == false && isLogin == true" src="@/assets/Icon_online_white.png" style="height:1.5rem; width:1.5rem;"/>
                       <img v-if="headerStatus == true && isLogin == true" src="@/assets/Icon_online_black.png" style="height:1.5rem; width:1.5rem;"/>
                     </template>
-                    <b-dropdown-item @click="logout">로그아웃</b-dropdown-item>
+                    <b-dropdown-item @click="logout"><router-link to="/" style="color:black;">로그아웃</router-link></b-dropdown-item>
                     <b-dropdown-item><router-link to="/userinfo" style="color:black;">회원정보</router-link></b-dropdown-item>
                   </b-dropdown>
                 <!-- </div> -->
