@@ -8,12 +8,12 @@
     <div class="simple-theme-content">
       <slot name="content"></slot>
     </div>  
-    <div class="more"><a href="#">더보기</a></div>
+    <div class="more"><router-link :to=title_eng>더보기</router-link></div>
     <div class="simple-theme-line"><span></span></div>
     <div class="simple-theme-playtime">
       <slot name="playtime"></slot>
     </div>
-    <div class="simple-theme-button"><button onClick="location.href='/home'">예약하기</button></div>
+    <div class="simple-theme-button"><button><router-link to="/book">예약하기</router-link></button></div>
   </div>
 </template>
 <script>
@@ -23,7 +23,9 @@ export default {
   props:{
     background: {
       type:String,
-    }
+    },
+    title_eng: String
+
   },
   data() {
     return {
