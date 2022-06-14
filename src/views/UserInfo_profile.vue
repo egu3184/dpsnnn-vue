@@ -16,7 +16,7 @@
             </div>
             <div> > </div>
         </button>
-        <button  @click="modifyPassword" v-b-modal.modal_pw>
+        <button  @click="modifyPassword" v-b-modal.modal_pw v-if="id.provider=='Application'">
             <div><b-icon  class="info_icon" icon="lock-fill"></b-icon></div>
             <div  class="info_content">*********</div>
             <div> > </div>
@@ -179,12 +179,16 @@ export default {
                 console.log(response)
                 if(response.data.success == true){
                     this.nickname = response.data.data.nickname;
-                    this.phoneNum = response.data.data.phoneNum;
+                    if(response.data.data.phoneNum == null){
+                        this.phoneNum = "연락처를 등록해주세요."
+                    }else{
+                         this.phoneNum = response.data.data.phoneNum;
+                    }
                     if(response.data.data.provider == "Application"){
                         this.id.provider = response.data.data.provider;
                         this.id.email_id = response.data.data.userId;
                     }else if(!!response.data.data.provider){
-                        this.id.provider = response.data.data.provider;
+                        this.id.provider = response.data.data.provider+"회원";
                     } 
                 }   
             }).catch((error)=>{ 
