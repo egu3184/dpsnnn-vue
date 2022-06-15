@@ -1,7 +1,7 @@
 <template>
-    <div class="bookContainer">
+    <div>
+    <div v-if="!isNull" class="bookContainer">
         <ReservationDetail :bookItems="bookItems" />
-        
         <div class="pagination">
             <ul>
                 <li @click="getReservation((currentPage-pageCount) > 0? currentPage-pageCount : 1)">
@@ -20,6 +20,10 @@
                     <button class="paginationButton" > 〉〉</button>
                 </li>
             </ul>
+        </div>
+    </div>
+    <div class="noResult" v-if="isNull">
+            예약 내역이 없습니다.
         </div>
     </div>
 </template>
@@ -44,7 +48,8 @@ export default {
                 value: '',
                 color: '',
                 showDepositDeadline: false,
-            }
+            },
+            isNull: false,
         };
     },
     setup() {},
@@ -85,10 +90,15 @@ export default {
                }
            }).then((response)=>{
                 console.log(response);
-                this.bookItems = response.data.data.list;
-                this.totalPages = response.data.data.totalPages;
-                //결제정보 상세보기 초기화
-                this.show = [false, false, false]
+                if(response.data.data.list.length == 0){
+                    this.isNull = true;
+                    return
+                }else{
+                    this.bookItems = response.data.data.list;
+                    this.totalPages = response.data.data.totalPages;
+                    //결제정보 상세보기 초기화
+                    this.show = [false, false, false]
+                }
            })
         },
 
@@ -252,6 +262,12 @@ export default {
     }
     dd div{
          margin-bottom: 0.5rem;
+    }
+    .noResult{
+        font-size: 2rem;
+        font-weight: 600;
+        padding: 3rem;
+        text-align: center;
     }
 
 </style>

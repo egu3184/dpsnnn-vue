@@ -1,4 +1,5 @@
 <template>
+<div>
     <div class="profile_container">
         <div class="profile_header">
             <div class="header_text">
@@ -79,6 +80,9 @@
             </form>
         </b-modal>       
     </div>
+    <div>
+    </div>
+</div>    
 </template>
 <script>
 
@@ -455,7 +459,7 @@ export default {
 <style scoped>
     .profile_container{
         width: 100%;
-        height: 65%;
+        height: 30rem;
         /* background-color: red; */
         border: 0.09rem solid rgb(182, 175, 175);
         border-radius: 1.2rem;
