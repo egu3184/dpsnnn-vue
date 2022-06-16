@@ -31,7 +31,7 @@ instance.interceptors.response.use(
     if(code === -1002 || code === -999){ 
       console.log("토큰이 없거나 잘못된 토큰일 때")
       store.commit('setIsLogin', false)
-      store.commit('alert_Error', "로그인 하셔야합니다.")
+      store.commit('alert_Error', "로그인이 필요합니다.")
       router.push({path: '/'}).catch(()=>{})
       
 
@@ -78,7 +78,7 @@ instance.interceptors.response.use(
         } 
       });
 
-    }else if(code === -1003){ 
+    }else if(code === -1003 || code === 1106){ 
       console.log("RefreshToekn 만료")
       //RefreshToken이 만료되었을 때 -> localStorage 비우고 로그인 유도
       sessionStorage.clear("AceessToken");
@@ -86,7 +86,7 @@ instance.interceptors.response.use(
       store.commit('setIsLogin', false)
       store.commit('alert_Error', "로그인 세션이 만료되었습니다.");
       router.push({path: '/'}).catch(()=>{})
-    } 
+    }
 
     return resp;
   },

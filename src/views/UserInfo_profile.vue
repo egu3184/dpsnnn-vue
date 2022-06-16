@@ -8,7 +8,7 @@
             </div>
         </div>
        
-        <button @click="modifyNickname()" v-b-modal.modal_nick>
+        <button v-b-modal.modal_nick>
             <div><b-icon  class="info_icon" icon="person-fill"></b-icon></div>
             <div class="info_content">
                 <div>{{nickname}}</div>
@@ -17,20 +17,23 @@
             </div>
             <div> > </div>
         </button>
-        <button  @click="modifyPassword" v-b-modal.modal_pw v-if="id.provider=='Application'">
+        <button  v-b-modal.modal_pw v-if="id.provider=='Application'">
             <div><b-icon  class="info_icon" icon="lock-fill"></b-icon></div>
             <div  class="info_content">*********</div>
             <div> > </div>
         </button>
-        <button @click="modifyPhone"  v-b-modal.modal_phone>
+        <button v-b-modal.modal_phone>
             <div><b-icon  class="info_icon" icon="telephone-fill"></b-icon></div>
             <div  class="info_content">{{phoneNum}}</div>
             <div> > </div>
         </button>
         <!-- 닉네임 모달 -->
         <b-modal id="modal_nick" hide-header ref="modal" @show="resetModal(modifyObject_nickname,nickname)" @hidden="resetModal" @ok="handleOk_nickanme">
+            <div class="modal_title">
+                닉네임 변경
+            </div>
             <form ref="form" @submit.stop.prevent="handleSubmit_nickname">
-                <b-form-group label="변경할 닉네임" label-for="name-input" :state="modifyObject_nickname.isValid">
+                <b-form-group label="변경할 닉네임" label-for="name-input" style="margin-top:3rem; font-weight:bold;" :state="modifyObject_nickname.isValid">
                     <b-form-input v-model="modifyObject_nickname.value" :state="modifyObject_nickname.isValid" required></b-form-input>
                 </b-form-group>
                 <p class="errorMessage" v-if="modifyObject_nickname.hasError">{{modifyObject_nickname.errorMessage}}</p>
@@ -39,18 +42,21 @@
         </b-modal> 
         <!-- 패스워드 모달 -->
         <b-modal id="modal_pw" hide-header ref="modal" @show="resetModal_pw" @hidden="resetModal_pw" @ok="handleOk_pw">
+            <div class="modal_title">
+                패스워드 변경
+            </div>
             <form ref="form" @submit.stop.prevent="handleSubmit_pw">
-                <b-form-group label="현재 비밀번호" label-for="name-input">
+                <b-form-group label="현재 비밀번호" label-for="name-input"  style="margin-top:3rem; font-weight:bold;">
                     <b-form-input type="password" v-model="currentPw.value" :state="currentPw.isValid" required></b-form-input>
                 </b-form-group>
                 <p class="errorMessage" v-if="currentPw.hasError">{{currentPw.errorMessage}}</p>
                 <p class="errorMessage" v-if="!currentPw.hasError">&nbsp;</p>
-                 <b-form-group label="새 비밀번호" label-for="name-input" :state="modifyObject_pw.isValid">
+                 <b-form-group label="새 비밀번호" label-for="name-input" :state="modifyObject_pw.isValid" style="font-weight:bold;">
                     <b-form-input type="password"  v-model="modifyObject_pw.value" :state="modifyObject_pw.isValid" required></b-form-input>
                 </b-form-group>
                 <p class="errorMessage" v-if="modifyObject_pw.hasError">{{modifyObject_pw.errorMessage}}</p>
                 <p class="errorMessage" v-if="!modifyObject_pw.hasError">&nbsp;</p>
-                 <b-form-group label="새 비밀번호 재확인" label-for="name-input" :state="modifyObject_cpw.isValid">
+                 <b-form-group label="새 비밀번호 재확인" label-for="name-input" :state="modifyObject_cpw.isValid" style="font-weight:bold;">
                     <b-form-input type="password"  v-model="modifyObject_cpw.value" :state="modifyObject_cpw.isValid" required></b-form-input>
                 </b-form-group>
                 <p class="errorMessage" v-if="modifyObject_cpw.hasError">{{modifyObject_cpw.errorMessage}}</p>
@@ -59,8 +65,11 @@
         </b-modal> 
         <!-- 전화번호 모달 -->
         <b-modal id="modal_phone" hide-header ref="modal" @show="resetModal_phone" @hidden="resetModal_phone" @ok="handleOk_phone">
+            <div class="modal_title">
+                연락처 변경
+            </div>
             <form style="position: relative" ref="form" @submit.stop.prevent="handleSubmit_phone">
-                <b-form-group label="변경할 전화번호" label-for="name-input">
+                <b-form-group label="변경할 전화번호" label-for="name-input"  style="margin-top:3rem; font-weight:bold;">
                     <b-form-input v-model="modifyObject_phone.value" type="tel" maxlength="13" required></b-form-input>
                     <!-- <b-form-input v-model="modifyObject_phone.value" type="tel" maxlength="13" :disabled="phone_auth.timeout == false" required></b-form-input>                   -->
                     <!-- <div style="display:flex; flex-direction:row; margin : 0.5rem 0;">
@@ -81,6 +90,22 @@
         </b-modal>       
     </div>
     <div>
+        <button type="button" class="deactivateButton" v-b-modal.modal_deactivated >회원탈퇴</button>
+        <b-modal id="modal_deactivated" hide-header ref="modal" @show="resetModal_deact" @hidden="resetModal_deact" @ok="handleOk_deactivate">
+            <div class="modal_title">
+                회원 탈퇴
+            </div>
+            <p style="font-size:1.2rem; font-weight:600; margin-top:1.2rem;">안전한 회원탈퇴를 위해, 비밀번호를 입력해주세요.</p>
+            <span>비밀번호 확인 후 아이디는 즉시 탈퇴됩니다.</span><br/>
+            <span>탈퇴 후에는 동일 아이디로 다시 가입할 수 없으며 아이디와 데이터는 복구할 수 없으니 신중하게 선택해주세요</span>
+            <form ref="form" @submit.stop.prevent="handleSubmit_deactivate">
+                <b-form-group label="비밀번호 확인" label-for="name-input" style="margin-top:2rem; font-weight:bold;">
+                    <b-form-input type="password" v-model="deactivatePassword.value" required></b-form-input>
+                </b-form-group>
+                 <p class="errorMessage" v-if="deactivatePassword.hasError">{{deactivatePassword.errorMessage}}</p>
+                <p class="errorMessage" v-if="!deactivatePassword.hasError">&nbsp;</p>
+            </form>
+        </b-modal> 
     </div>
 </div>    
 </template>
@@ -88,7 +113,7 @@
 
 import instance from '@/axiosInterceptor.js'
 import axios from 'axios'
-
+import router from '../router/index'
 
 export default {
     name: '',
@@ -142,9 +167,12 @@ export default {
             //     timeout: null,
             //     isSuccess: null,
             // }
+            deactivatePassword: {
+                value: '', 
+                hasError: false,
+                errorMessage : '',
+            }
 
-
-             
         };
     },
     setup() {},
@@ -199,18 +227,6 @@ export default {
                 console.log(error)
             });
         },
-        //닉네임 수정
-        modifyNickname(){
-            
-        },
-        //패스워드 수정
-        modifyPassword(){
-
-        },
-        //패스워드 수정
-        modifyPhone(){
-
-        },
         //모달 초기화
         resetModal(object, value){
             object.value = value;
@@ -245,6 +261,13 @@ export default {
             // }
 
         },
+        resetModal_deact(){
+            this.deactivatePassword = {
+                value: "",
+                hasError: false,
+                errorMessage : '',
+            }
+        },
         handleOk_nickanme(bvModalEvent){
             bvModalEvent.preventDefault()
             this.handleSubmit_nickname()
@@ -256,6 +279,10 @@ export default {
         handleOk_phone(bvModalEvent){
             bvModalEvent.preventDefault()
             this.handleSubmit_phone()
+        },
+        handleOk_deactivate(bvModalEvent){
+            bvModalEvent.preventDefault()
+            this.handleSubmit_deactivate()
         },
         async handleSubmit_nickname(){
             //(0) 변경없이 ok눌렀을 때
@@ -294,7 +321,7 @@ export default {
             }).then((response)=>{
                 console.log(response)
                 if(response.data.success == true){
-                    this.nickname = this.modifyObject_nickname.value;
+                    this.nickname = response.data.data.nickname;
                     this.$nextTick(()=>{    
                         this.$bvModal.hide('modal_nick')
                     })
@@ -419,7 +446,7 @@ export default {
                     // 창 닫기
                     this.$nextTick(()=>{ this.$bvModal.hide('modal_phone') })
                     // 새 전화번호로 값 변경 
-                    this.phoneNum = this.modifyObject_phone.value;
+                    this.phoneNum = response.data.data.phoneNum;
                     // 모달 인증 초기화
                     this.resetModal_phone();
                 }
@@ -427,8 +454,37 @@ export default {
                  console.log(error)
             });
         },
+        //회원 탈퇴
+        handleSubmit_deactivate(){
+            //정규식x 빈값만 체크
+            if(!this.deactivatePassword.value){
+                this.setInvalidStatusAndMessage(this.deactivatePassword, '비밀번호를 입력해주세요.')
+                return 
+            } 
+            instance({
+                url: 'http://localhost:2030/users',
+                method: 'delete',
+                data:{
+                    password: this.deactivatePassword.value
+                }
+            }).then((response)=>{
+                console.log(response)
+                //비밀번호 불일치
+                if(response.data.success == false && response.data.code == 1104){
+                    this.setInvalidStatusAndMessage(this.deactivatePassword, '비밀번호가 일치하지 않습니다.')
+                    return 
+                }else if(response.data.success == true){
+                    sessionStorage.clear("AceessToken");
+                    sessionStorage.clear("RefreshStorage");
+                    this.$store.commit('setIsLogin', false)
+                    router.push({path: '/'}).catch(()=>{})
+                }
+                
 
+            });
 
+            
+        },
         // 유효하지않은 상태, 에러 메시지 삽입 메서드
         setInvalidStatusAndMessage(object, message){
            object.errorMessage = message
@@ -441,8 +497,6 @@ export default {
            object.isValid = true
            object.errorMessage = ""
         },
-
-
         //값이 정규표현식에 부합 체크
         checkRegEx(value, regex){
            let check = regex.test(value);
@@ -451,7 +505,8 @@ export default {
            }else{       //포함o
                return true
            }
-       },
+        },
+
         
     }
 }
@@ -553,6 +608,22 @@ export default {
         width: 100%;
         height: 2.4rem;
         font-size:0.71rem;
+    }
+    .deactivateButton{
+        border: 1px solid #ffffff;;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        color: #ffffff;
+        background-color: #8f939b;
+        border-radius: 0.4rem;
+        margin: 1.6rem 0;
+        float: right;
+
+    }
+    .modal_title{
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: rgb(255, 94, 0);
     }
   
 </style>
