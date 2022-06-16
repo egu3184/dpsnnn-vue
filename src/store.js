@@ -5,17 +5,10 @@ import router from './router/index'
 
 Vue.use(Vuex)
 
-
-
 import createPersistedState from 'vuex-persistedstate';
-// import header from '@/components/layout/Header.vue';
-
 
 export const store = new Vuex.Store({
-  // modules:{
-  //   Header: Header,
-
-  // },
+ 
   plugins: [
     createPersistedState ({
       storage: window.sessionStorage,
@@ -33,10 +26,10 @@ export const store = new Vuex.Store({
     phone_number : '',
     capacityAndPrice: '',
     totalPriceList :[],
-    // reservationId: '',
 
     isLogin : '',
     CompleteSignup : '',
+    
 
     headerColor: '',
 
@@ -86,9 +79,6 @@ export const store = new Vuex.Store({
       state.capacityAndPrice = ob
       
     },
-    // setReservationId(state, id){
-    //   state.reservationId = id
-    // },
     setReservationInfo(state, object){
       state.responseReservationInfo = object
     },

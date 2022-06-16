@@ -306,7 +306,7 @@ export default {
                 }
             }).then((response)=>{
                 console.log(response)
-                if(response.data.code == 1102){  //닉네임 중복(o)
+                if(response.data.success == true){  //닉네임 중복(o)
                     this.setInvalidStatusAndMessage(this.modifyObject_nickname, "이미 등록된 닉네임입니다.")
                     return
                 }

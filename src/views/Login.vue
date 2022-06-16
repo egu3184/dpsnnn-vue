@@ -138,7 +138,7 @@ export default {
     //구글 로그인 성공 메서드
     googleLoginSuccess(googleUser){
         axios({
-            url:"http://localhost:2030/social/login/"+"google",
+            url:"http://localhost:2030/users/"+"google",
             method:"post",
             data:{
                 accessToken : googleUser.xc.id_token
@@ -162,25 +162,26 @@ export default {
         // window.open(url, "windowPopup","width=400, height=600,left=400, top=400, resizable = yes");
         location.href = naverLogin.generateAuthorizeUrl();
     },
-    //현재 페이지 url의 엑세스 토큰 가져오기
+    //네이버 - 현재 페이지 url의 엑세스 토큰 가져오기
     searchUrlParams(){
          // 1. 현재 주소 불러오기.
         const currentUrl = window.location;
          // 2. 해시가 있는지 확인.
         if(!!currentUrl.hash){
-             // 3. 있으면 #을 ?로 바꿔주고 URLSearchParam 객체화 후 엑세스 토큰 찾기.
+             // 3. 있으면 #을 ?로 바꿔주고 URLSearchParam 객체화 후 엑세스 토큰 가져오기 -> 액세스 토큰 vuex에 저장
              // #access_token="" & token_type=bearer & expires_in=3600
             const currentUrlParams = "?"+currentUrl.hash.substring(1);
-            const params = new URLSearchParams(currentUrlParams);
+            const naverAccessToken = new URLSearchParams(currentUrlParams).get('access_token');
+            sessionStorage.setItem("SocialAccessToken", naverAccessToken);
             // 4. 네이버 로그인 메서도 호출
-            this.naverLogin(params.get('access_token'));
+            this.naverLogin(naverAccessToken);
         }
           // 4. 없으면 그냥 메소드 지나가기.
     },
     //네이버 로그인 후 Jwt 토큰 받아오기
     async naverLogin(accessToken){
         axios({
-            url: "http://localhost:2030/social/login/"+"naver",
+            url: "http://localhost:2030/users/"+"naver",
             method: "post",
             data: {
                 "accessToken": accessToken
@@ -201,20 +202,19 @@ export default {
         Kakao.Auth.login({
             success:(response)=> {
                 axios({
-                    url: "http://localhost:2030/social/login/"+"kakao",
+                    url: "http://localhost:2030/users/"+"kakao",
                     method: "post",
                     data: {
                         "accessToken": response.access_token
                     }
                 }).then((resp)=>{
-                   if(!!resp.data.data.accessToken){
+                    sessionStorage.setItem("SocialAccessToken", response.access_token);
+                    if(!!resp.data.data.accessToken){
                         this.saveTokenAndSetLoginStatus(resp.data.data.accessToken,resp.data.data.refreshToken)
                         //this.$router.push('/') 새로고침이 필요함
                         location.href = "/";
                   }
-                }).catch((err)=>{
-                      this.setPopbox_error("카카오 로그인이 실패하였습니다.")
-                });
+                })
             },
             fail:(error)=>{
                   this.setPopbox_error("카카오 로그인이 실패하였습니다.")
