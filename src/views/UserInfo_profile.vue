@@ -13,7 +13,7 @@
             <div class="info_content">
                 <div>{{nickname}}</div>
                 <div v-if="id.provider == 'Application'">{{id.email_id}}</div>
-                <div v-else>{{id.provider}}</div>
+                <div v-else>{{id.provider}} 회원</div>
             </div>
             <div> > </div>
         </button>
@@ -90,7 +90,8 @@
         </b-modal>       
     </div>
     <div>
-        <button type="button" class="deactivateButton" v-b-modal.modal_deactivated >회원탈퇴</button>
+        <button v-if="id.provider == 'Application'" type="button" class="deactivateButton" v-b-modal.modal_deactivated>회원탈퇴</button>
+        <button v-else type="button" class="deactivateButton" v-b-modal.modal_deactivated_social >회원탈퇴</button>
         <b-modal id="modal_deactivated" hide-header ref="modal" @show="resetModal_deact" @hidden="resetModal_deact" @ok="handleOk_deactivate">
             <div class="modal_title">
                 회원 탈퇴
@@ -105,7 +106,16 @@
                  <p class="errorMessage" v-if="deactivatePassword.hasError">{{deactivatePassword.errorMessage}}</p>
                 <p class="errorMessage" v-if="!deactivatePassword.hasError">&nbsp;</p>
             </form>
-        </b-modal> 
+        </b-modal>
+        <b-modal id="modal_deactivated_social" hide-header ref="modal" @ok="handleOk_deactivate_social">
+            <div class="modal_title">
+                회원 탈퇴
+            </div>
+            <p style="font-size:1.2rem; font-weight:600; margin-top:1.2rem;">안전한 회원탈퇴를 위해, 비밀번호를 입력해주세요.</p>
+            <span>비밀번호 확인 후 아이디는 즉시 탈퇴됩니다.</span><br/>
+            <span>탈퇴 후에는 동일 아이디로 다시 가입할 수 없으며 아이디와 데이터는 복구할 수 없으니 신중하게 선택해주세요</span>
+            <p style="color:red; font-size:1.4rem; margin-top:1.5rem; font-weight:600;">탈퇴하시겠습니까?</p>
+        </b-modal>  
     </div>
 </div>    
 </template>
@@ -220,7 +230,7 @@ export default {
                         this.id.provider = response.data.data.provider;
                         this.id.email_id = response.data.data.userId;
                     }else if(!!response.data.data.provider){
-                        this.id.provider = response.data.data.provider+"회원";
+                        this.id.provider = response.data.data.provider;
                     } 
                 }   
             }).catch((error)=>{ 
@@ -469,21 +479,22 @@ export default {
                 }
             }).then((response)=>{
                 console.log(response)
-                //비밀번호 불일치
-                if(response.data.success == false && response.data.code == 1104){
+                if(response.data.success == true){
+                    //정상 탈퇴
+                    this.$store.commit("logout");
+                    this.$store.commit("alert_Success", "정상적으로 탈퇴 처리되었습니다.", "그동안 이용해주셔서 감사합니다.")
+                }else if(response.data.success == false && response.data.code == 1104){ 
+                    //비밀번호 불일치
                     this.setInvalidStatusAndMessage(this.deactivatePassword, '비밀번호가 일치하지 않습니다.')
                     return 
-                }else if(response.data.success == true){
-                    sessionStorage.clear("AceessToken");
-                    sessionStorage.clear("RefreshStorage");
-                    this.$store.commit('setIsLogin', false)
-                    router.push({path: '/'}).catch(()=>{})
+                }else if(response.data.success == false && response.data.code== -1005){
+                    //이미 탈퇴된 회원
+                    this.$store.commit("alert_Error_And_Logout", "이미 탈퇴된 계정입니다.");
+                }else{
+                    //그 외 예외 발생
+                    this.$store.commit("alert_Error_And_Logout", "처리 중 문제가 발생하였습니다.");
                 }
-                
-
             });
-
-            
         },
         // 유효하지않은 상태, 에러 메시지 삽입 메서드
         setInvalidStatusAndMessage(object, message){
@@ -506,7 +517,32 @@ export default {
                return true
            }
         },
-
+        //소셜 회원탈퇴 ok버튼 클릭시
+        handleOk_deactivate_social(){
+            const accessToken = sessionStorage.getItem("SocialAccessToken");
+            instance({
+                url: 'http://localhost:2030/users/'+this.id.provider,
+                method: 'delete',
+                data: {
+                    accessToken: accessToken
+                }
+            }).then((response)=>{
+                console.log(response)
+                if(response.data.success == true){
+                    //정상 탈퇴
+                    this.$store.commit("logout");
+                    this.$store.commit("alert_Success", "정상적으로 탈퇴 처리되었습니다.", "그동안 이용해주셔서 감사합니다.")
+                }else if(response.data.success == false && response.data.code== -1005){
+                    //이미 탈퇴된 회원
+                    this.$store.commit("alert_Error_And_Logout", "이미 탈퇴된 계정입니다.");
+                }else{
+                    //그 외 예외 발생
+                    this.$store.commit("alert_Error_And_Logout", "처리 중 문제가 발생하였습니다.");
+                }
+            }).catch((error)=>{
+                this.$store.commit("alert_Error_And_Logout", "처리 중 문제가 발생하였습니다.");
+            })
+        }
         
     }
 }
