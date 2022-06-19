@@ -61,6 +61,14 @@
                     </div>
                     <div id="buttonDiv"></div> 
                 </div>
+                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <div @click="getNaverAuthorizeUrl" >
+                        <a href="#"><img src="@/assets/login_naver.png"  class="social_bar"/></a>
+                    <div @click="kakaoLogin"> 
+                        <a href="#"><img src="@/assets/login_kakao.png"  class="social_bar"/></a>
+                    </div>
+                </div>
+            </div>
             </div>
         </div>
 </div>    
@@ -188,11 +196,13 @@ export default {
             }
         }).then((response)=>{
             console.log(response)
-            if(!!response.data.data.accessToken){
-                this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
-                // this.$router.push('/') 새로고침이 필요함
-                location.href = "/";
-            }
+            if(response.data.success == false && response.data.code == 1101){
+                    this.setPopbox_error("탈퇴한 계정입니다. 다른 서비스로 가입해주시기 바랍니다.")
+                    return
+             }
+            this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
+            // this.$router.push('/') 새로고침이 필요함
+            location.href = "/";
         }).catch((error)=>{
               this.setPopbox_error("네이버 로그인이 실패하였습니다.")
         });
@@ -208,6 +218,10 @@ export default {
                         "accessToken": response.access_token
                     }
                 }).then((resp)=>{
+                    if(resp.data.success == false && resp.data.code == 1101){
+                        this.setPopbox_error("탈퇴한 계정입니다. 다른 서비스로 가입해주시기 바랍니다.")
+                        return
+                    }
                     sessionStorage.setItem("SocialAccessToken", response.access_token);
                     if(!!resp.data.data.accessToken){
                         this.saveTokenAndSetLoginStatus(resp.data.data.accessToken,resp.data.data.refreshToken)
@@ -220,13 +234,6 @@ export default {
                   this.setPopbox_error("카카오 로그인이 실패하였습니다.")
             }
         })
-    },
-    //로그아웃 : 로그인 상태 false & SessionStrage 비우기 
-    logout(){
-      this.$store.commit("setIsLogin", false);
-      this.isLogin = false;
-      sessionStorage.clear("AccessToken");
-      sessionStorage.clear("RefreshToken");
     },
     //일반 로그인
     async login(){
@@ -433,6 +440,11 @@ export default {
         font-size: 2.5rem;
         font-weight: bold;
         padding: 0 7rem;
+    }
+    .social_bar{
+        height: 3rem; 
+        width: 15rem; 
+        
     }
 
 

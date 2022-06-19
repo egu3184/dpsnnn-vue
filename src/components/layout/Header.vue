@@ -168,12 +168,8 @@ export default {
     }, 
     logout(){
       //로그인 상태 false & SessionStrage 비우기 
-      this.$store.commit("setIsLogin", false);
       this.isLogin = false;
-      sessionStorage.clear("AccessToken");
-      sessionStorage.clear("RefreshToken");
-      router.push({path: '/'}).catch(()=>{})
-      
+      this.$store.commit("logout");
     },
     getLoginStatus(){
       
