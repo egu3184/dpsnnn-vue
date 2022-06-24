@@ -7,17 +7,21 @@
         </div>
         <div>
           <ul class="menu">
-            <li><a @click="test()" :class="{headerActive_fontColor: headerStatus == true}">단편선</a></li>
-            <li><router-link to="/login" :class="{headerActive_fontColor: headerStatus == true}">로그인</router-link></li>
+            <!-- <li><a @click="test()" :class="{headerActive_fontColor: headerStatus == true}">단편선</a></li> -->
+            <!-- <li><router-link to="/login" :class="{headerActive_fontColor: headerStatus == true}">로그인</router-link></li> -->
             <li><router-link to="/book" :class="{headerActive_fontColor: headerStatus == true}">예약하기</router-link></li>
             <li><router-link to="/box" :class="{headerActive_fontColor: headerStatus == true}">첫번째 이야기</router-link></li>
              <li><router-link to="/happy" :class="{headerActive_fontColor: headerStatus == true}">두번째 이야기</router-link></li>
             <li>
               <a >
-                <img @click="getLoginModal" v-if="headerStatus == false && isLogin == false" src="@/assets/Icon_login_white.png" style="height:1.5rem; width:1.5rem;"/>
-                <img @click="getLoginModal" v-if="headerStatus == true && isLogin == false" src="@/assets/Icon_login_black.png" style="height:1.5rem; width:1.5rem;"/>
+                <!-- <img @click="getLoginModal" v-if="headerStatus == false && isLogin == false" src="@/assets/Icon_login_white.png" style="height:1.5rem; width:1.5rem;"/> -->
+                <!-- <img @click="getLoginModal" v-if="headerStatus == true && isLogin == false" src="@/assets/Icon_login_black.png" style="height:1.5rem; width:1.5rem;"/> -->
+                <router-link to="/login">
+                <img  v-if="headerStatus == false && isLogin == false" src="@/assets/Icon_login_white.png" style="height:1.5rem; width:1.5rem;"/>
+                <img  v-if="headerStatus == true && isLogin == false" src="@/assets/Icon_login_black.png" style="height:1.5rem; width:1.5rem;"/>
+                </router-link>
                  <b-dropdown v-if="isLogin == true" size="sm"  variant="link" toggle-class="text-decoration-none" no-caret dropup>
-                    <template #button-content>
+                    <template #button-content> 
                        <img v-if="headerStatus == false && isLogin == true" src="@/assets/Icon_online_white.png" style="height:1.5rem; width:1.5rem;"/>
                       <img v-if="headerStatus == true && isLogin == true" src="@/assets/Icon_online_black.png" style="height:1.5rem; width:1.5rem;"/>
                     </template>
