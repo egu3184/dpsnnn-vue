@@ -81,8 +81,6 @@
     </div>
 </template>
 <script>
-
-    import axios from 'axios'
     // CommonJS
     const Swal = require('sweetalert2')
     import {mapMutations, mapState} from 'vuex'
@@ -196,8 +194,8 @@
 
             getBranchAndTheme() {
                 //테마 정보 가지고 오기
-                axios(
-                    {method: "get", url: "http://localhost:2030/themes", responseType: "json"}
+                this.$axios(
+                    {method: "get", url: "themes", responseType: "json"}
                 ).then((response) => {
                     for (var i in response.data.list) {
                         let themeName = response.data.list[i].themeName
@@ -218,8 +216,8 @@
                     }
                 });
                 //지점 정보 가지고 오기
-                axios(
-                    {method: "get", url: "http://localhost:2030/branches", responseType: "json"}
+                this.$axios(
+                    {method: "get", url: "branches", responseType: "json"}
                 ).then((response) => {
                     // console.log(response);
                     for (var j in response.data.list) {
@@ -245,9 +243,9 @@
                 //3개의 값이 모두 있을 때만 비동기 통신
                 if (!!this.activatedBranchId && !!this.activatedThemeId && !!this.activatedDate) {
 
-                    await axios({
+                    await this.$axios({
                         method: 'get',
-                        url: 'http://localhost:2030/slots',
+                        url: 'slots',
                         responseType: 'json',
                         params: {
                             slotDate: this.activatedDate,
@@ -301,9 +299,9 @@
                 this.availableSlotDate = [],
                 this.intervalTotalSlotDate = []
                 //maxDate 설정 - 생성된 슬롯 중 가장 마지막의 날짜를 가지고 오기
-                await axios({
+                await this.$axios({
                     method: "get",
-                    url: "http://localhost:2030/slots/date",
+                    url: "slots/date",
                     params: {
                         branchId: this.activatedBranchId,
                         themeId: this.activatedThemeId
@@ -313,10 +311,10 @@
                     this.makeDateList(this.min, this.max); //minDate~maxDate까지 날짜 만드는 메서드
                 });
                 //minDate와 maxDate 사이의 날짜 중 공개되지 않은 date들 가져오기
-                if (!!this.max) { //테마 변경시 date가 아무 것도 없을 때 max가 ''이기 때문에 500번 에러가 나는 것을 방지
-                    await axios({
+                if (this.max) { //테마 변경시 date가 아무 것도 없을 때 max가 ''이기 때문에 500번 에러가 나는 것을 방지
+                    await this.$axios({
                         method: "get",
-                        url: "http://localhost:2030/slots/date/disabled",
+                        url: "slots/date/disabled",
                         responseType: "json",
                         params: {
                             max: this.max,

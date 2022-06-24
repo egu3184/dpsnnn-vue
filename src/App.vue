@@ -35,6 +35,7 @@ import Footer from "./components/layout/Footer.vue"
 }
 @font-face {
     font-family: 'GowunDodum-Regular';
+    /* font-family: "Spoqa Han Sans Neo",-apple-system,BlinkMacSystemFont,avenir next,avenir,segoe ui,helvetica neue,helvetica,Ubuntu,roboto,noto,arial,sans-serif; */
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunDodum-Regular.woff') format('woff');
     font-weight: normal;
     font-style: normal;
@@ -43,6 +44,7 @@ import Footer from "./components/layout/Footer.vue"
   height: 100%;
 }
 #content{
-  height: 100%;
+  /* height: 100%; */
+  min-height: 80rem;;
 }
 </style>

@@ -214,7 +214,7 @@ export default {
                 return
             } 
             // (4) 비밀번호에 아이디가 포함(x)
-            if(!!this.email_id.value){
+            if(this.email_id.value){
                 let array = this.email_id.value.split('@');
                 if(this.pw.value.search(array[0]) > -1){
                     this.setInvalidStatusAndMessage(this.pw, "비밀번호에 아이디가 포함할 수 없습니다.")

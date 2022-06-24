@@ -3,7 +3,7 @@ import {store} from './store'
 import router from './router/index'
 
 const instance = axios.create({
-
+  baseURL : process.env.VUE_APP_API_URL
 });
 
 
@@ -56,9 +56,9 @@ instance.interceptors.response.use(
               url: originalRequest.url,
               method: originalRequest.method,
            }
-           if(!!originalRequest.data){
+           if(originalRequest.data){
                instanceConfig.data = JSON.parse(originalRequest.data)
-           }else if(!!originalRequest.params){
+           }else if(originalRequest.params){
                 instanceConfig.params = JSON.parse(originalRequest.params)
            }
           await instance( instanceConfig ).then((response)=>{ 

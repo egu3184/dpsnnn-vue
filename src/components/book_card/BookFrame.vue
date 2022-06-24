@@ -108,7 +108,7 @@
                         await this.$refs.select_saveItems.saveItemsToVuex();
                         //해당 슬롯이 예약 가능한지 확인
                         let result = await this.checkReservation();
-                        if(!!result.isPossible){
+                        if(result.isPossible){
                             this.currentTap += 1
                         }else{
                             this.alert_Error(result.message)

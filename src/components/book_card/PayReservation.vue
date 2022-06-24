@@ -450,7 +450,7 @@ export default {
                 })
                 .then((response)=>{
                     console.log(response)
-                    if(!!response.data.data){
+                    if(response.data.data){
                         endPoint = true
                         this.$store.commit("setReservationInfo",response.data.data)
                         console.log(this.$store.state.responseReservationInfo)

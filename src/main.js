@@ -14,11 +14,14 @@ export const eventBus = new Vue();
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import '@/assets/scss/custom.scss'
+import axios from 'axios'
 
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.use(store);
-   
+Vue.prototype.$axios = axios
+axios.defaults.baseURL=process.env.VUE_APP_API_URL
+
 Vue.config.productionTip = false
  
 new Vue({

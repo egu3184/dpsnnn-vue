@@ -122,7 +122,6 @@
 <script>
 
 import instance from '@/axiosInterceptor.js'
-import axios from 'axios'
 import router from '../router/index'
 
 export default {
@@ -215,7 +214,7 @@ export default {
         //페이지 mount시 로그인 유저 정보 가져오기
         getUserProfile(){
             instance({
-                url: 'http://localhost:2030/users',
+                url: 'users',
                 method: 'get'
             }).then((response)=>{
                 console.log(response)
@@ -229,7 +228,7 @@ export default {
                     if(response.data.data.provider == "Application"){
                         this.id.provider = response.data.data.provider;
                         this.id.email_id = response.data.data.userId;
-                    }else if(!!response.data.data.provider){
+                    }else if(response.data.data.provider){
                         this.id.provider = response.data.data.provider;
                     } 
                 }   
@@ -308,8 +307,8 @@ export default {
                 return
             }
             //(2)DB에 중복확인 요청
-            await axios({
-                url: "http://localhost:2030/users",
+            await this.$axios({
+                url: "users",
                 method: "get",
                 params:{
                     nickname : this.modifyObject_nickname.value
@@ -323,7 +322,7 @@ export default {
             });
             //(3)문제 없을시 서버에 닉네임 변경 요청
             await instance({
-                url : "http://localhost:2030/users",
+                url : "users",
                 method : 'put',
                 data : {
                     nickname : this.modifyObject_nickname.value
@@ -380,7 +379,7 @@ export default {
             }
             //(3) 변경 요청 보내기
             instance({
-                url: 'http://localhost:2030/users',
+                url: 'users',
                 method: 'put',
                 data:{
                     password : this.currentPw.value,
@@ -446,7 +445,7 @@ export default {
             }
             // (3) 전화번호 변경 요청
             await instance({
-                url: 'http://localhost:2030/users',
+                url: 'users',
                 method: 'put',
                 data:{
                     phoneNum : this.modifyObject_phone.value
@@ -472,7 +471,7 @@ export default {
                 return 
             } 
             instance({
-                url: 'http://localhost:2030/users',
+                url: 'users',
                 method: 'delete',
                 data:{
                     password: this.deactivatePassword.value
@@ -521,7 +520,7 @@ export default {
         handleOk_deactivate_social(){
             const accessToken = sessionStorage.getItem("SocialAccessToken");
             instance({
-                url: 'http://localhost:2030/users/'+this.id.provider,
+                url: 'users/'+this.id.provider,
                 method: 'delete',
                 data: {
                     accessToken: accessToken

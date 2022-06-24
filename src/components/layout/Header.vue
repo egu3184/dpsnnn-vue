@@ -83,7 +83,6 @@
 <script>
 
 import Login from "@/views/Login.vue"
-import axios from 'axios'
 import instance from '@/axiosInterceptor.js'
 import router from '@/router/index'
 
@@ -150,8 +149,8 @@ export default {
   methods:{
     
     async kakaoLogin(){
-      axios({
-        url: "http://localhost:2030/login/"+"kakao"+"/url",
+      this.$axios({
+        url: "login/"+"kakao"+"/url",
         method: "get",
 
       }).then((response)=>{
@@ -179,7 +178,7 @@ export default {
 
     async test(){
       await instance({
-        url: "http://localhost:2030/user/test/",
+        url: "user/test/",
         method: 'get'
 
       }).then((response)=>{
@@ -220,7 +219,7 @@ export default {
         &&!!this.checkEmptyValue(this.pw, "비밀번호를 입력해주세요.")){
 
         await instance({
-          url: "http://localhost:2030/login",
+          url: "login",
           method: "post",
           data:{
             userId: this.id,

@@ -315,11 +315,11 @@ export default {
        },       
        checkInputItem(status, setter ,message){
             if(!status){
-                if(!!setter) setter(message, false)
+                if(setter) setter(message, false)
                 this.alert_Warning(message)
                 return false
             }else{
-                if(!!setter) setter("", true)
+                if(setter) setter("", true)
                 return true
             }
         },
