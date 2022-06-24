@@ -61,14 +61,7 @@
                     </div>
                     <div id="buttonDiv"></div> 
                 </div>
-                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                    <div @click="getNaverAuthorizeUrl" >
-                        <a href="#"><img src="@/assets/login_naver.png"  class="social_bar"/></a>
-                    <div @click="kakaoLogin"> 
-                        <a href="#"><img src="@/assets/login_kakao.png"  class="social_bar"/></a>
-                    </div>
-                </div>
-            </div>
+            
             </div>
         </div>
 </div>    
