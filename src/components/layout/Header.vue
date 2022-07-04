@@ -35,9 +35,9 @@
           </ul> 
         </div>
       <!-- </div> -->
-      <b-modal id="login" v-model="modalShow" hide-footer @hidden="hidden" title="Login">
+      <!-- <b-modal id="login" v-model="modalShow" hide-footer @hidden="hidden" title="Login"> -->
         <!-- <Login /> -->
-        <form autocomplete="off">
+        <!-- <form autocomplete="off">
           <b-form-group label="Email" label-for="name-input" invalid-feedback="Id is required">
               <b-input-group class="mb-2">
                   <b-input-group-prepend is-text>
@@ -78,21 +78,15 @@
             </div>
             <div class="socialIcon"> 
                 <a @click="kakaoLogin"><img src="@/assets/Icon_kakao.jpg"  style="height: 3.3rem; width: 3.3rem;"  /></a>
-            </div>
-        </div>   
+            </div> 
+        </div>    -->
           <!-- <b-button class="mt-3" variant="outline-secondary" block @click="hideModal">Close Me</b-button> -->
-  </b-modal>
+  <!-- </b-modal> -->
   </header>  
 </template>
 <script>
 
 import Login from "@/views/Login.vue"
-import instance from '@/axiosInterceptor.js'
-import router from '@/router/index'
-
-  // //카카오 초기화
-  // window.Kakao.init('e32167f2d82055442aa0c2ae73c4a2ac');
-  // window.Kakao.isInitialized();
 
 export default {
   components:{
@@ -124,7 +118,7 @@ export default {
     window.scrollTo(0,0);
     document.addEventListener('scroll', this.scrollEvents);
     //로그인 상태 가져오기
-    this.getLoginStatus();
+    // this.getLoginStatus();
   },
   destroyed() {
     //스크롤 이벤트 제거
@@ -151,55 +145,6 @@ export default {
     }
   },
   methods:{
-    
-    async kakaoLogin(){
-      this.$axios({
-        url: "login/"+"kakao"+"/url",
-        method: "get",
-
-      }).then((response)=>{
-        console.log(response)
-        // window.open(response.data, 'windowPop', 'width=400, height=600, left=400, top=400, resizable = yes')
-        this.popSocialLogin(response.data)
-      }).catch((error)=>{
-
-      });
-    },
-    popSocialLogin : function(loginUrl){
-      window.open(loginUrl, 'windowPop', 'width=400, height=600, left=400, top=400, resizable = yes')
-      opener.close();
-    }, 
-    logout(){
-      //로그인 상태 false & SessionStrage 비우기 
-      this.isLogin = false;
-      this.$store.commit("logout");
-    },
-    getLoginStatus(){
-      
-      this.isLogin = this.$store.state.isLogin
-
-    },
-
-    async test(){
-      await instance({
-        url: "user/test/",
-        method: 'get'
-
-      }).then((response)=>{
-       console.log(response)
-      }).catch((error)=>{
-        console.log(error)
-      });
-    },
-    hidden(){
-      //모달이 닫혔을 때 data 초기화
-      this.id = "";
-      this.pw = "";
-    },
-    getLoginModal(){ 
-      this.modalShow = true
-    },
-    
     scrollEvents(){
       let currentScrollPosition = window.scrollY;
       if(this.scrollPosition-currentScrollPosition > 0){ //양수면 마우스 휠업
@@ -215,60 +160,7 @@ export default {
       }
       this.scrollPosition = currentScrollPosition;
     },
-
-    async login(){
-      if(!!this.checkEmptyValueAndVerifyRegex(this.id
-              ,/^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/
-              ,"아이디를 입력하지 않았거나 이메일 형식이 아닙니다.")
-        &&!!this.checkEmptyValue(this.pw, "비밀번호를 입력해주세요.")){
-
-        await instance({
-          url: "login",
-          method: "post",
-          data:{
-            userId: this.id,
-            password: this.pw
-          }
-        }).then((response)=>{
-          const {success} = response.data;
-          if(success === true){
-            //토큰 저장
-            sessionStorage.setItem("AccessToken", response.data.data.accessToken);
-            sessionStorage.setItem("RefreshToken", response.data.data.refreshToken);
-            //로그인 상태값 true
-            this.$store.commit("setIsLogin", true);
-            this.isLogin = true;
-            //data(id,pw) 초기화, 모달 닫기   
-            this.modalShow = false;
-            this.hidden();
-            // window.location.reload()
-          }else{
-            this.$store.commit("alert_Warning", "계정이 존재하지 않거나"+"\u00A0" +"이메일 또는 비밀번호가 정확하지 않습니다.");
-          }
-        }).catch((error)=>{
-          this.$store.commit("alert_Error", "로그인이 실패하였습니다.");
-        });
-      }
-    },
-    checkEmptyValue(item, message){
-      if(!item){
-        return this.$store.commit("alert_Warning", message)
-      }else{
-        return true
-      }
-    },
-    checkEmptyValueAndVerifyRegex(item, regex ,message){
-      this.checkEmptyValue(item, message);
-      if(!regex.test(item)){
-        return this.$store.commit("alert_Warning", message)
-      }else{
-        return true
-      }
-
-    },
-    
   }
-  
 
 };
 </script>

@@ -21,7 +21,7 @@
                 <div v-else-if="ReservationObject.paymentMethod=='Card'">
                     <div class="reserv_item">
                         <dt>결제금액</dt> 
-                        <dd>{{ReservationObject.totPrice}}원</dd>
+                        <dd>{{numberWithCommas(ReservationObject.totPrice)}}원</dd>
                     </div> 
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="reserv_item">
                         <dt>인원/금액</dt>&nbsp;&nbsp;
-                        <dd>{{ReservationObject.numUsers}}인 / {{ReservationObject.totPrice}}원</dd>
+                        <dd>{{ReservationObject.numUsers}}인 / {{numberWithCommas(ReservationObject.totPrice)}}원</dd>
                     </div>
                 </div>  
             </div>
@@ -96,7 +96,11 @@ export default {
             let hour = time[0]
             let minute = time[1]
             return hour+"시"+"\u00A0"+minute+"분"
-        }
+        },
+        //금액에 콤마 찍기
+        numberWithCommas(price){
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
 
 
 

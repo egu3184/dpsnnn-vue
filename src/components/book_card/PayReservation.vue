@@ -2,7 +2,7 @@
     <div id="pay_constructor">
         <div class="reserv_info_container box"> 
             <div class="theme_info_img_div"> 
-                <img :src="theme_img" style="justify-content: center; align-item: center; margin:0.5rem" />
+                <img :src="theme_img" style="width: 100%; height: auto; justify-content: center; align-item: center; margin:0.5rem" />
             </div>
             <div class="theme_info_content">
                 <div class="theme_info_item">
@@ -210,7 +210,7 @@
                 <div class="total_Price_box box">
                     <div class="total_Price">
                         <span style="margin-right: 2.2rem;">{{paymentObject.type}} </span>
-                        <span>{{paymentObject.price}}원</span>
+                        <span>{{numberWithCommas(paymentObject.price)}}원</span>
                     </div> 
                </div>
             </div>
@@ -232,7 +232,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
+import instance from '@/axiosInterceptor.js'
 import { mapMutations } from 'vuex';
 export default {
     name: '',
@@ -250,7 +250,7 @@ export default {
              payment_Method: 'onSite',
              method_radio_options: [
                 { item : 'onSite' , name: '현장결제'},
-                { item : 'card' , name: '카드'},
+                { item : 'card' , name: '카드', notEnabled: true},
                 { item : 'accountTransfer' , name: '계좌이체', notEnabled: true} 
              ],
              deposit_price:  '',
@@ -335,8 +335,8 @@ export default {
             return year+"년"+'\u00A0'+month+"월"+'\u00A0'+day+'일'
         },
         getBankAccountInfo(){
-            axios({
-                url: 'http://localhost:2030/bank',
+            this.$axios({
+                url: 'bank',
                 method: 'get',
                 responseType: 'json',
                 params: {
@@ -361,6 +361,10 @@ export default {
             let formatted = name+"\u00A0"+number+"\u00A0"+"("+holder+")";
             return formatted;
         },
+        //금액에 콤마 찍기
+        numberWithCommas(price){
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
 
         //입력 혹은 선택 유무 체크 메서드
         isItemInputAndSeleted(){
@@ -384,7 +388,7 @@ export default {
         requestToPay(){
             if(this.payment_Method == 'onSite') //현장결제일 경우
                 //입금 확인 요청
-                axios({
+                this.$axios({
                     url: '',
                     method: 'post',
                     data: {
@@ -413,10 +417,10 @@ export default {
                 return this.alert_Warning("아직 카드 결제가 지원되지 않습니다.")
 
 
-             }else if(this.payment_Method == 'onSite') //현장결제일 경우
+             }else if(this.payment_Method == 'onSite'){ //현장결제일 경우
                 //결제 정보 넣기
-                await axios({
-                    url: 'http://localhost:2030/payment',
+                await this.$axios({
+                    url: 'payment',
                     method: 'post',
                     data: {
                         paymentMethod : this.payment_Method,
@@ -427,56 +431,80 @@ export default {
                     }
                 }).then((response)=>{
                         // id
-                        console.log(response)
+                        // console.log(response)
                         this.paymentId = response.data.data.id
                         console.log("payId = "+this.paymentId)
                 });
-                //예약 넣기
-                await axios({
-                    url: 'http://localhost:2030/reservations',
-                    method: 'post',
-                    data: {
-                        bookerName : this.booker_name,
-                        slotId : this.slotId,
-                        branchId : this.branchId,
-                        themeId : this.themeId,
-                        numUsers : this.numUsers,
-                        privacyAgree : this.$store.state.privacy_agree,
-                        conditionsAgree : this.conditions_agree,
-                        paymentId : this.paymentId,
-                        phoneNum : this.phone_number
-                    }
+                //예약 넣기 
+                if(sessionStorage.getItem("AccessToken")){  //로그인시 토큰 요청
+                    await instance({
+                        url: 'reservations',
+                        method: 'post',
+                        data: {
+                            bookerName : this.booker_name,
+                            slotId : this.slotId,
+                            branchId : this.branchId,
+                            themeId : this.themeId,
+                            numUsers : this.numUsers,
+                            privacyAgree : this.$store.state.privacy_agree,
+                            conditionsAgree : this.conditions_agree,
+                            paymentId : this.paymentId,
+                            phoneNum : this.phone_number
+                        }
 
-                })
-                .then((response)=>{
-                    console.log(response)
-                    if(response.data.data){
-                        endPoint = true
-                        this.$store.commit("setReservationInfo",response.data.data)
-                        console.log(this.$store.state.responseReservationInfo)
-                    }
-                    
-                })
-                .catch((error)=>{
-                    this.alert_Error(error.data.message)
-                })
-               console.log(endPoint)
-               return endPoint 
-            },
-            //예약번호 만들기 - 보류
-            // makeReservationNum(){
-            //     const first = this.formatted_date.split('-')
-            //     console.log()
-            //     return this.slot 
+                    })
+                    .then((response)=>{
+                        // console.log(response)
+                        if(response.data.data){
+                            endPoint = true
+                            this.$store.commit("setReservationInfo",response.data.data)
+                            // console.log(this.$store.state.responseReservationInfo)
+                        }
+                        
+                    })
+                    .catch((error)=>{
+                        this.alert_Error(error.data.message)
+                    })
+                }else{ //로그인x 일반요청o
+                    await this.$axios({
+                        url: 'reservations',
+                        method: 'post',
+                        data: {
+                            bookerName : this.booker_name,
+                            slotId : this.slotId,
+                            branchId : this.branchId,
+                            themeId : this.themeId,
+                            numUsers : this.numUsers,
+                            privacyAgree : this.$store.state.privacy_agree,
+                            conditionsAgree : this.conditions_agree,
+                            paymentId : this.paymentId,
+                            phoneNum : this.phone_number
+                        }
 
-            // },
-
-
-        }
+                    })
+                    .then((response)=>{
+                        // console.log(response)
+                        if(response.data.data){
+                            endPoint = true
+                            this.$store.commit("setReservationInfo",response.data.data)
+                            // console.log(this.$store.state.responseReservationInfo)
+                        }
+                        
+                    })
+                    .catch((error)=>{
+                        this.alert_Error(error.data.message)
+                    })
+                }
+                return endPoint  
+            }
+        },
+      
         
 
-
+        
     }
+
+}
 
 </script>
 <style scoped>
@@ -665,6 +693,9 @@ export default {
 
 
      @media (max-width: 798px) {
+        .title{
+            padding: 5rem 1rem;
+        }
         .reserv_info_container{
             width: 100%;
             flex-direction: column;
