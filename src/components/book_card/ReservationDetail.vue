@@ -68,8 +68,8 @@
                             <div>{{reserv.bankName}} (예금주: {{reserv.bankAccountHolder}})</div>
                             <div>{{reserv.bankAccountNumber}}</div>
                             <div class="depositDeadline" v-if="paymentStatusOb.showDepositDeadline">
-                                <div style="color:red; font-weight:600;">{{dateFormatting_mmdd(reserv.slotDate)}} ({{timeFormatiing(reserv.slotTime)}})까지</div>
-                                <div style="font-size:0.7rem;">(입금기한 내에 입금하지 않으면 예약 자동 취소 됩니다.)</div>                                   
+                                <div style="color:red; font-weight:600;">{{formattingDepositDueDateTime(reserv.depositDueDateTime)}})까지</div>
+                                <div style="font-size:0.7rem;">(입금기한 내에 입금하지 않으면 예약 자동 취소 됩니다.)</div>                           
                             </div>
                         </dd>     
                     </div>
@@ -197,6 +197,14 @@ export default {
             }).then((response)=>{
 
             })
+        },
+        //입금마감시간 LocalDateTime 포맷
+        formattingDepositDueDateTime(dateTime){
+            const dateAndTime = dateTime.split("T");
+            const date = dateAndTime[0].split("-")
+            const time = dateAndTime[0].split(":")
+            const year = date[0].split("")[3]+date[0].split("")[4]
+            return year+"/"+date[1]+"/"+date[2]+" ("+time[0]+":"+time[1]+")";
         }
 
 
