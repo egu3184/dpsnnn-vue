@@ -6,7 +6,7 @@
                 <ul>
                     <div :key="index" v-for="(branch, index) in branchList">
                         <li>
-                            <a href="javascript:void(0);" :class="{on : activatedBranchId == branch.id}" v-on:click="selectBranch(branch.id), getSlotTime(), getSlotMaxDateAndDisableDate()">{{branch.name}}</a>
+                            <a href="javascript:void(0);" :class="{on : activatedBranchId == branch.id}" v-on:click="selectBranch(branch.id)">{{branch.name}}</a>
                         </li>
                     </div>
                 </ul>
@@ -21,7 +21,9 @@
                             <a  style="white-space: pre;" 
                                 href="javascript:void(0);"
                                 :class="{on : activatedThemeId == theme.id}"
-                                v-on:click="selectTheme(theme.id) , getSlotTime(), getSlotMaxDateAndDisableDate()">{{theme.alteredName}}</a>
+                                v-on:click="selectTheme(theme.id)"
+                                @click="getDate, getSlotTime()"
+                                >{{theme.alteredName}}</a>
                         </li>
                     </div>
                 </ul>
@@ -81,6 +83,7 @@
     </div>
 </template>
 <script>
+
     // CommonJS
     const Swal = require('sweetalert2')
     import {mapMutations, mapState} from 'vuex'
@@ -126,8 +129,8 @@
         },
         mounted() {
             //페이지 열리자마자 실행
-            this.getBranchAndTheme();
-            this.getSlotMaxDateAndDisableDate();
+            // this.getBranchAndTheme();
+            this.getBranch();
             
         },
         computed:{
@@ -137,10 +140,23 @@
         beforeDestroy(){
             // this.saveItemsToVuex();
         },
-        methods: {
-            ddd(){
-                alert("ddd")
+        watch:{
+            branchList:{
+                handler(newValue){
+                    this.getTheme();
+                }, deep: true
             },
+            themeList:{
+                handler(newValue){
+                    // console.log(newValue)
+                    this.getDate()
+                }, deep: true
+            },
+           
+             
+        },
+        methods: {
+        //vuex
             //vuex의 mapMutation
             ...mapMutations(['alert_Error', 'alert_Warning']),
            
@@ -157,15 +173,14 @@
                         object = list[i]
                 this.$store.commit(mutationName, object);
             },
-            //이전 버튼 클릭시 선택 항목들이 저장된 vuex 비우기
+            //vuex 비우기
             deleteItemFromVuex(){
-                
                 this.$store.commit("setSelectedTheme", "")
-                console.log(this.$store.state.selectedThemeInfo)
+                // console.log(this.$store.state.selectedThemeInfo)
                 this.$store.commit("setSelectedBranch", "")
-                console.log(this.$store.state.selectedBranchInfo)
+                // console.log(this.$store.state.selectedBranchInfo)
                 this.$store.commit("setSelectedSlot", "")
-                console.log(this.$store.state.selectedSlotInfo)
+                // console.log(this.$store.state.selectedSlotInfo)
             },
             //선택항목을 모두 선택했는지 확인하는 메서드(부모 컴포넌트에서 호출)
             isItemSelected(){
@@ -181,19 +196,26 @@
                 }
                 return check
             },
-            //달력 날짜를 선택했을 때 호출되는 메서드
-            onContext(ctx) {
-                this.context = ctx
-                this.activatedDate = ctx.selectedYMD
-                this.getSlotTime()
-            },
-            //선택 항목을 클릭했을 때 activated~Id에 ~id값을 저장
-            selectBranch(branchId) { this.activatedBranchId = branchId; },
-            selectTheme(themeId) { this.activatedThemeId = themeId; },
-            selectSlot(slotId) { this.activatedSlotId = slotId; },
 
-            getBranchAndTheme() {
-                //테마 정보 가지고 오기
+        //예약 셋팅
+            //(1)지점 정보 요청
+            getBranch(){
+                this.$axios(
+                    {method: "get", url: "branches", responseType: "json"}
+                ).then((response) => {
+                    // console.log(response);
+                    for (var j in response.data.list) {
+                        this.branchList.push({
+                                id: response.data.list[j].branchId,
+                                name: response.data.list[j].branchName,
+                                depositPrice : response.data.list[j].depositPrice    
+                            });
+                    }
+                    this.activatedBranchId = this.branchList[0].id
+                });
+            },
+            //(2)테마 정보 요청
+            getTheme() {
                 this.$axios(
                     {method: "get", url: "themes", responseType: "json"}
                 ).then((response) => {
@@ -213,32 +235,120 @@
                                 themeImg : response.data.list[i].themeImg,
                            }
                         )
-                    }
-                });
-                //지점 정보 가지고 오기
-                this.$axios(
-                    {method: "get", url: "branches", responseType: "json"}
-                ).then((response) => {
-                    // console.log(response);
-                    for (var j in response.data.list) {
-                        this
-                            .branchList
-                            .push({
-                                id: response
-                                    .data
-                                    .list[j]
-                                    .branchId,
-                                name: response
-                                    .data
-                                    .list[j]
-                                    .branchName,
-                                depositPrice : response.data.list[j].depositPrice    
-                            });
+                        this.activatedThemeId = this.themeList[0].id
                     }
                 });
             },
 
-            //슬롯의 타임테이블을 가지고 오는 메서드
+            //(3)날짜 요청
+            getDate(){
+                //초기화
+                //예약 가능한 마지막 날짜와 예약 불가능한 날짜 가져오기
+                this.getSlotMaxDateAndDisableDate();
+            },
+            //달력 날짜를 선택했을 때 호출되는 메서드
+            onContext(ctx) {
+                this.context = ctx
+                this.activatedDate = ctx.selectedYMD
+                this.getSlotTime()
+            },
+            async getSlotMaxDateAndDisableDate() {
+                this.max = ""; //초기화
+                this.isNotShowSlotDate = [];
+                this.availableSlotDate = [],
+                this.intervalTotalSlotDate = []
+                //maxDate 설정 - 생성된 슬롯 중 가장 마지막의 날짜를 가지고 오기
+                await this.$axios({
+                    method: "get",
+                    url: "slots/date",
+                    params: {
+                        branchId: this.activatedBranchId,
+                        themeId: this.activatedThemeId
+                    }
+                }).then((response) => {
+                    // console.log(response)
+                    //마지막날짜가 null일 경우
+                    if(response.data.data == null){
+                        this.alert_Error("현재 예약 가능한 날짜가 없습니다.")
+                        //* 모두 disable 시켜야함 */
+                        return 
+                    }
+                    this.max = response.data.data; //max값 설정
+                    this.makeDateList(this.min, this.max); //minDate~maxDate까지 날짜 만드는 메서드
+                });
+                //minDate와 maxDate 사이의 날짜 중 공개되지 않은 date들 가져오기
+                if (this.max) {
+                    await this.$axios({
+                        method: "get",
+                        url: "slots/date/disabled",
+                        responseType: "json",
+                        params: {
+                            max: this.max,
+                            min: this.min
+                        }
+                    }).then((response) => {
+                        // console.log(response)
+                            //결과 
+                            for (let i in response.data.list) {
+                                this.isNotShowSlotDate.push(response.data.list[i]);
+                            }
+                            this.getAvailableSlotDate();
+                        })
+                        
+                } else {
+                    this.alert_Error("현재 예약 가능한 날짜가 없습니다.")
+                }
+            },
+            //전체날짜(minDate~maxDate 사이의 총 날짜)-disable
+            getAvailableSlotDate() {
+                let list = []
+                for (var n in this.intervalTotalSlotDate) {
+                    list.push(this.toStringByFormattingDate(this.intervalTotalSlotDate[n]))
+                }
+                this.availableSlotDate = list.filter(x => !this.isNotShowSlotDate.includes(x));
+            },
+            //getAvailableSlotDate에 필요한 minDate와 maxDate로 전체 날짜 리스트 생성
+            makeDateList(min, max) {
+                const minite = 1000 * 60;
+                const hour = minite * 60;
+                const day = hour * 24;
+                let minDate = new Date(min);
+                let maxDate = new Date(max);
+                let spendTime = maxDate.getTime() - minDate.getTime();
+                let interval = Math.round(spendTime / day);
+                let date = new Date(minDate);
+                for (let i = 0; i < interval + 1; i++) {
+                    this.intervalTotalSlotDate.push(new Date(date.getTime()))
+                    date.setDate(date.getDate() + 1)
+                }
+                // console.log(this.intervalTotalSlotDate)
+            },
+
+            //공개하지 않은 date를 달력에서 비활성화하는 메서드
+            dateDisabled(ymd, date) {
+                //console.log("ymd = "+ymd);
+                let dateOfString = '';
+                for (var d in this.isNotShowSlotDate) {
+                    if (ymd == this.isNotShowSlotDate[d]) {
+                        dateOfString = this.isNotShowSlotDate[d]
+                    }
+                }
+                // const no = new Date(dateOfString); const gkgk =
+                // this.toStringByFormattingDate(no); console.log(gkgk);
+                return ymd === this.toStringByFormattingDate(new Date(dateOfString));
+            },
+            //달력 예약 가능일 색상 강조
+            dateClass(ymd, date) {
+                let bool = false
+                let calendarDate = this.toStringByFormattingDate(new Date(ymd))
+                for (let i in this.availableSlotDate) {
+                    if (calendarDate == this.availableSlotDate[i]) {
+                        bool = true;
+                    }
+                }
+                return bool == true? 'table-primary': ''
+            },
+            //(4)슬롯의 타임테이블을 가지고 오는 메서드
             async getSlotTime() {
                 //3개의 값이 모두 있을 때만 비동기 통신
                 if (!!this.activatedBranchId && !!this.activatedThemeId && !!this.activatedDate) {
@@ -257,29 +367,12 @@
                         this.slotList = []; //재호출시 무한 추가 방지를 위한 초기화 작업
                         // console.log(response);
                         for (var i in response.data.list) {
-                            this
-                                .slotList
-                                .push({
-                                    id: response
-                                        .data
-                                        .list[i]
-                                        .slotId,
-                                    slotTime: response
-                                        .data
-                                        .list[i]
-                                        .slotTime,
-                                    isShowed: response
-                                        .data
-                                        .list[i]
-                                        .showed,
-                                    isReserved: response
-                                        .data
-                                        .list[i]
-                                        .reserved,
-                                    isOpened: response
-                                        .data
-                                        .list[i]
-                                        .opened,
+                            this.slotList.push({
+                                    id: response.data.list[i].slotId,
+                                    slotTime: response.data.list[i].slotTime,
+                                    isShowed: response.data.list[i].showed,
+                                    isReserved: response.data.list[i].reserved,
+                                    isOpened: response.data.list[i].opened,
                                     slotDate : response.data.list[i].slotDate,     
                                     alterdSlotTime : this.dropSeconds(response.data.list[i].slotTime)     
                                 });
@@ -287,59 +380,20 @@
                     });
                 }
             },
+        //유틸 
+            //선택 항목을 클릭했을 때 activated~Id에 ~id값을 저장
+            selectBranch(branchId) { this.activatedBranchId = branchId; },
+            selectTheme(themeId) { 
+                this.activatedThemeId = themeId; 
+                this.getDate();
+            },
+            selectSlot(slotId) { this.activatedSlotId = slotId; },   
+
             //받아온 slotTime의 시간을 hh:mm:ss가 아닌 hh시 mm분으로 바꿔주는 메서드
             dropSeconds : function(time){
               var strArray = time.split(':');
               strArray.pop();
               return strArray[0]+'시 '+strArray[1]+'분'
-            },
-            async getSlotMaxDateAndDisableDate() {
-                this.max = ""; //초기화
-                this.isNotShowSlotDate = [];
-                this.availableSlotDate = [],
-                this.intervalTotalSlotDate = []
-                //maxDate 설정 - 생성된 슬롯 중 가장 마지막의 날짜를 가지고 오기
-                await this.$axios({
-                    method: "get",
-                    url: "slots/date",
-                    params: {
-                        branchId: this.activatedBranchId,
-                        themeId: this.activatedThemeId
-                    }
-                }).then((response) => {
-                    this.max = response.data.data; //max값 설정
-                    this.makeDateList(this.min, this.max); //minDate~maxDate까지 날짜 만드는 메서드
-                });
-                //minDate와 maxDate 사이의 날짜 중 공개되지 않은 date들 가져오기
-                if (this.max) { //테마 변경시 date가 아무 것도 없을 때 max가 ''이기 때문에 500번 에러가 나는 것을 방지
-                    await this.$axios({
-                        method: "get",
-                        url: "slots/date/disabled",
-                        responseType: "json",
-                        params: {
-                            max: this.max,
-                            min: this.min
-                        }
-                    })
-                        .then((response) => {
-                            // console.log(response);
-                            for (let i in response.data.list) {
-                                this
-                                    .isNotShowSlotDate
-                                    .push(response.data.list[i]);
-                            }
-                            this.getAvailableSlotDate();
-                            // console.log(this.isNotShowSlotDate);
-
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                            this.alert_Error("현재 예약 가능한 날짜가 없습니다.")
-                        });
-                } else {
-                    this.alert_Error("현재 예약 가능한 날짜가 없습니다.")
-                }
-
             },
             //날짜 데이터를 yyyy-mm-dd로 바꿔주는 메서드
             toStringByFormattingDate(date, delimiter = '-') {
@@ -355,73 +409,7 @@
                 }
                 return `0${value}`;
             },
-            //공개하지 않은 date를 달력에서 비활성화하는 메서드
-            dateDisabled(ymd, date) {
-                //console.log("ymd = "+ymd);
-                let dateOfString = '';
-                for (var d in this.isNotShowSlotDate) {
-                    if (ymd == this.isNotShowSlotDate[d]) {
-                        dateOfString = this.isNotShowSlotDate[d]
-                    }
-                }
-                // const no = new Date(dateOfString); const gkgk =
-                // this.toStringByFormattingDate(no); console.log(gkgk);
-                return ymd === this.toStringByFormattingDate(new Date(dateOfString));
-            },
-
-            //getAvailableSlotDate에 필요한 minDate와 maxDate로 전체 날짜 리스트 생성
-            makeDateList(min, max) {
-                const minite = 1000 * 60;
-                const hour = minite * 60;
-                const day = hour * 24;
-                let minDate = new Date(min);
-                let maxDate = new Date(max);
-                let spendTime = maxDate.getTime() - minDate.getTime();
-                let interval = Math.round(spendTime / day);
-                let date = new Date(minDate);
-                for (let i = 0; i < interval + 1; i++) {
-                    this.intervalTotalSlotDate.push(new Date(date.getTime()))
-                    date.setDate(date.getDate() + 1)
-                }
-            },
-            //달력 예약 가능일 색상 강조
-            dateClass(ymd, date) {
-                let bool = false
-                let calendarDate = this.toStringByFormattingDate(new Date(ymd))
-                for (let i in this.availableSlotDate) {
-                    if (calendarDate == this.availableSlotDate[i]) {
-                        bool = true;
-                    }
-                }
-                return bool == true? 'table-primary': ''
-            },
-            //전체날짜(minDate~maxDate 사이의 총 날짜)-disable
-            getAvailableSlotDate() {
-                let list = []
-                for (var n in this.intervalTotalSlotDate) {
-                    list.push(this.toStringByFormattingDate(this.intervalTotalSlotDate[n]))
-                }
-                this.availableSlotDate = list.filter(x => !this.isNotShowSlotDate.includes(x));
-            },
-           
-            //Axios 에러 처리
-            errorMessage(error) {
-                if (error.response) {
-                    // 요청이 이루어졌으며 서버가 2xx의 범위를 벗어나는 상태 코드로 응답했습니다.
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    // 요청이 이루어 졌으나 응답을 받지 못했습니다. `error.request`는 브라우저의 XMLHttpRequest 인스턴스 또는
-                    // Node.js의 http.ClientRequest 인스턴스입니다.
-                    console.log(error.request);
-                } else {
-                    // 오류를 발생시킨 요청을 설정하는 중에 문제가 발생했습니다.
-                    console.log('Error', error.message);
-                }
-                console.log(error.config);
-            }
-
+            
         }
 
     }

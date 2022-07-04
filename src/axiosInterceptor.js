@@ -38,10 +38,11 @@ instance.interceptors.response.use(
     //AccessToken이 만료되었을 때  
     }else if(code === -1000){ 
       console.log("AccessToken이 만료되었을 때")
+      var vm = this
       //RefreshToken 갱신 요청 
-       await axios({
+       await vm.$axios({
         method:"post",
-        url: "http://localhost:2030/reissue",
+        url: "reissue",
         data:{
           refreshToken : sessionStorage.getItem("RefreshToken")
         }
