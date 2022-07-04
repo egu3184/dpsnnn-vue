@@ -34,7 +34,7 @@
                         </dt>
                         <dd>
                             <div>{{reserv.bookerName}}</div>
-                            <div>010-1111-2222</div>
+                            <div>{{reserv.phoneNumber}}</div>
                         </dd>     
                     </div>
                     <div class="right" style="display:flex; justify-content:space-evenly;" >
@@ -189,7 +189,7 @@ export default {
             const reservId = this.bookItems[index].id;
             console.log(reservId)
             instance({
-                url: 'http://localhost:2030/reservation/cancle',
+                url: 'reservation/cancle',
                 method: 'get',
                 params:{
                     id: reservId,

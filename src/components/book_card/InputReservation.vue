@@ -144,8 +144,7 @@
                     id="checkbox-1"
                     v-model="privacy_agree"
                     name="checkbox-1"
-                    value=true
-                    unchecked-value=false
+                    @click="isAgree(value)"
                 >
                 개인정보 수집 및 이용에 동의합니다.
                 </b-form-checkbox>
@@ -207,7 +206,7 @@
                 <div class="inputBox" style="margin: 2rem">
                     <div class="inputItem">
                     <span>이용 금액 : </span>
-                    <span style="font-size: 2.0rem; font-weight: bold;">{{totalPrice}}&nbsp;원</span>
+                    <span style="font-size: 2.0rem; font-weight: bold;">{{numberWithCommas(totalPrice)}}&nbsp;원</span>
                     </div>
                 </div>
             </div>
@@ -303,16 +302,25 @@ export default {
        },
        //다음 버튼 눌렀을 때 빈값이 없는지 확인하는 메서드
        isItemInput(){
-          if(!!this.checkInputItem(this.privacy_agree, "", "개인정보 수집 및 이용에 동의하셔야합니다." )
-                && !!this.checkInputItem(this.hasWrongName, this.setNameBlurErrorMessage,"이름을 확인해주세요.")
-                && !!this.checkInputItem(this.hasWrongNumber, this.setNumberBlurErrorMessage, "번호를 확인해주세요.")
-                && !!this.checkInputItem(this.totalPrice, "" ,"인원을 선택하세요.")
-            ){
-                return true
-            }else{
-                return
-            } 
-       },       
+        if(!this.privacy_agree){
+            this.$store.commit("alert_Warning", "개인정보 수집 및 활용에 동의해주세요!")
+            return;
+        }
+        if(!this.checkInputItem(this.hasWrongName, this.setNameBlurErrorMessage,"이름을 확인해주세요.")){
+         return;
+        }
+        if(!this.checkInputItem(this.hasWrongNumber, this.setNumberBlurErrorMessage, "번호를 확인해주세요.")){
+            return
+        }
+        if(!this.checkInputItem(this.totalPrice, "" ,"인원을 선택하세요.")){
+          return
+        }
+          return true
+        },
+        //금액에 콤마 찍기
+        numberWithCommas(price){
+            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },       
        checkInputItem(status, setter ,message){
             if(!status){
                 if(setter) setter(message, false)
@@ -322,6 +330,9 @@ export default {
                 if(setter) setter("", true)
                 return true
             }
+        },
+        isAgree(value){
+            this.privacy_agree = !value;
         },
         //입력 항목을 vuex에 저장하는 메서드
         saveItemsToVuex(){
