@@ -351,7 +351,7 @@ export default {
 
     .login_container{
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        width: 60%;
+        /* width: 60%; */
         /* border: 0.13rem solid rgb(182, 175, 175); */
         background-color: white;
         padding: 6.5rem 4.5rem;

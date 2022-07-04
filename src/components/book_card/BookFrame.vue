@@ -59,7 +59,7 @@
 </template>
 <script>
 
-    import axios from 'axios'
+
     import SelectReservation from "./SelectReservation.vue"
     import InputReservation from "./InputReservation.vue"
     import PayReservation from "./PayReservation.vue"
@@ -133,12 +133,16 @@
                             // window.location.reload(); 
                         }
                         // 입력&선택 확인
-                        if(await this.$refs.pay_saveItems.isItemInputAndSeleted()){
-                            //결제와 예약 처리
-                            if(await this.$refs.pay_saveItems.saveReservation()){
-                                this.currentTap += 1
-                            }
-                        }   
+                        if(!await this.$refs.pay_saveItems.isItemInputAndSeleted()){
+                            return
+                        }
+                        //결제와 예약 처리
+                        if(await this.$refs.pay_saveItems.saveReservation()){
+                            this.currentTap += 1
+                        }else{
+                            //실패시
+                        }
+                           
                     }
                     step2();
                    break; 
@@ -152,26 +156,19 @@
                                 isPossible : false,
                                 message : ""
                         }
-                 await fetch( "http://localhost:2030/slots/" + this.selectedSlotInfo.id)
+                 await this.$axios({ 
+                        url : "slots/" + this.selectedSlotInfo.id,
+                        method: "get"
+                        })  
                     .then((response)=>{
-                        // console.log(response)
-                        // 결과값은 Response 타입
-                        // 여기에는 서버와 통신 정보가 담겨있는데
-                        // 이걸 자바스크립트의 json화 하기 위해 .json() 메서드를 사용하면
-                        // 리턴값은 다시 Promise이다. 이 promise는 json화 하기 위한 promise.
-                        return response.json()
-                     })
-                     //리턴값은 promise이기 때문에 다시 then을 사용할 수 있다. (chaining)
-                    .then(data =>{
                         //  console.log(data)
-                        if (!data.data.reserved) {
+                        if (!response.data.data.reserved) {
                             result.isPossible = true
                             result.message = "예약 가능"
                         } else {
                             result.isPossible = false
                             result.message = "이미 예약된 슬롯입니다."
                         }
-                        // return result
                      })
                      
                 return result;     
@@ -236,6 +233,7 @@
         /* background-color: rgb(247, 247, 247); */
         /* background-color: #F8F5F1; */
         margin: 0 1rem;
+        width:100%;
     }
     /* 1 layer*/
     .blank {

@@ -82,7 +82,7 @@ export default {
         getReservation(i){
            this.currentPage = i
            instance({
-               url: 'http://localhost:2030/reservations/',
+               url: 'reservations/',
                method: 'get',
                params: {
                    page : this.currentPage-1,

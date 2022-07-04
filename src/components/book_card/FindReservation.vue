@@ -12,7 +12,7 @@
             </div>
             <b-form-input maxlength="15" type="text" v-model="reservationNumber" class="input" placeholder="예약 번호"></b-form-input>
             <b-form-input maxlength="35" type="text" v-model="bookerName" class="input" placeholder="예약자 성함"></b-form-input>
-            <b-form-input maxlength="13" type="text" v-model="phoneNum" class="input" placeholder="연락처"></b-form-input>         
+            <b-form-input maxlength="13" type="text" v-model="phoneNumber" class="input" placeholder="연락처"></b-form-input>         
             <div>
                 <button class="find_button" @click="findReservation" type="button">조회하기</button>
             </div>
@@ -23,7 +23,6 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
 import ReservationDetail from './ReservationDetail.vue'
 export default {
     name: '',
@@ -93,28 +92,28 @@ export default {
             }
             this.showHeaderBox = false;
             //다 이상 없으면 조회 요청
-            axios({
-                url: 'http://localhost:2030/reservations/'+this.reservationNumber,
+            this.$axios({
+                url: 'reservations/'+this.reservationNumber,
                 method: 'get',
                 params:{
                     bookerName: this.bookerName,
                     phoneNum: this.phoneNum, 
                 }
             }).then((response)=>{
-                console.log(response)
+                // console.log(response)
                 if(response.data.success == false){
                     this.setPopbox_error("예약 내역을 찾을 수 없습니다.")
                     return;
                 }else{
                     this.bookItems.push(response.data.data)
                     // this.reservationItem = response.data.data;
-                    console.log(this.reservationItem)
+                    // console.log(this.reservationItem)
                     //step+1 -> 예약내역 보여주기
                     this.step_find = 1;
                     
                 }
             }).catch((error)=>{
-                console.log(error)
+                // console.log(error)
             });
         },
         //값이 정규표현식에 부합 체크

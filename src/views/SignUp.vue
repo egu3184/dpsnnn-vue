@@ -52,11 +52,11 @@
                                 <b-input-group-prepend is-text>
                                     <b-icon icon="telephone-fill" class="b_icon"></b-icon>
                                 </b-input-group-prepend>
-                                <b-form-input max=13 type="tel" maxlength="13" :disabled="phoneNum.isValid == true" v-model="phoneNum.value" class="input" :state="phoneNum.isValid">
+                                <b-form-input max=13 type="tel" @blur="phoneNumB_auth" maxlength="13" :disabled="phoneNum.isValid == true" v-model="phoneNum.value" class="input" :state="phoneNum.isValid">
                                 </b-form-input>
-                                <div class="btn_auth_div">
+                                <!-- <div class="btn_auth_div">
                                     <button class="btn_auth" v-if="phoneNum.isValid != true" @click="phoneNumB_auth" type="button">본인인증</button>
-                                </div>
+                                </div> -->
                             </b-input-group>
                             
                         </b-form-group>
@@ -96,7 +96,6 @@
 </template>
 <script>
 
-import axios from 'axios'
 export default {
     
 
@@ -168,8 +167,8 @@ export default {
                     return;
                 }
             // (2) 서버에 중복 체크 요청
-            axios({
-                url: 'http://localhost:2030/users',
+            this.$axios({
+                url: 'users',
                 method: 'get',
                 params:{
                     userId : this.email_id.value
@@ -246,8 +245,8 @@ export default {
                 this.setInvalidStatusAndMessage(this.nickname, "2~15자의 영어 또는 숫자, 한글 조합만 가능합니다.");
             }else{
                 //DB 조회 후 valid 처리
-                axios({
-                    url: "http://localhost:2030/users",
+                this.$axios({
+                    url: "users",
                     method: "get",
                     params:{
                         nickname : this.nickname.value
@@ -283,11 +282,11 @@ export default {
                return;
            }
            //본인 인증 - 지금은 생략
-            this.$store.commit('alert_Success', "인증되었습니다!", "회원가입을 계속하세요.")
+            // this.$store.commit('alert_Success', "인증되었습니다!", "회원가입을 계속하세요.")
 
            //DB 중복 조회
-           axios({
-                url: 'http://localhost:2030/users',
+           this.$axios({
+                url: 'users',
                 method: 'get' ,
                 params:{
                     phoneNum : this.phoneNum.value
@@ -309,8 +308,8 @@ export default {
             if(this.email_id.isValid && this.pw.isValid && this.cpw.isValid 
                         && this.nickname.isValid && this.phoneNum.isValid && this.privacy_agreement_status){
                 //요청 전에 한번 더 값 체크하는 것이 좋을까? - 아니야 어차피 서버에서 한번 더 해야해
-                axios({
-                    url: 'http://localhost:2030/signup',
+                this.$axios({
+                    url: 'signup',
                     method: 'post',
                     data: {
                         userId : this.email_id.value,
