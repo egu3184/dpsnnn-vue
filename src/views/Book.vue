@@ -103,7 +103,7 @@
     .title {
         width: 100%;
         background-color: white;
-        padding: 1.1rem 1rem;
+        /* padding: 1.1rem 1rem; */
         text-align: center;
         font-weight: bold;
         font-size: 4rem;
@@ -149,51 +149,7 @@
         justify-content: center;
         flex-wrap: wrap;
     }
-    .step {
-        width: 15rem;
-        /* background-color: rgb(165, 159, 159); */
-        margin: 0 0 0.8rem 1.5rem;
-        color: whitesmoke;
-        font-size: 1rem;
-        border-radius: 5px;
-    }
-    .step p {
-        line-height: 0.6rem;
-        margin: 1rem 2rem;
-    }
-    .step :nth-child(2) {
-        font-size: 1.15rem;
-    }
-    .step4 {
-        margin-right: 1rem;
-    }
-    .triangle {
-        width: 0;
-        height: 0;
-        border-left: 12px solid rgb(165, 159, 159);
-        border-top: 6px solid transparent;
-        border-bottom: 12px solid transparent;
-    }
-    .step2,
-    .step3,
-    .step4 {
-        background-color: rgb(165, 159, 159);
-    }
-    .triangle2,
-    .triangle3 {
-        border-left: 12px solid rgb(165, 159, 159);
-    }
-
-    .on {
-        background-color: #287a75;
-        color: #fff !important;
-        border: 1px solid #287a75 !important;
-    }
-    .none {
-        background-color: rgb(134, 129, 129);
-        color: #fff !important;
-        border: 1px solid rgb(134, 129, 129) !important;
-    }
+    
     .triangle_on {
         border-left: 12px solid #287a75;
     }

@@ -246,7 +246,7 @@
     .title {
         width: 100%;
         background-color: white;
-        padding: 1.1rem 1rem;
+        /* padding: 1.1rem 1rem; */
         text-align: center;
         font-weight: bold;
         font-size: 1.1rem;
@@ -345,11 +345,20 @@
         border-left: 12px solid rgb(134, 129, 129);
     }
 
-    @media (max-width: 798px) {
+    @media (max-width: 916px) {
         .book_container{
             margin: 0 0;
 
         }
+        .step{
+            width: 7.5rem !important;
+            font-size: 0.8rem;
+        }
+        .step p{
+            font-size: 0.75rem !important;
+            margin: 0.75rem 0.5rem !important;
+        }
+        
     }    
 
 </style>

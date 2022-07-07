@@ -171,5 +171,12 @@ export default {
         font-size: 1.55rem; 
         text-align: center;
     }
+
+    @media (max-width: 916px) {
+        .find_container{
+            width: 23rem;
+        }
+
+    }
     
 </style>

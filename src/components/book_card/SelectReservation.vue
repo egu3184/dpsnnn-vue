@@ -617,19 +617,19 @@
         }
     }
 
-    @media (max-width: 798px) {
+    @media (max-width: 916px) {
         
 
 
         .blank {
             padding: 21%;
         }
-        .progress2 {
+        /* .progress2 {
             width: 100%;
             padding: 20%, 0;
-        }
-        .step {
-            width: 7rem;
+        } */
+        /* .step {
+            width: 8rem;
             height: 70px;
             margin-left: 16px;
             margin-bottom: 5px;
@@ -650,14 +650,14 @@
         }
         .step4 {
             margin-right: 0.8rem;
-        }
+        } */
 
         .select_container{
             flex-direction: column;
         }
 
         .branch {
-            width: 100%;
+            /* width: 100%; */
             height: 30vh;
         }
         .branch dt {
@@ -665,7 +665,7 @@
         }
 
         .theme {
-            width: 100%;
+            /* width: 100%; */
             height: 21rem;
         }
         .theme dt {
@@ -677,10 +677,11 @@
         }
         .time{
             height: 27rem;
+            width: 95%;
         }
         .cal{
-            height: 27rem;
-            width: 100%;
+            /* height: 27rem; */
+            width: 95% !important;
         }
     }
 </style>
