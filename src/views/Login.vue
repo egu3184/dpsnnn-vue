@@ -195,8 +195,7 @@ export default {
                     return
              }
             this.saveTokenAndSetLoginStatus(response.data.data.accessToken,response.data.data.refreshToken)
-            // this.$router.push('/') 새로고침이 필요함
-            location.href = "/";
+            this.$router.push({path: "/"}).catch(()=>{})
         }).catch((error)=>{
               this.setPopbox_error("네이버 로그인이 실패하였습니다.")
         });
@@ -220,7 +219,7 @@ export default {
                     if(resp.data.data.accessToken){
                         this.saveTokenAndSetLoginStatus(resp.data.data.accessToken,resp.data.data.refreshToken)
                         //this.$router.push('/') 새로고침이 필요함
-                        location.href = "/";
+                        this.$router.push({path: "/"}).catch(()=>{})
                   }
                 })
             },

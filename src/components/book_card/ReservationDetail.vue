@@ -68,7 +68,7 @@
                             <div>{{reserv.bankName}} (예금주: {{reserv.bankAccountHolder}})</div>
                             <div>{{reserv.bankAccountNumber}}</div>
                             <div class="depositDeadline" v-if="paymentStatusOb.showDepositDeadline">
-                                <div style="color:red; font-weight:600;">{{formattingDepositDueDateTime(reserv.depositDueDateTime)}})까지</div>
+                                <div style="color:red; font-weight:600;">{{formattingDepositDueDateTime(reserv.depositDueDateTime)}}까지</div>
                                 <div style="font-size:0.7rem;">(입금기한 내에 입금하지 않으면 예약 자동 취소 됩니다.)</div>                           
                             </div>
                         </dd>     

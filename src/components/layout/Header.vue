@@ -160,7 +160,12 @@ export default {
       }
       this.scrollPosition = currentScrollPosition;
     },
+    logout(){
+      this.$store.commit("logout");
+    }
   }
+  
+
 
 };
 </script>
