@@ -300,7 +300,7 @@ export default {
     },
     unmounted() {},
     methods: {
-        ...mapMutations(['alert_Warning', 'alert_Error']),
+        ...mapMutations(['alert_Warning', 'alert_Error', 'alert_Error_And_toHome']),
 
         getThemeInfo(){
             let theme = this.$store.state.selectedThemeInfo;
@@ -455,15 +455,20 @@ export default {
                     })
                     .then((response)=>{
                         // console.log(response)
+                        if(response.data.code != 0){
+                            this.alert_Error_And_toHome(response.data.message)
+                            return
+                        }
                         if(response.data.data){
                             endPoint = true
                             this.$store.commit("setReservationInfo",response.data.data)
                             // console.log(this.$store.state.responseReservationInfo)
                         }
                         
+                        
                     })
                     .catch((error)=>{
-                        this.alert_Error(error.data.message)
+                        this.alert_Error_And_toHome(error.data.message)
                     })
                 }else{ //로그인x 일반요청o
                     await this.$axios({
@@ -484,15 +489,19 @@ export default {
                     })
                     .then((response)=>{
                         // console.log(response)
+                         if(response.data.code != 0){
+                            this.alert_Error_And_toHome(response.data.message)
+                            return
+                        }
                         if(response.data.data){
                             endPoint = true
                             this.$store.commit("setReservationInfo",response.data.data)
                             // console.log(this.$store.state.responseReservationInfo)
                         }
-                        
+                       
                     })
                     .catch((error)=>{
-                        this.alert_Error(error.data.message)
+                        this.alert_Error_And_toHome(error.data.message)
                     })
                 }
                 return endPoint  
