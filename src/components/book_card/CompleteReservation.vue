@@ -2,7 +2,7 @@
     <div id="complete_constructor">
         <div class="complete_container box">
             <div class="title_box">
-                <span>{{ReservationObject.bookerName}}님의 예약 등록이 완료되었습니다!</span>
+                <span>{{ReservationObject.bookerName}}님의 예약 등록이 <span class="highlight">완료</span>되었습니다!</span>
             </div>
             <div class="payment">
                 <div v-if="ReservationObject.paymentMethod=='OnSite'">
@@ -15,7 +15,7 @@
                         <dd>{{ReservationObject.bankName}} {{ReservationObject.bankAccountNumber}} (예금주 : {{ReservationObject.bankAccountHolder}})</dd>
                     </div>
                     <div class="notice">
-                        <span> ※ 예약등록으로부터 30분내 미입금시 자동으로 예약등록이 취소됩니다. </span>
+                        <span> ※ 예약등록으로부터 <span class="highlight">30분내 미입금시</span> 자동으로 예약등록이 <span class="highlight">취소</span>됩니다. </span>
                     </div>  
                 </div>
                 <div v-else-if="ReservationObject.paymentMethod=='Card'">
@@ -27,6 +27,10 @@
             </div>
             <div class="content_box"> 
                 <div class="left_box">
+                    <div class="reserv_item">
+                        <dt>입금기한</dt>&nbsp;&nbsp;
+                        <dd><span class="highlight">{{formattingDepositDueDateTime(ReservationObject.depositDueDateTime)}}</span>까지</dd>
+                    </div>
                     <div class="reserv_item">
                         <dt>예약번호 </dt>&nbsp;&nbsp;
                         <dd>{{ReservationObject.reservationNumber}}</dd>
@@ -101,6 +105,13 @@ export default {
         numberWithCommas(price){
             return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         },
+        formattingDepositDueDateTime(dueDateTime){
+            const dateAndTime = dueDateTime.split("T");
+            const date = dateAndTime[0].split("-")
+            const time = dateAndTime[1].split(":")
+            const year = date[0].split("")[2]+date[0].split("")[3]
+            return year+"/"+date[1]+"/"+date[2]+" ("+time[0]+":"+time[1]+")";
+        }
 
 
 
@@ -179,6 +190,10 @@ export default {
     dt{
        width: 7rem;
     }
+    .highlight{
+        color: rgb(255, 94, 0);
+    }
+
      @media (max-width: 798px) {
          #complete_constructor{
              width: 100%;

@@ -202,8 +202,8 @@ export default {
         formattingDepositDueDateTime(dateTime){
             const dateAndTime = dateTime.split("T");
             const date = dateAndTime[0].split("-")
-            const time = dateAndTime[0].split(":")
-            const year = date[0].split("")[3]+date[0].split("")[4]
+            const time = dateAndTime[1].split(":")
+            const year = date[0].split("")[2]+date[0].split("")[3]
             return year+"/"+date[1]+"/"+date[2]+" ("+time[0]+":"+time[1]+")";
         }
 
