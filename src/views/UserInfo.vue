@@ -55,7 +55,7 @@ export default {
         padding-bottom: 0.5rem;
         /* background-color: #f8f9fa; */
         display: flex;
-        align-items: center;
+        align-items: unset;
         justify-content: center;
         flex-direction: row;
         min-height: 50rem;
@@ -133,11 +133,11 @@ export default {
 
     .content{
         box-shadow: 0 10px 20px rgb(0 0 0 / 10%);
-        width: 50%;
+        width: 42%;
         /* height: 100%; */
         /* border: 0.13rem solid rgb(182, 175, 175); */
         background-color: white;
-        padding: 4.5rem 4.5rem;
+        padding: 2.5rem 1.5rem;
         /* padding-bottom: 4.5rem; */
         border-radius: 1rem;
         margin: 2rem;
@@ -145,6 +145,7 @@ export default {
     @media (max-width: 798px) {
         .profile_constructor{
             flex-direction: column;
+            align-items: center;
         }
         .menu_list{
             height: 15rem;

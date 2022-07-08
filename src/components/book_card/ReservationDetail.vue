@@ -21,7 +21,7 @@
                 <button v-if="reserv.paymentStatus == 'DepositWaiting'" @click="cancleReservation(index)" type="button" class="button_cancle">예약취소</button>  
             </div>
         </div>
-        <div v-if="show[index]" :ref="'detail-'+index" name="slide-fade">
+        <div v-if="show[index]" :ref="'detail-'+index" name="slide-fade" style="width:100%; display:flex; justify-content:center; ">
             <div class="book payment_detail">
                 <div class="title">
                     예약자 정보
@@ -37,7 +37,7 @@
                             <div>{{reserv.phoneNumber}}</div>
                         </dd>     
                     </div>
-                    <div class="right" style="display:flex; justify-content:space-evenly;" >
+                    <div class="reserv_right" style="display:flex; justify-content:space-evenly;" >
                         <dt>
                             <div>&nbsp;</div>
                             <div>&nbsp;</div>
@@ -69,12 +69,12 @@
                             <div>{{reserv.bankAccountNumber}}</div>
                             <div class="depositDeadline" v-if="paymentStatusOb.showDepositDeadline">
                                 <div style="color:red; font-weight:600;">{{formattingDepositDueDateTime(reserv.depositDueDateTime)}}까지</div>
-                                <div style="font-size:0.7rem;">(입금기한 내에 입금하지 않으면 예약 자동 취소 됩니다.)</div>                           
+                                <div style="font-size:0.7rem;"><span>(입금기한 내에 입금하지 않으면<br/> 예약 자동 취소 됩니다.)</span></div>                           
                             </div>
                         </dd>     
                     </div>
                     <div class="right" style="background-color: rgb(245, 245, 245); display:flex; justify-content:space-evenly;" >
-                        <dt style="width:70%">
+                        <dt style="width:80%">
                             <div>총 예약 가격</div>
                             <div>예약금</div>
                             <div>&nbsp;</div>
@@ -246,11 +246,12 @@ export default {
         height: 100%;
         display: flex;
         flex-direction: column;
+        align-items: center;
     }
 
     .book{
         background-color: rgb(255, 255, 255);
-        width: 40rem;
+        width: 100%;
         height: 30%;
         display: flex;
         flex-direction: row;
@@ -341,6 +342,9 @@ export default {
         border-bottom: 2px solid rgb(177, 170, 170);
         border-top-left-radius: 0.5rem;
         border-top-right-radius: 0.5rem;
+        padding-top: 1rem;
+        padding-left: 1rem;
+        padding-bottom: 0.5rem;
     }
     .right{
         width: 85%;
@@ -369,4 +373,37 @@ export default {
     dd div{
          margin-bottom: 0.5rem;
     }
+
+     @media (max-width: 798px) {
+        .book{
+            width: 95%;
+            flex-direction: column !important;
+        }
+        .bookHeader{
+            display: flex;
+            justify-content: center;
+        }
+        .bookContent{
+            padding: 5% 15%;
+        }
+        .button_cancle{
+            width: 50%;
+            height: 3rem;
+        }
+        .title{
+            padding-top: 10%;
+        }
+        .resev_right{
+            display: none !important;
+        }
+        .payment_info_content{
+            flex-direction: column;
+        }
+        .right{
+            width: 100%;
+        }
+        .left{
+            width: 100%;
+        }
+     }   
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="blank"></div>
-        <div class="title">
+        <div class="title" style="padding-top:5rem;">
             <span>Reservation</span>
         </div>
         <div class="selectBar">
