@@ -5,7 +5,7 @@
           <!-- <a href="/" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</a> -->
           <router-link to="/" :class="{headerActive_fontColor: headerStatus == true}">dpsnnn</router-link>
         </div>
-        <div>
+        <div v-if="window_width > 786 ">
           <ul class="menu">
             <!-- <li><a @click="test()" :class="{headerActive_fontColor: headerStatus == true}">단편선</a></li> -->
             <!-- <li><router-link to="/login" :class="{headerActive_fontColor: headerStatus == true}">로그인</router-link></li> -->
@@ -31,9 +31,36 @@
                 <!-- </div> -->
               </a>
             </li>  
-     
+
           </ul> 
         </div>
+        <div v-if="window_width < 786">
+          <a>
+            <img v-b-toggle.sidebar-backdrop v-if="headerStatus == false" src="@/assets/hamberger_white.png" style="margin-top:0.35rem; height:2.2rem; width:2.2rem;"/>
+            <img v-b-toggle.sidebar-backdrop v-if="headerStatus == true" src="@/assets/hamberger_black.png" style="margin-top:0.35rem; height:2.2rem; width:2.2rem;"/>
+          </a>
+          <b-sidebar
+            id="sidebar-backdrop"
+            right
+            title="Menu"
+            backdrop-variant="dark"
+            backdrop
+            shadow
+            width="9.5rem"
+          >
+          <ul style="list-style:none; margin: 3rem 0;" class="sidebar_ul">
+            <li><router-link to="/login" v-if="isLogin==false" >로그인</router-link></li>
+            <li><router-link to="/" v-if="isLogin==true" >로그아웃</router-link></li>
+            <li><router-link to="/userinfo" v-if="isLogin==true" >회원정보</router-link></li>
+            <br/>
+            <li><router-link to="/book" >예약하기</router-link></li>
+            <li><router-link to="/box" >첫번째 이야기</router-link></li>
+            <li><router-link to="/happy">두번째 이야기</router-link></li>
+            
+          </ul>    
+          </b-sidebar>
+        </div>  
+
       <!-- </div> -->
       <!-- <b-modal id="login" v-model="modalShow" hide-footer @hidden="hidden" title="Login"> -->
         <!-- <Login /> -->
@@ -108,17 +135,20 @@ export default {
       token: '',
       loginObj: '',
       modalShow: false,
+      window_width: '',
 
 
-      isLogin : '',
+      isLogin : false,
     }
   },
   mounted(){
     //스크롤 이벤트
     window.scrollTo(0,0);
     document.addEventListener('scroll', this.scrollEvents);
-    //로그인 상태 가져오기
-    // this.getLoginStatus();
+    //브라우저 크기 
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+
   },
   destroyed() {
     //스크롤 이벤트 제거
@@ -162,7 +192,11 @@ export default {
     },
     logout(){
       this.$store.commit("logout");
+    },
+    handleResize(){
+      this.window_width = window.innerWidth;
     }
+
   }
   
 
@@ -254,10 +288,22 @@ export default {
       justify-content: space-between;
       
     }
+    .sidebar_ul li{
+      margin: 0.95rem 0;
+    }
+
     @media (max-width: 768px) {
       .menu{
         display: none;
+       
       }
+      .main{
+         margin: 0;
+      }
+
+
+
+
 }
 
 
