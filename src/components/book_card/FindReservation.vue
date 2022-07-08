@@ -1,5 +1,5 @@
 <template>
-    <div style="padding:3rem;">
+    <div>
         <transition name="slide-fade" mode="out-in" v-if="showHeaderBox">
         <div class="pop_box" :style="pop_box">
                 <b-icon  :icon=pop_box.icon></b-icon>&nbsp;&nbsp;
@@ -175,6 +175,9 @@ export default {
     @media (max-width: 916px) {
         .find_container{
             width: 23rem;
+        }
+        .pop_box{
+            width: 100%;
         }
 
     }

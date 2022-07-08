@@ -192,7 +192,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
 
     .header {
         background-color: cadetblue;
