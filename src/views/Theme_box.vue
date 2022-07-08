@@ -58,7 +58,7 @@ export default {
   @media (max-width: 798px){
     .img{
       margin-top: 10%;
-      background-color: darkolivegreen; 
+      /* background-color: darkolivegreen;  */
     }
     .img img{
       width: 100%;

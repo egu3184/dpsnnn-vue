@@ -55,7 +55,7 @@ export default {
         padding-bottom: 0.5rem;
         /* background-color: #f8f9fa; */
         display: flex;
-        /* align-items: center; */
+        align-items: center;
         justify-content: center;
         flex-direction: row;
         min-height: 50rem;
@@ -142,6 +142,24 @@ export default {
         border-radius: 1rem;
         margin: 2rem;
     }
+    @media (max-width: 798px) {
+        .profile_constructor{
+            flex-direction: column;
+        }
+        .menu_list{
+            height: 15rem;
+        }
+        .content{
+          width:95%;
+          margin: 0;  
+          padding: 0;
+        }
+        .menu{
+            width: 95%;
+            margin: 2rem 0;
+        }
+
+    }    
 
 
 </style>

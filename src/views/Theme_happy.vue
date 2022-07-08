@@ -51,7 +51,7 @@ export default {
 <style>
   #theme{
     width: 100%;
-    background-color: #2c2524;
+    /* background-color: #2c2524; */
     display: flex;
     justify-content: center;
     flex-wrap: wrap; 
@@ -60,7 +60,7 @@ export default {
   @media (max-width: 798px){
     .img{
       margin-top: 10%;
-      background-color: darkolivegreen; 
+      /* background-color: darkolivegreen;  */
     }
     .img img{
       width: 100%;
