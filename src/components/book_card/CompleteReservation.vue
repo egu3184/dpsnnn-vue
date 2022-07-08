@@ -140,7 +140,7 @@ export default {
         background-color: rgb(255, 255, 255);
         border-radius: 4px;
         border: 2px solid rgb(207, 199, 199);
-        margin: 0rem 0.5rem;
+        /* margin: 0rem 0.5rem; */
     }
 
     .content_box{
@@ -197,6 +197,10 @@ export default {
      @media (max-width: 798px) {
          #complete_constructor{
              width: 100%;
+             height: 50rem;
+         }
+         .complete_container{
+            height: 48rem;
          }
          .payment{
              width: 100%;
@@ -205,7 +209,7 @@ export default {
              width: 100%;
          }
          dd{
-             font-size: 1rem;
+             font-size: 0.93rem;
          }
          .notice span{
              font-size: 1.1rem;

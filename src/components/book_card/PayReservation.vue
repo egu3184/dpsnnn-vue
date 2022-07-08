@@ -706,7 +706,7 @@ export default {
             padding: 5rem 1rem;
         }
         .reserv_info_container{
-            width: 100%;
+            width: 95%;
             flex-direction: column;
             height: 40rem;
         }
@@ -721,13 +721,13 @@ export default {
             margin: 1rem 2rem;
         }
         .theme_info_content{
-            width: 100%;
+            width: 95%;
         }
         .input_info_content{
-            width: 100%;
+            width: 95%;
         }
         .reserv_term_of_use_container{
-            width: 100%;
+            width: 95%;
             margin: 0rem 0rem;
             margin-bottom: 1rem;
         }
@@ -745,15 +745,15 @@ export default {
             width:100%;
         }
         .right_container{
-            width:100%;
+            width:95%;
         }
 
         .agreeCheckBox{
-            width: 100%;
+            width: 95%;
             font-size: 1rem;
         }
         .total_Price_box{
-            width: 100%;
+            width: 95%;
         }
         .selectDepositBank{
             width: 10rem !important;
@@ -762,12 +762,14 @@ export default {
             font-size: 0.8rem;
         }
         .total_Price{
-            width: 100%;
+            width: 95%;
             font-size: 1.5rem;
             margin-left: 1rem;
         }
         .total_Price_box{
+            width: 100%;
             height: 5rem;
+            margin:0.5rem 0;
         }
     }    
 

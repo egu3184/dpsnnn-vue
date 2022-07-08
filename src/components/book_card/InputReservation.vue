@@ -193,7 +193,7 @@
                
                 <dd style="display:flex; align-items:center; justify-conten:center;"  >
                     <div>
-                    <b-form-select style="width: 20rem; height: 3.2rem; font-size: 1.5rem; text-align:center;" v-model="totalPrice" :options="capacityAndTotalPriceList" value-field="price" text-field="capacity">
+                    <b-form-select style="height: 3.2rem; font-size: 1.5rem; text-align:center;" v-model="totalPrice" :options="capacityAndTotalPriceList" value-field="price" text-field="capacity">
                         <template #first>
                             <b-form-select-option value="" disabled> 이용 인원을 선택해주세요.</b-form-select-option>
                         </template>
@@ -505,7 +505,11 @@ export default {
         }
         .left_box{
             margin: 0 0;
+            width: 95%;
             margin-bottom: 1rem;
+        }
+        .right_box{
+            width: 95%;
         }
 
         .NoPBox{
@@ -526,18 +530,18 @@ export default {
             
         }
         #input-name{
-            width: 10rem;
+            width: 14rem !important;
         }
         #input-num{
             width: 3rem;
         }
         .label{
-            width: 4rem;
+            width: 4rem5
            
         }
         .label span{
-             font-size: 1rem;
-             width: 4rem;
+             font-size: 0.9rem;
+             width: 5rem;
            
         }
 
