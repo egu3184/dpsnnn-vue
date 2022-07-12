@@ -88,9 +88,14 @@ router.beforeEach((to, from, next)=>{
   //다른 페이지를 위해 일단 헤더 색상 초기화
   store.commit("setHeaderColor", '')
   //해당 페이지로 이동시 vuex에 헤더 색상 저장
-  if(to.name === "login"|| to.name === "book" || to.name === "signup" 
-        || to.name === "userinfo"){
+  if(to.name === "userinfo"){
     store.commit("setHeaderColor", '#45526C')
+  }
+  if(to.name === "book"){
+    store.commit("setHeaderColor", '#df8117')
+  }
+  if(to.name === "login" || to.name === "signup"){
+    store.commit("setHeaderColor", '#287a75')
   }
   next()
 });

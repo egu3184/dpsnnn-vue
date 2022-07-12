@@ -6,6 +6,10 @@ const instance = axios.create({
   baseURL : process.env.VUE_APP_API_URL
 });
 
+axios.defaults.baseURL=process.env.VUE_APP_API_URL
+
+
+
 
 
 instance.interceptors.request.use(
@@ -40,7 +44,7 @@ instance.interceptors.response.use(
       console.log("AccessToken이 만료되었을 때")
       var vm = this
       //RefreshToken 갱신 요청 
-       await vm.$axios({
+       await axios({
         method:"post",
         url: "reissue",
         data:{

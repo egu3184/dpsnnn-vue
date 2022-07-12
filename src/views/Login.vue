@@ -349,9 +349,7 @@ export default {
     }
 
     .login_container{
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        /* width: 60%; */
-        /* border: 0.13rem solid rgb(182, 175, 175); */
+        /* box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); */
         background-color: white;
         padding: 6.5rem 4.5rem;
         padding-bottom: 2.5rem;
@@ -430,6 +428,7 @@ export default {
     .login_title{
         width: 100%;
         height: 7rem;
+        text-align: center;
         font-size: 2.5rem;
         font-weight: bold;
         padding: 0 7rem;

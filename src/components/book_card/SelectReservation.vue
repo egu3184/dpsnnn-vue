@@ -545,7 +545,7 @@
         background-color: rgb(255, 255, 255);
         border-radius: 4px;
         border: 2px solid rgb(207, 199, 199);
-        overflow: auto;
+        /* overflow: auto; */
     }
 
     .time dt {
@@ -558,7 +558,11 @@
         color: rgb(126, 122, 122);
         margin-bottom: 0.8rem;
     }
+    .time dd{
+        overflow: auto;
+    }
     .time dd ul {
+        height: 30rem;
         display: flex;
         flex-direction: column;
         padding: 1rem;
@@ -678,6 +682,9 @@
         .time{
             height: 27rem;
             width: 95%;
+        }
+        .time dd ul{
+            height: 20rem;
         }
         .cal{
             /* height: 27rem; */

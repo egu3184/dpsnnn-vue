@@ -15,9 +15,9 @@ export default {};
   footer{
     width: 100%;
     text-align: center;
-    height: auto;
+    padding: 2rem 0;
     color: rgba(126, 122, 122, 0.959);
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    margin-top: 7rem;
+    
   }
 </style>
